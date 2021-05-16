@@ -1,0 +1,134 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #112">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+
+<title>CY's Take on The Weekly Challenge #112</title>
+</head>
+
+<body>
+  <h2>CY's Take on The Weekly Challenge #112</h2>
+  
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku, go to <a href="https://perlweeklychallenge.org/">https://perlweeklychallenge.org</a>, code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<hr>
+
+<h4>Task 1: Canonical Path</h4>
+
+<p>For the <tt>.</tt> cases, we can choose to ignore them (<tt><font color="#007f00">grep</font>&nbsp;{&nbsp;<font color="#0000ff"><b>$_</b></font>&nbsp;<font color="#ffa500">ne</font>&nbsp;<font color="#ffa500">"</font><font color="#ff0000">.</font><font color="#ffa500">"</font>&nbsp;&nbsp;}</tt>).</p>
+
+<p>For the <tt>..</tt> cases, naturally they are handled by a stack &dash; <tt>pop</tt> and <tt>push</tt> operations in Perl arrays.</p>
+
+<p>For cases with multiple consecutive slashes, we can choose to ignore the empty string (<tt><font color="#007f00">grep</font>&nbsp;{&nbsp;<font color="#0000ff"><b>$_</b></font>&nbsp;<font color="#ffa500">ne</font>&nbsp;<font color="#ffa500">""</font>&nbsp;}</tt>).</p>
+
+<blockquote><tt>
+<b>my</b>&nbsp;<font color="#0000ff">$origin</font>&nbsp;=&nbsp;<font color="#0000ff"><b>$ARGV</b></font>[0]&nbsp;||&nbsp;<font color="#ffa500">"</font><font color="#ff0000">/a//b/c/../../</font><font color="#ffa500">"</font>;<br>
+<br>
+<b>my</b>&nbsp;<font color="#0000ff">@directories</font>&nbsp;=&nbsp;<font color="#007f00">grep</font>&nbsp;{&nbsp;<font color="#0000ff"><b>$_</b></font>&nbsp;<font color="#ffa500">ne</font>&nbsp;<font color="#ffa500">""</font>&nbsp;&amp;&amp;&nbsp;<font color="#0000ff"><b>$_</b></font>&nbsp;<font color="#ffa500">ne</font>&nbsp;<font color="#ffa500">"</font><font color="#ff0000">.</font><font color="#ffa500">"</font>&nbsp;&nbsp;}&nbsp;<font color="#007f00">split</font>&nbsp;<font color="#ffa500">"</font><font color="#ff0000">/</font><font color="#ffa500">"</font>,&nbsp;<font color="#0000ff">$origin</font>;<br>
+<br>
+<b>my</b>&nbsp;<font color="#0000ff">@new_dirs</font>&nbsp;=&nbsp;();<br>
+<br>
+<b>for</b>&nbsp;(<font color="#0000ff">@directories</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff"><b>$_</b></font>&nbsp;<font color="#ffa500">ne</font>&nbsp;<font color="#ffa500">"</font><font color="#ff0000">..</font><font color="#ffa500">"</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">push</font>&nbsp;<font color="#0000ff">@new_dirs</font>,&nbsp;<font color="#0000ff"><b>$_</b></font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>else</b>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">pop</font>&nbsp;<font color="#0000ff">@new_dirs</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<font color="#007f00">print</font>&nbsp;(&nbsp;<font color="#ffa500">"</font><font color="#ff0000">/</font><font color="#ffa500">"</font>&nbsp;.&nbsp;(<font color="#007f00">join</font>&nbsp;<font color="#ffa500">"</font><font color="#ff0000">/</font><font color="#ffa500">"</font>,&nbsp;<font color="#0000ff">@new_dirs</font>));<br>
+<font color="#007f00">print</font>&nbsp;<font color="#ffa500">"</font><font color="#ff00ff">\n</font><font color="#ffa500">"</font>;<br>
+</tt></blockquote>
+
+<p>The followings are some output of the program, it is good that the Perl intepreter does not complain on <tt>pop @<i>empty_array</i></tt>:</p>
+
+<blockquote><pre>
+$ perl ch-1.pl "/../../"
+/
+$ perl ch-1.pl "/a/"
+/a
+$ perl ch-1.pl "/a/b//c/"
+/a/b/c
+$ perl ch-1.pl "/a/b/c/../.."
+/a
+</pre></blockquote>
+
+<h4>Task 2: Climb Stairs</h4>
+
+<p>If you had studied a bit about the Fibonacci sequence, did the domino-monomino covering problem cross your mind?</p>
+
+<blockquote>Consider a 1-by-<i>n</i> chessbaord. You have plenty of monomino(1×1) pieces and domino(1×2) pieces. How many ways are there to cover the chessboard?</blockquote>
+
+<p>It is a standard exercise of programming to display the <i>n</i>-th Fibonacci number. Let us go further. Can we display the details of the options?</p>
+
+<p>After some thoughts, I realized it can be accomplished by combinations:</p>
+
+<blockquote><tt><b>use</b> <a href="https://metacpan.org/pod/Algorithm::Combinatorics">Algorithm::Combinatorics</a> <b>qw</b>/combinations/;<br>#...<br><b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$i</font>&nbsp;(<font color="#0000ff">$n%2</font>+<font color="#0000ff">$n</font>/<font color="#00007f">2</font>&nbsp;..&nbsp;<font color="#0000ff">$n</font>-<font color="#00007f">1</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$iter</font>&nbsp;=&nbsp;combinations([0..<font color="#0000ff">$i</font>-<font color="#00007f">1</font>]&nbsp;,&nbsp;(<font color="#0000ff">$n</font>-<font color="#0000ff">$i</font>)&nbsp;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$str</font>&nbsp;=&nbsp;<font color="#ffa500">"</font><font color="#ff0000">1</font><font color="#ffa500">"</font>&nbsp;x&nbsp;<font color="#0000ff">$i</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>while</b>&nbsp;(<b>my</b>&nbsp;<font color="#0000ff">$c</font>&nbsp;=&nbsp;<font color="#0000ff">$iter</font>-&gt;<font color="#0000ff">next</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$str_clone</font>&nbsp;=&nbsp;<font color="#0000ff">$str</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">substr</font>(<font color="#0000ff">$str_clone</font>,&nbsp;<font color="#0000ff"><b>$_</b></font>,&nbsp;<font color="#00007f">1</font>)&nbsp;=&nbsp;<font color="#ffa500">"</font><font color="#ff0000">2</font><font color="#ffa500">"</font>&nbsp;<b>for</b>&nbsp;(<font color="#0000ff">@</font>{<font color="#0000ff">$c</font>});<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">push</font>&nbsp;<font color="#0000ff">@all</font>,&nbsp;<font color="#0000ff">$str_clone</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}</tt></blockquote>
+
+
+<p>The followings are some output of the program:</p>
+
+<blockquote><pre>
+$ perl ch-2.pl 3
+For 3 steps to climb, the number of options is 3:
+21
+12
+111
+
+$ perl ch-2.pl 5
+For 5 steps to climb, the number of options is 8:
+221
+212
+122
+2111
+1211
+1121
+1112
+11111
+
+$ perl ch-2.pl 10
+For 10 steps to climb, the number of options is 89:
+22222
+222211
+222121
+<i>  ... </i>
+111111121
+111111112
+1111111111
+
+
+</pre></blockquote>
+
+<p>As a dessert for this blogpost: a math question popped in my mind: what is the total number of 2's occurs on the options? Then I came to this integer sequence:<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://oeis.org/A001629">A001629 Self-convolution of Fibonacci numbers</a>. </p>
+
+<p>The recent weekly challenge tasks contain some sophisticated math sequences &dash; refer to <a href="https://en.wikipedia.org/wiki/Fusc_function">FUSC Sequence</a> in <a href="https://perlweeklychallenge.org/blog/perl-weekly-challenge-108">Week 104</a> (Task 1) and <a href="https://en.wikipedia.org/wiki/Bell_number">Bell Numbers</a> in <a href="https://perlweeklychallenge.org/blog/perl-weekly-challenge-108">Week 108</a> (Task 2). </p>
+
+<p><font color="#CCCCCC">Besides, I wish I have knowledge and time to write Common Lisp solution(s) for the tasks, but I am stuck on exam preparation. Therefore, leave the "guest language conquer" after May.</font></p>
+  
+<p>Stay alert and healthy! □</p>
+
+<p><i>link for codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-112/cheok-yin-fung/perl/ch-1.pl">ch-1.pl</a></tt>, <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-112/cheok-yin-fung/perl/ch-2.pl">ch-2.pl</a></tt></i></p>
+
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Created Date: 16th May, 2021; last updated: 14:32 HKT</p>
+  
+</body>
+
+</html>
+
