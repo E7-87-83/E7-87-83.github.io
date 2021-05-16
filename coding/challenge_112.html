@@ -67,20 +67,6 @@ $ perl ch-1.pl "/a/b/c/../.."
 
 <p>After some thoughts, I realized it can be accomplished by combinations:</p>
 
-<p>The followings are some output of the program:</p>
-
-<blockquote><pre>
-$ perl ch-1.pl "/../../"
-/
-$ perl ch-1.pl "/a/"
-/a
-$ perl ch-1.pl "/a/b//c/"
-/a/b/c
-$ perl ch-1.pl "/a/b/c/../.."
-/a
-</pre></blockquote>
-
-
 <blockquote><tt><b>use</b> <a href="https://metacpan.org/pod/Algorithm::Combinatorics">Algorithm::Combinatorics</a> <b>qw</b>/combinations/;<br>#...<br><b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$i</font>&nbsp;(<font color="#0000ff">$n%2</font>+<font color="#0000ff">$n</font>/<font color="#00007f">2</font>&nbsp;..&nbsp;<font color="#0000ff">$n</font>-<font color="#00007f">1</font>)&nbsp;{<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$iter</font>&nbsp;=&nbsp;combinations([0..<font color="#0000ff">$i</font>-<font color="#00007f">1</font>]&nbsp;,&nbsp;(<font color="#0000ff">$n</font>-<font color="#0000ff">$i</font>)&nbsp;);<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$str</font>&nbsp;=&nbsp;<font color="#ffa500">"</font><font color="#ff0000">1</font><font color="#ffa500">"</font>&nbsp;x&nbsp;<font color="#0000ff">$i</font>;<br>
@@ -92,7 +78,7 @@ $ perl ch-1.pl "/a/b/c/../.."
 }</tt></blockquote>
 
 
-The followings are some output of the program:
+<p>The followings are some output of the program:</p>
 
 <blockquote><pre>
 $ perl ch-2.pl 3
@@ -139,7 +125,7 @@ For 10 steps to climb, the number of options is 89:
 
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
-<p>Created Date: 16th May, 2021; last updated: 13:23 HKT</p>
+<p>Created Date: 16th May, 2021; last updated: 13:27 HKT</p>
   
 </body>
 
