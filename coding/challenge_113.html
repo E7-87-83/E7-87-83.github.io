@@ -92,24 +92,14 @@
 </i></font>&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;0&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$D</font>&nbsp;==&nbsp;<font color="#00007f">2</font>&nbsp;||&nbsp;<font color="#0000ff">$D</font>&nbsp;==&nbsp;<font color="#00007f">5</font>;
 
 <br><br>
+<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$D</font>&nbsp;==&nbsp;4&nbsp;&amp;&amp;&nbsp;<font color="#0000ff">$N</font>&nbsp;&gt;&nbsp;<font color="#00007f">10</font>)&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$N</font>&nbsp;%&nbsp;<font color="#00007f">2</font>&nbsp;==&nbsp;0)&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#00007f">1</font>;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>else</b>&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;0;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#0000ff">$N</font>&nbsp;%&nbsp;<font color="#00007f">2</font>&nbsp;==&nbsp;0&nbsp;?&nbsp;<font color="#00007f">1</font>&nbsp;:&nbsp;0;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;}<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$D</font>&nbsp;==&nbsp;<font color="#00007f">8</font>&nbsp;&amp;&amp;&nbsp;<font color="#0000ff">$N</font>&nbsp;&gt;=&nbsp;40)&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$N</font>&nbsp;%&nbsp;<font color="#00007f">2</font>&nbsp;==&nbsp;0)&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#00007f">1</font>;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>else</b>&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;0;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#0000ff">$N</font>&nbsp;%&nbsp;<font color="#00007f">2</font>&nbsp;==&nbsp;0&nbsp;?&nbsp;<font color="#00007f">1</font>&nbsp;:&nbsp;0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$D</font>&nbsp;==&nbsp;<font color="#00007f">6</font>)&nbsp;{<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;0&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$N</font>&nbsp;%&nbsp;<font color="#00007f">2</font>&nbsp;!=&nbsp;0;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>&nbsp;&nbsp;&nbsp;&nbsp;# call &amp;step_down or &amp;last_digit...<br>}</tt></blockquote>
