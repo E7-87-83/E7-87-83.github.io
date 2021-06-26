@@ -1,0 +1,91 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #117">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="all">
+<title>CY's Take on The Weekly Challenge #117</title></head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li>Reserved</li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #117 &dash; First Taste of awk and large Schröder numbers</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku, go to <a href="https://perlweeklychallenge.org/">https://perlweeklychallenge.org</a>, code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://perlweeklychallenge.org/blog/perl-weekly-challenge-117/">challenges in Week #117</a> !</i></b></p>
+
+<hr>
+
+original
+<tt>scalar $newstp->[$i-1]->@* - 1</tt>
+change to 
+<tt>$newstp->[$i-1]->$#*</tt>
+
+
+<div style="color:white; background-color:black; padding-left: 5px">
+<pre>                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span><font color="#FCE94F">sub </font><font color="#34E2E2"><b>ways </b></font>{
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$K</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$newstp</b></font> = [ [<font color="#AD7FA8">&apos;&apos;</font>] ];
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@newarr</b></font> = (<font color="#AD7FA8">1</font>);                                           <span style="background-color:white;"><font color="#3F3F3F">|</font></span>    <font color="#FCE94F">while</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@{$newstp}</b></font> &lt;= <font color="#34E2E2"><b>$K</b></font>) {
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$stp</b></font> = <font color="#34E2E2"><b>$newstp</b></font>;
+<font color="#FCE94F">while</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@newarr</b></font> &lt;= <font color="#34E2E2"><b>$N</b></font>) {                              <span style="background-color:white;"><font color="#3F3F3F">|</font></span>        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ord</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@{$stp}</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arr</b></font> = <font color="#34E2E2"><b>@newarr</b></font>;                                      <span style="background-color:white;"><font color="#3F3F3F">|</font></span>        <font color="#34E2E2"><b>$newstp</b></font> = [ [ <font color="#AD7FA8">&apos;L&apos;</font> x <font color="#34E2E2"><b>$ord</b></font> ] ];
+    <font color="#34E2E2"><b>@newarr</b></font> = (<font color="#AD7FA8">1</font>);                                          <span style="background-color:white;"><font color="#3F3F3F">|</font></span>        <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">1.</font>. <font color="#34E2E2"><b>$ord</b></font> - <font color="#AD7FA8">1</font>) {
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ord</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@arr</b></font>;                                  <span style="background-color:white;"><font color="#3F3F3F">|</font></span>            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@{$newstp-&gt;[$i]}</b></font>, <font color="#34E2E2"><b>$stp-&gt;[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;[$_]</b></font> . <font color="#AD7FA8">&apos;R&apos;</font>
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">1.</font>. <font color="#34E2E2"><b>$ord</b></font> - <font color="#AD7FA8">1</font>) {                              <span style="background-color:white;"><font color="#3F3F3F">|</font></span>                <font color="#FCE94F">for</font> (<font color="#AD7FA8">0.</font>. <font color="#34E2E2"><b>$stp-&gt;[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;$#*</b></font>);
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@newarr</b></font>, <font color="#34E2E2"><b>$arr[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> + <font color="#34E2E2"><b>$arr[$i]</b></font> + <font color="#34E2E2"><b>$newarr[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;<span style="background-color:white;"><font color="#3F3F3F">|</font></span>            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@{$newstp-&gt;[$i]}</b></font>, <font color="#34E2E2"><b>$stp-&gt;[$i]-&gt;[$_]</b></font> . <font color="#AD7FA8">&apos;L&apos;</font>
+    }                                                       <span style="background-color:white;"><font color="#3F3F3F">|</font></span>                <font color="#FCE94F">for</font> (<font color="#AD7FA8">0.</font>. <font color="#34E2E2"><b>$stp-&gt;[$i]-&gt;$#*</b></font>);
+    <font color="#34E2E2"><b>$newarr[$ord]</b></font> = <font color="#34E2E2"><b>$arr[$ord</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> + <font color="#34E2E2"><b>$newarr[$ord</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;         <span style="background-color:white;"><font color="#3F3F3F">|</font></span>            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@{$newstp-&gt;[$i]}</b></font>, <font color="#34E2E2"><b>$newstp-&gt;[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;[$_]</b></font> . <font color="#AD7FA8">&apos;H&apos;</font>
+}                                                           <span style="background-color:white;"><font color="#3F3F3F">|</font></span>                <font color="#FCE94F">for</font> (<font color="#AD7FA8">0.</font>. <font color="#34E2E2"><b>$newstp-&gt;[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;$#*</b></font>);
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>        }
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;Number of Paths: &quot;</font>, <font color="#34E2E2"><b>$newarr[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;                     <span style="background-color:white;"><font color="#3F3F3F">|</font></span>
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;                                                 <span style="background-color:white;"><font color="#3F3F3F">|</font></span>        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@{$newstp-&gt;[$ord]}</b></font>, <font color="#34E2E2"><b>$stp-&gt;[$ord</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;[$_]</b></font> . <font color="#AD7FA8">&apos;R&apos;</font>
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>            <font color="#FCE94F">for</font> (<font color="#AD7FA8">0.</font>. <font color="#34E2E2"><b>$stp-&gt;[$ord</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;$#*</b></font>);
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@{$newstp-&gt;[$ord]}</b></font>, <font color="#34E2E2"><b>$newstp-&gt;[$ord</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;[$_]</b></font> . <font color="#AD7FA8">&apos;H&apos;</font>
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>            <font color="#FCE94F">for</font> (<font color="#AD7FA8">0.</font>. <font color="#34E2E2"><b>$newstp-&gt;[$ord</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;$#*</b></font>);
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>    }
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$newstp-&gt;[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>}
+                                                            <span style="background-color:white;"><font color="#3F3F3F">|</font></span>
+</pre>
+</div>
+
+<p>Stay alert and healthy! □</p>
+
+<p><i>link for full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-117/cheok-yin-fung/perl/ch-1.pl">ch-1.pl</a></tt>, <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-117/cheok-yin-fung/perl/ch-2.pl">ch-2.pl</a></tt></i></p>
+
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+
+<p>Created Date: 18th June, 2021; </p>
+
+</body>
+
+</html>
+

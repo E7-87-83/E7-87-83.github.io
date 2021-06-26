@@ -1,0 +1,291 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Puzzle Created on The Weekly Challenge #118 ‒ Pre-processing">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="all">
+<title>CY's Puzzle Created for The Weekly Challenge #118 ‒ Pre-processing </title></head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li>Reserved</li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>[Writing] CY's Puzzle Created for The Weekly Challenge #118 &dash; Pre-processing</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku, go to <a href="https://perlweeklychallenge.org/">https://perlweeklychallenge.org</a>, code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://perlweeklychallenge.org/blog/perl-weekly-challenge-118/">challenges in Week #118</a> !</i></b></p>
+
+<hr>
+
+<h4>Task 2: Adventure of Knight</h4>
+
+<p>TL;DR: I have demostrated the logic of getting the (length of) the shortest paths in a 4 &times; 4
+board on the beginning POD section of <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl">ch-2.pl</a></tt> .</p>
+
+<h5><u>Puzzle Creation</u></h5>
+<p>This week I am not only one of the participants, but also a coding puzzle creator!
+I was quite excited about it.</p>
+
+<p>Many people recognized that this task can be related to Knight's tour. It is really
+one of inspirations &dash; other important source of inspirations is "checkmate" exercises for chess
+players.</p>
+
+<p>Let's explain a bit on checkmate exercises. A checkmate exercise asks the chess
+player moves one of its pieces to checkmate the opponent in a few steps
+("a few", normally for newbie). 
+Sometimes a form of related exercise
+may be presented, it is "capture an important piece" exercise.
+I found <a href="http://www.chesscuriosities.com/worksheets/worksheets">a nice collection</a>
+by Mr David Petty. (Sorry for the site is commerical, as I could not find a non-commerical
+site having these exercises.)</p>
+
+<p><font color="#CCCCCC">Yes, having experience of practising chess gains advantage in this task.
+Since there are tasks which people familiar with number theory have advantage,
+I put this puzzle to submit.</font></p>
+
+<h5><u>Warm-Up</u></h5>
+
+<h5>The Knight's Property</h5>
+<blockquote><div border="1"><pre>N  3  2 
+3     1
+2  1  4
+</pre></div></blockquote>
+
+<p>The above small box often appears on my mind this week. It indicates number of steps of a knight
+to move towards the other squares. In this 3 &times; 3 chessboard, the knight cannot
+move to the diagonal immediate neighbour.</p>
+
+<p>So imagine there are paddings that the knight can move to:</p>
+
+<blockquote><div border="1"><pre>   ~  ~  ~
+~  N  3  2 
+~  3  2^ 1
+~  2  1  4
+</pre></div></blockquote>
+
+<p>Here <tt>^</tt> temporarily indicates a value appears only when there are paddings.</p>
+
+<h5>Move from A Square to Another Square</h5>
+
+<p>The main purpose of this section is a discussion of how to get a shortest path to another square.</p>
+
+<p>(I have thought of whether using a smaller distance table can solve the puzzle exactly. Like,
+since 5 &times; 5 distance tables of two knights will ultimately overlap a
+rectangle. It guarantees a solution, but may not be the <i>shortest</i> solution(s).)</p>
+
+<blockquote><pre>my $dist_tbl = 
+   [[0,3,2,3,2,3,4,5],
+    [3,2,1,2,3,4,3,4],
+    [2,1,4,3,2,3,4,5],
+    [3,2,3,2,3,4,3,4],
+    [2,3,2,3,4,3,4,5],
+    [3,4,3,4,3,4,5,4],
+    [4,3,4,3,4,5,4,5],
+    [5,4,5,4,5,4,5,6]] ;</pre></blockquote>
+
+<p><i>Caution for a special case:</i> <tt>[1][1] = 2</tt> only if the starting point is not a corner;
+<tt>[1][1] = 4</tt> if the starting point is a corner. My code uses a subroutine <tt>is_corner</tt>
+to work-around it.</p>
+
+<p><i>Caution:</i> Don't confuse <tt>$dist_tbl</tt> with the chessboard for this task! <font color="#CCCCCC">They are only related when the number of squares having treasure is 1 (and <tt>$dist_tbl-&gt;[1][1] = 4</tt> .</font></p>
+
+<h5>(Optional) How the Distance Table is Generated</h5>
+
+<p>The pre-processing is in <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl">pre-ch-2.pl</a></tt>.</p>
+
+<p>The core of the pre-processing codes is only ~40 lines, let us see:</p>
+
+<div><tt>
+<b>my</b>&nbsp;<font color="#0000ff">$board</font>;<BR>
+<BR>
+<BR>
+<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$k</font>&nbsp;(<font color="#00007f">1..63</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#007f00">int</font>&nbsp;<font color="#0000ff">$k</font>&nbsp;/&nbsp;<font color="#00007f">8</font>][<font color="#0000ff">$k</font>&nbsp;%&nbsp;<font color="#00007f">8</font>]&nbsp;=&nbsp;<font color="#00007f">-1</font>;<BR>
+}<BR>
+<BR>
+<font color="#0000ff">$board</font>-&gt;[0][0]&nbsp;=&nbsp;0;<BR>
+<font color="#0000ff">$board</font>-&gt;[<font color="#00007f">1</font>][<font color="#00007f">1</font>]&nbsp;=&nbsp;<font color="#00007f">2</font>;<BR>
+<BR>
+<b>my</b>&nbsp;<font color="#0000ff">$total</font>&nbsp;=&nbsp;<font color="#00007f">62</font>;<BR>
+<b>my</b>&nbsp;<font color="#0000ff">$t</font>&nbsp;=&nbsp;0;<BR>
+<b>while</b>&nbsp;(<font color="#0000ff">$total</font>&nbsp;&gt;&nbsp;0)&nbsp;{<BR>
+&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$i</font>&nbsp;(0.<font color="#00007f">.7</font>)&nbsp;{&nbsp;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$j</font>&nbsp;(0.<font color="#00007f">.7</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$i</font>][<font color="#0000ff">$j</font>]&nbsp;==&nbsp;<font color="#0000ff">$t</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$a</font>&nbsp;(&nbsp;[<font color="#00007f">-2</font>,<font color="#00007f">-1</font>],&nbsp;&nbsp;[<font color="#00007f">-1</font>,<font color="#00007f">-2</font>],&nbsp;&nbsp;[<font color="#00007f">-2</font>,&nbsp;<font color="#00007f">1</font>],&nbsp;&nbsp;[&nbsp;<font color="#00007f">1</font>,<font color="#00007f">-2</font>],&nbsp;&nbsp;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<font color="#00007f">-1</font>,&nbsp;<font color="#00007f">2</font>],&nbsp;&nbsp;[&nbsp;<font color="#00007f">2</font>,<font color="#00007f">-1</font>],&nbsp;&nbsp;[&nbsp;<font color="#00007f">1</font>,&nbsp;<font color="#00007f">2</font>],&nbsp;&nbsp;[&nbsp;<font color="#00007f">2</font>,&nbsp;<font color="#00007f">1</font>])<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$ai</font>&nbsp;=&nbsp;<font color="#0000ff">$i</font>+<font color="#0000ff">$a</font>-&gt;[0];<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$aj</font>&nbsp;=&nbsp;<font color="#0000ff">$j</font>+<font color="#0000ff">$a</font>-&gt;[<font color="#00007f">1</font>];<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(&nbsp;&nbsp;<font color="#0000ff">$ai</font>&nbsp;&gt;=&nbsp;0&nbsp;&amp;&amp;&nbsp;<font color="#0000ff">$aj</font>&nbsp;&gt;=&nbsp;0&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#no&nbsp;negative&nbsp;index</i></font><font color="#7f7f7f"><i><BR>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp;&nbsp;<font color="#007f00">defined</font>(<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$ai</font>][<font color="#0000ff">$aj</font>])&nbsp;<font color="#7f7f7f"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<i>#&nbsp;&nbsp;no&nbsp;running&nbsp;outside&nbsp;board</i></font><font color="#7f7f7f"><i><BR>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp;&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$ai</font>][<font color="#0000ff">$aj</font>]&nbsp;==&nbsp;<font color="#00007f">-1</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$ai</font>][<font color="#0000ff">$aj</font>]&nbsp;=&nbsp;<font color="#00007f">1</font>&nbsp;+&nbsp;<font color="#0000ff">$t</font>;&nbsp;&nbsp;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$total</font>--;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;<font color="#0000ff">$t</font>++;<BR>
+}<BR>
+<BR>
+<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$i</font>&nbsp;(0.<font color="#00007f">.7</font>)&nbsp;{<BR>
+&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$j</font>&nbsp;(0.<font color="#00007f">.7</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">print</font>&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$i</font>][<font color="#0000ff">$j</font>],&nbsp;<font color="#ffa500">"</font><font color="#ff0000">&nbsp;</font><font color="#ffa500">"</font>&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$i</font>][<font color="#0000ff">$j</font>]&nbsp;&gt;=&nbsp;0;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">print</font>&nbsp;<font color="#ffa500">"</font><font color="#ff0000">*</font><font color="#ffa500">"</font>,&nbsp;<font color="#ffa500">"</font><font color="#ff0000">&nbsp;</font><font color="#ffa500">"</font>&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$i</font>][<font color="#0000ff">$j</font>]&nbsp;==&nbsp;<font color="#00007f">-1</font>;<BR>
+&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;<font color="#007f00">print</font>&nbsp;<font color="#ffa500">"</font><font color="#ff00ff">\n</font><font color="#ffa500">"</font>;<BR>
+}<BR>
+</tt></div>
+
+<p>Yup, there are so many nested blocks hence 4-space-indentation has to be replaced by
+2-space-indentation.</p>
+
+<p>When it comes to squares reachable within 3 steps, <tt>$board</tt> in <tt>pre-ch-2.pl</tt>,
+corresponds to <tt>$dist_tbl</tt> in <tt>ch-2.pl</tt>, is like this:</p>
+
+<blockquote><pre><tt>0 3 2 3 2 3 * * 
+3 2 1 2 3 * 3 * 
+2 1 * 3 2 3 * * 
+3 2 3 2 3 * 3 * 
+2 3 2 3 * 3 * * 
+3 * 3 * 3 * * * 
+* 3 * 3 * * * * 
+* * * * * * * * </tt></pre></blockquote>
+
+<p>By luck(?), the number of steps to reach every square is consecutive from 0 to 6…
+This part may have to be “aggressively” modified if the chessboard is irregular.</p>
+
+<div><font color="#999999"><u>Story on logical errors:</u>
+
+<p>The original I coded</p>
+
+<blockquote><tt>if (  defined($board->[$ai][$aj])<br> 
+       &nbsp;&nbsp;&nbsp;&nbsp;&& $board->[$ai][$aj] == -1)</tt></blockquote>
+
+<p>The code crashed. After I discovered it was caused by the
+negative index for array feature,
+I changed it into</p>
+
+<blockquote><tt>if (  $ai >= 0 && $aj >= 0 <br> 
+       &nbsp;&nbsp;&nbsp;&nbsp;&& $board->[$ai][$aj] == -1)</tt></blockquote>
+
+<p>It was still "featured" with bugs &dash; luckily, the interpreter told that the
+bug was related to uninitialized values.</p>
+
+<p>As you can see the final version above, I omit it here.</p>
+
+<p>(Much earlier: I created a <tt>$visited</tt> variable for saving whether
+a square is traversed and whether a square computes its possible next step.)
+</font></p></div>
+
+<h5><u>Main Dish</u></h5>
+
+<p>Since a large part of problem-solving is done by <tt>pre-ch-2.pl</tt>,
+the main code consists of only 6 subroutines:</p>
+
+<blockquote><pre>dist_fun
+compare_mini
+alphanumeric
+binumeric_position
+is_corner
+expand</pre></blockquote>
+<ul>
+<li>(Supportive:) <tt>&amp;alphanumeric</tt> and <tt>&amp;binumeric_position</tt> interchange the
+notation of the position.</li>
+<li><tt>&amp;expand</tt> will return a knight's path between two positions.
+Its internal is very similar to <tt>pre-ch-2.pl</tt>.</li>
+<li><tt>&amp;dist_fun</tt></li>
+<li><tt>&amp;is_corner</tt></li>
+<li><tt>&amp;compare_mini</tt></li>
+</ul>
+
+<h5><u>Performance and Extensibility</u></h5>
+
+<blockquote><pre>$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4
+The number of minimum path(s) is more than or equal to 2.
+Path length: 14.
+Treasure spots shown only: b6=>d7=>b4=>c2=>d4=>g7=>h4=>g2=>h3
+
+A full path:
+   a8->b6
+=> b6->d7
+=> d7->b8->a6->b4
+=> b4->c2
+=> c2->d4
+=> d4->e6->g7
+=> g7->f5->h4
+=> h4->g2
+=> g2->f4->h3
+
+real	0m4.263s
+user	0m4.257s
+sys	0m0.004s
+</pre></blockquote>
+
+<blockquote><pre>$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1
+The number of minimum path(s) is more than or equal to 4.
+Path length: 16.
+Treasure spots shown only: d7=>b6=>b4=>c2=>d4=>g7=>h4=>g2=>d1=>h3
+
+A full path:
+   a8->b6->d7
+=> d7->b6
+=> b6->d5->b4
+=> b4->c2
+=> c2->d4
+=> d4->e6->g7
+=> g7->f5->h4
+=> h4->g2
+=> g2->e3->d1
+=> d1->f2->h3
+
+real	0m46.254s
+user	0m46.223s
+sys	0m0.000s
+</pre></blockquote>
+
+<h5><u>Farewell Messages</u></h5>
+
+
+
+
+<hr>
+
+<p><i>link for full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl">pre-ch-2.pl</a></tt> (pre-processing), <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl">ch-2.pl</a></tt></i></p>
+
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+
+<p>Created Date: 26th May, 2021;</p>
+
+</body>
+
+</html>
+
+
