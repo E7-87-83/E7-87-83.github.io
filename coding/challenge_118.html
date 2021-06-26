@@ -5,6 +5,12 @@
   <meta name="keywords" content="Perl">
   <meta name="author" content="Cheok-Yin Fung">  
   <link rel="styleSheet" href="../docs/main.css" type="text/css" media="all">
+  <style>
+    #wk118 tt {
+      color:#E78783;
+    }
+  </style>
+
 <title>CY's Puzzle Created for The Weekly Challenge #118 ‒ Pre-processing </title></head>
 
 <body>
@@ -30,7 +36,7 @@
 </div>
 
 <div class="main">
-  <h2>[Writing] CY's Puzzle Created for The Weekly Challenge #118 &dash; Pre-processing</h2>
+  <h2>CY's Puzzle Created for The Weekly Challenge #118 &dash; Pre-processing</h2>
 
 <p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku, go to <a href="https://perlweeklychallenge.org/">https://perlweeklychallenge.org</a>, code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
 
@@ -64,7 +70,7 @@ site having these exercises.)</p>
 
 <p><font color="#CCCCCC">Yes, having experience of practising chess gains advantage in this task.
 Since there are tasks which people familiar with number theory have advantage,
-I put this puzzle to submit.</font></p>
+I put this puzzle to submit. Isn't chess a popular game?</font></p>
 
 <h5><u>Warm-Up</u></h5>
 
@@ -215,17 +221,89 @@ alphanumeric
 binumeric_position
 is_corner
 expand</pre></blockquote>
-<ul>
+<ul id="wk118">
 <li>(Supportive:) <tt>&amp;alphanumeric</tt> and <tt>&amp;binumeric_position</tt> interchange the
-notation of the position.</li>
-<li><tt>&amp;expand</tt> will return a knight's path between two positions.
+notation of a position. For example, <code>a6</code>→<code>[0,2]</code>, <code>b2</code>→<code>[1,6]</code>, <code>d4</code>→<code>[3,4]</code>, etc.. </li>
+<li><tt>&amp;expand</tt> will return a knight's path with a pre-set number of steps between two positions.
 Its internal is very similar to <tt>pre-ch-2.pl</tt>.</li>
-<li><tt>&amp;dist_fun</tt></li>
-<li><tt>&amp;is_corner</tt></li>
-<li><tt>&amp;compare_mini</tt></li>
+<li><tt>&amp;dist_fun</tt> uses <tt>$dist_tbl</tt> as a reference and handle the corner case.
+It returns the minimum number of steps between two position.</li>
+<li><tt>&amp;is_corner</tt> is a supportive subroutine to <tt>&amp;dist_fun</tt>. It returns whether a position is one of the chessboard four corners.</li>
+<li><tt>&amp;compare_mini</tt> compares a path with information of positions having treasure, sees whether the order of traversing the positions with treasure is a candidate for the shortest path.</li>
 </ul>
 
+The code is written in the procedural style:
+
+<div style="color:white; background-color:black; padding-left: 5px">
+<pre><font color="#FCE94F">use strict</font>;
+<font color="#FCE94F">use warnings</font>;
+<font color="#FCE94F">use</font> <a href="https://metacpan.org/pod/Algorithm::Combinatorics">Algorithm::Combinatorics</a> <font color="#AD7FA8">qw/permutations/</font>;
+
+<font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;Give me positions with treasure!</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">unless</font> <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@treasures</b></font> = <font color="#FCE94F">map</font> <font color="#FCE94F">{</font> binumeric_position(<font color="#34E2E2"><b>$_</b></font>) <font color="#FCE94F">}</font> <font color="#34E2E2"><b>@ARGV</b></font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$min_path_length</b></font> = <font color="#AD7FA8">1000</font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@min_paths</b></font> = ();
+
+
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$dist_tbl</b></font> = <font color="#34E2E2">#[[],[],...]</font>
+
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$iter</b></font> = permutations( \<font color="#34E2E2"><b>@treasures</b></font> );
+<font color="#FCE94F">while</font> (<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$iter-&gt;next</b></font>) {
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$path_length</b></font> = dist_fun([<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>], <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$i</b></font> &lt; <font color="#34E2E2"><b>$p-&gt;$#*</b></font>) {
+        <font color="#34E2E2"><b>$path_length</b></font> += dist_fun(<font color="#34E2E2"><b>$p-&gt;[$i]</b></font>, <font color="#34E2E2"><b>$p-&gt;[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>);
+        <font color="#34E2E2"><b>$i</b></font>++;
+    }
+    compare_mini(<font color="#34E2E2"><b>$path_length</b></font>, <font color="#34E2E2"><b>$p</b></font>);
+}
+
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$total</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@min_paths</b></font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;The number of minimum path(s) is more than or equal to </font><font color="#34E2E2"><b>$total</b></font><font color="#AD7FA8">.</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;Path length: </font><font color="#34E2E2"><b>$min_path_length</b></font><font color="#AD7FA8">.</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$gd</b></font> = <font color="#FCE94F">int</font>(<font color="#FCE94F">rand</font>(<font color="#34E2E2"><b>$total</b></font>));
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;Treasure spots shown only: &quot;</font>;
+<font color="#FCE94F">print</font> <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;=&gt;&quot;</font>, <font color="#FCE94F">map</font> <font color="#FCE94F">{</font>alphanumeric(<font color="#34E2E2"><b>$_</b></font>)<font color="#FCE94F">}</font> <font color="#34E2E2"><b>$min_paths[$gd]-&gt;@*</b></font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;</font><font color="#FFD7D7">\n\n</font><font color="#AD7FA8">&quot;</font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;A full path:</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;   &quot;</font>, <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;-&gt;&quot;</font>, <font color="#FCE94F">map</font> <font color="#FCE94F">{</font>alphanumeric(<font color="#34E2E2"><b>$_</b></font>)<font color="#FCE94F">}</font>
+                expand([<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>], <font color="#34E2E2"><b>$min_paths[$gd]-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>)-&gt;@*;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;
+<font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$s</b></font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$#treasures</b></font>-<font color="#AD7FA8">1</font>) {
+    <font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;=&gt; &quot;</font>;
+    <font color="#FCE94F">print</font> <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;-&gt;&quot;</font>, <font color="#FCE94F">map</font> <font color="#FCE94F">{</font>alphanumeric(<font color="#34E2E2"><b>$_</b></font>)<font color="#FCE94F">}</font>
+                expand(<font color="#34E2E2"><b>$min_paths[$gd]-&gt;[$s]</b></font>, <font color="#34E2E2"><b>$min_paths[$gd]-&gt;[$s</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)-&gt;@*;
+    <font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;
+}
+
+</pre>
+</div>
+
+The given condition in the task statement has only one permutation of visiting the spots is minimum; see the output of the program:
+<blockquote><pre>$ time perl ch-2.pl a2 b1 b2 b3 c4 e6
+The number of minimum path(s) is more than or equal to 1.
+Path length: 11.
+Treasure spots shown only: e6=>b3=>a2=>b1=>c4=>b2
+
+A full path:
+   a8->c7->e6
+=> e6->c5->b3
+=> b3->c1->a2
+=> a2->c3->b1
+=> b1->a3->c4
+=> c4->b2
+
+real	0m0.066s
+user	0m0.028s
+sys	0m0.008s</pre></blockquote>
+
 <h5><u>Performance and Extensibility</u></h5>
+
+I have randomly generated some chessboard positions for testing.
 
 <blockquote><pre>$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4
 The number of minimum path(s) is more than or equal to 2.
@@ -268,21 +346,50 @@ A full path:
 real	0m46.254s
 user	0m46.223s
 sys	0m0.000s
+
+$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1 c5 e4 
+The number of minimum path(s) is more than or equal to 2.
+Path length: 17.
+Treasure spots shown only: b6=>d7=>c5=>e4=>d1=>h3=>g2=>h4=>g7=>d4=>c2=>b4
+
+A full path:
+   a8->b6
+=> b6->d7
+=> d7->c5
+=> c5->e4
+=> e4->c3->d1
+=> d1->f2->h3
+=> h3->f4->g2
+=> g2->h4
+=> h4->f5->g7
+=> g7->e6->d4
+=> d4->c2
+=> c2->b4
+
+real	130m8.447s
+user	129m54.621s
+sys	0m1.240s
 </pre></blockquote>
+
+<p>6! = 720, 9! = 720 &times; 504 = 362880, 10! = 3628800, 12! = 10! &times; 132 = 479001600.</p>
+
+<p>未寫完</p>
 
 <h5><u>Farewell Messages</u></h5>
 
-
+<p></p>
 
 
 <hr>
 
 <p><i>link for full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl">pre-ch-2.pl</a></tt> (pre-processing), <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl">ch-2.pl</a></tt></i></p>
 
+<p><i>link to my blogpost for <a href="challenge_118t1.html">Task 1 "Binary Palindrome" #(Being a random_sort_char("Begin")-ner)</a></i></p>
+
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
 
-<p>Created Date: 26th May, 2021;</p>
+<p>Created Date: 26th June, 2021; last updated: 10:XX HKT.</p>
 
 </body>
 

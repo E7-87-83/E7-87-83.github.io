@@ -1,0 +1,180 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Puzzle Created on The Weekly Challenge #118 Task 1 ‒ ">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="all">
+  <style>
+  #wk118 tt {
+    color:#E78783;
+  }
+  </style>
+
+<title>CY's Take on The Weekly Challenge #118 Task 1 ‒  Being a random_sort_char("Begin")-ner </title></head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li>Reserved</li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #118 Task 1 &dash; Being a random_sort_char("Begin")-ner</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku, go to <a href="https://perlweeklychallenge.org/">https://perlweeklychallenge.org</a>, code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://perlweeklychallenge.org/blog/perl-weekly-challenge-118/">challenges in Week #118</a> !</i></b></p>
+
+<hr>
+
+<h4>Task 1: Binary Palindrome</h4>
+
+<p>Task statement in one-line: Given a positive integer <tt>$N</tt> in base-10, determine whether it is a palindrome in base-2.</p>
+
+<p>First of all, I would like to talk about the blogpost title. I avoid adoring any programming languages, but I avoid (subjective)"bad" ones. At this stage, I don't adore Perl. Once I came across the book <i>Games, Diversions &amp; Perl Culture</i>, published in 2003 &dash; while Python is beginning to be popular and Ruby jumps into the stage of scripting languages. ... I have an impulse to flush opinions but, as a beginner in programming, I think it is better for me to re-read the book (and <i>Perl Best Practices</i> and comment on the current Perl culture. (Actually I found myself forgetting grammar rules of English as well... Need to work on it.)</p> 
+
+<p>As a beginner, I focus on practising programming grammar and algorithms. :D I also learn new languages when I think learning(through getting hands dirty) it benefits my scope or career of programming.</p>
+
+<p>A few times I have tried to "teach" some knowledge or skills on programming in the weekly challenge blogpost, but the outcome of attempts are so-so. It is better to save the time for reading the experts' codes and blogpost!</p>
+
+<p>It is just a matter I realized and learnt in last week that <tt>scalar $arr->[$i-1]->@* - 1</tt> is better replaced by <tt>$arr->[$i-1]->$#*</tt>. Arrrrrrrrrrrrr...</p>
+
+<p>I learnt by reading others' codes that <tt>@{$array}</tt> can be replaced by <tt>$array->@*</tt> which requires less click on position keys (usually I will write <tt>$array</tt> then <tt>@{$array}</tt>).</p>
+
+<p>In short, blogging the challenges is a real journal for me.</p>
+<p><br><br><br><br></p>
+<p>Looking at others' codes on Week #117, I have also learn the <tt color="#E78783">oct</tt> for a handy transform integer to base-2 string! I referred to the Perl Cookbook and use <tt color="#E78783">pack</tt>-<tt color="#E78783">unpack</tt>, which I have still not understood. Oooooops...</p>
+
+<p>Let's come back to the Task 1 of this week. I implemented a <tt>&amp;divmod</tt> similar to <a href="https://docs.ruby-lang.org/en/3.0.0/Numeric.html#method-i-divmod">that in Ruby</a>(but not OO, a big difference as Ruby is pure-OO language) and think it's useful and tiddying stuff, well.</p>
+
+<p>Without testing, I proceeded to write other code components, and the codes are:</p>
+
+
+<div style="color:white; background-color:black; padding-left: 5px">
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$r</b></font> = <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> || <font color="#AD7FA8">0</font>;
+<font color="#FCE94F">print</font> binpali(<font color="#34E2E2"><b>$r</b></font>),<font color="#AD7FA8">&quot;</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;
+
+
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>binpali </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@d</b></font> = dec2binarr(<font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>)-&gt;@*;
+    <font color="#FCE94F">return</font> (<font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>@d</b></font>) <font color="#FCE94F">eq</font> (<font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#FCE94F">reverse</font> <font color="#34E2E2"><b>@d</b></font>) ? <font color="#AD7FA8">1</font> : <font color="#AD7FA8">0</font>;
+}
+
+
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>dec2binarr </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$s</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@digit</b></font>;
+    <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$s</b></font> != <font color="#AD7FA8">0</font>) {
+        (<font color="#34E2E2"><b>$s</b></font>, <font color="#34E2E2"><b>$digit[$i]</b></font> ) = divmod(<font color="#34E2E2"><b>$s</b></font>)-&gt;@*;
+        <font color="#34E2E2"><b>$i</b></font>++;
+    }
+    <font color="#FCE94F">return</font> [<font color="#34E2E2"><b>@digit</b></font>];
+}
+</pre>
+</div>
+
+<font color="#666666">(I intentionally hide the details of <tt>&amp;divmod</tt> for blogpost.)</font>
+
+<p>Started test with the integer 3. The terminal output is negative. So I modified the code to see what happens. I decided to print <tt>$i</tt> in <tt>&amp;dec2binarr</tt> and printed the binary string. The terminal gave me this string:</p>
+
+<blockquote><pre>00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000011</pre></blockquote>
+
+<p>And the <tt>$i</tt> ran to as large as 1077. How about <tt>$N</tt> = 2? <tt>$i</tt> ran to 1076 and also something with many zeros and end with <tt>10</tt>. What happens?</p>
+
+<p>Then I checked <tt>$digit[$i]</tt>:</p>
+
+<blockquote><pre>
+# $i $digit[$i]
+1 1
+2 0.5
+3 0.25
+4 0.125
+5 0.0625
+#...
+1066 2.52961610670718e-321
+1067 1.26480805335359e-321
+1068 6.32404026676796e-322
+1069 3.16202013338398e-322
+1070 1.58101006669199e-322
+1071 7.90505033345994e-323
+1072 3.95252516672997e-323
+1073 1.97626258336499e-323
+1074 9.88131291682493e-324
+1075 4.94065645841247e-324
+1076 0
+00000000000000000000000
+...
+00000000000000000000000
+000000000 #end with 10 </pre></blockquote>
+
+<p>I think the readers are able to guess where goes wrong on my first attempt.</p>
+
+<p>Initial <tt>&amp;divmod</tt>:</p>
+
+<div style="color:white; background-color:black; padding-left: 5px">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>divmod </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$num</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">return</font> [<font color="#34E2E2"><b>$num</b></font> / <font color="#AD7FA8">2</font> , <font color="#34E2E2"><b>$num</b></font> % <font color="#AD7FA8">2</font>];
+}
+</pre></div>
+
+<p>Corrected <tt>&amp;divmod</tt>:</p>
+<div style="color:white; background-color:black; padding-left: 5px">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>divmod </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$num</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">return</font> [<font color="#FCE94F"><big><big>int</big></big></font> <font color="#34E2E2"><b>$num</b></font> / <font color="#AD7FA8">2</font> , <font color="#34E2E2"><b>$num</b></font> % <font color="#AD7FA8">2</font>];
+}
+</pre></div>
+
+<p>Finally I am back to provide test cases with <tt>Test::More</tt>, for reviewers or other coders to validate my code. Initially, I tried many times with <tt>oct 0b1001001</tt> before realizing it should be <tt>oct "0b1001001"</tt>.</p>
+
+<p>Stay alert and healthy! □</p>
+
+<p><i>link for full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-1.pl">ch-1.pl</a></tt></i></p>
+
+<p><i>link to blogpost for <a href="challenge_118.html">Task 2 "Adventure of Knight"</a> </i></p>
+
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+
+<p>Created Date: 26th June, 2021; last updated: 12:20 HKT.</p>
+
+</body>
+
+</html>
+
+
