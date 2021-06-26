@@ -449,6 +449,13 @@ very creative or compact but providing reasonably short paths.</p>
 
 <hr>
 
+<p style="text-decoration: underline"><u>Update on 27th June</u>: Soon after a cry on Twitter, E. Choroba
+ invited us to take a look on his A* search solution. It does not listing all permutations but find a shortest
+ path. And it is much faster &dash; for cases on 6 to 12 spots, it does its responsibility within 10 seconds.
+It finishes a 16-spot case in 4 minute and 9.199 second. Bravo.</p>
+
+<hr>
+
 <p>The image of the knight (horse head) is from Wikimedia Commons; the image is
 released under <a href="https://www.gnu.org/licenses/lgpl-3.0.html" title="LGPL">GNU Lesser General Public License</a>.
 Its author is Maurizio Monge. See the
@@ -461,15 +468,15 @@ Its author is Maurizio Monge. See the
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
 
-<p>Created Date: 26th June, 2021; last updated: 22:02 HKT (14:02 UTC). 
+<p>Created Date: 26th June, 2021; last updated: 27th June, 06:40 HKT (26th June 22:40 UTC). 
 
-<p>[20:10 HKT] A major update and apology: as the paths we are seeking are usually not <a href="https://en.wikipedia.org/wiki/Hamiltonian_path" title="Wikipedia: Hamiltonian path">Hamiltonian path</a>.</p>
+<p>[20:10 HKT] A major update and apology: the paths we are seeking are usually not <a href="https://en.wikipedia.org/wiki/Hamiltonian_path" title="Wikipedia: Hamiltonian path">Hamiltonian paths</a>.</p>
 
 <div>[22:00 HKT] A major update: It must be unfair to E. Choroba if I do not share it:
 <a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-118/e-choroba/perl/ch-2.pl" title="ch-2.pl from E. Choroba">E. Choroba's solution</a>, employing the object-oriented paradigm, using the <a href="https://www.geeksforgeeks.org/a-search-algorithm/">A* search Algorithm</a>, finishes the 12 spots case within 8~9 seconds on my machine! I have to be more hard-working.
 
 <pre>
-Data:
+$ cat Data
   a b c d e f g h
 8 N * * * * * * * 8
 7 * * * x * * x * 7
