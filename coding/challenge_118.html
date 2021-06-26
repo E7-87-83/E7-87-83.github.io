@@ -16,9 +16,13 @@
       border: 1px solid black;
     }
 
+    h6 {
+      font-size: medium;
+    }
   </style>
 
-<title>CY's Puzzle Created for The Weekly Challenge #118 ‒ Pre-processing </title></head>
+<title>CY's Puzzle Created for The Weekly Challenge #118 ‒ Pre-processing </title>
+</head>
 
 <body>
 
@@ -46,12 +50,12 @@
   <h2>CY's Puzzle Created for The Weekly Challenge #118 &dash; Pre-processing</h2>
 
 <p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
-go to <a href="https://perlweeklychallenge.org/">https://perlweeklychallenge.org</a>,
+go to <a href="https://perlweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://perlweeklychallenge.org</a>,
 code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
 
 <p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
 
-<p><b><i>It's time for <a href="https://perlweeklychallenge.org/blog/perl-weekly-challenge-118/">challenges
+<p><b><i>It's time for <a href="https://perlweeklychallenge.org/blog/perl-weekly-challenge-118/" title="The Weekly Challenge #118">challenges
 in Week #118</a> !</i></b></p>
 
 <hr>
@@ -64,7 +68,7 @@ in Week #118</a> !</i></b></p>
 <p>image info at bottom</p></div>
 
 <p>TL;DR: I have demostrated the logic of getting the (length of) the shortest paths in a 4 &times; 4
-board on the beginning POD section of <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl">ch-2.pl</a></tt> .</p>
+board on the beginning POD section of <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl" title="CY Fung's script for Week 118 Task 2">ch-2.pl</a></tt> .</p>
 
 <h5><u>Puzzle Creation</u></h5>
 <p>This week I am not only one of the participants, but also a coding puzzle creator!
@@ -79,7 +83,8 @@ player moves one of its pieces to checkmate the opponent in a few steps
 ("a few", normally for newbie). 
 Sometimes a form of related exercise
 may be presented, it is "capture an important piece" exercise.
-I found <a href="http://www.chesscuriosities.com/worksheets/worksheets">a nice collection</a>
+I found <a href="http://www.chesscuriosities.com/worksheets/worksheets" title="Chess Worksheets">
+a nice collection</a>
 by Mr David Petty. (Sorry for the site is commerical, as I could not find a non-commerical
 site having these exercises.)</p>
 
@@ -133,11 +138,11 @@ to work-around it.</p>
 
 <p><i>Caution:</i> Don't confuse <tt>$dist_tbl</tt> with the chessboard for this task! <font color="#CCCCCC">They are only related when the number of squares having treasure is 1 (and <tt>$dist_tbl-&gt;[1][1] = 4</tt> .</font></p>
 
-<h5>(Optional) How the Distance Table is Generated</h5>
+<h5>How the Distance Table is Generated</h5>
 
-<p>The pre-processing is in <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl">pre-ch-2.pl</a></tt>.</p>
+<p>The pre-processing is in <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl" title="CY Fung's pre-processing script for Week 118 Task 2">pre-ch-2.pl</a></tt>.</p>
 
-<p>The core of the pre-processing codes is only ~40 lines, let us see:</p>
+<p>The core of the pre-processing codes is only roughly 40 lines, let us see:</p>
 
 <div><tt>
 <b>my</b>&nbsp;<font color="#0000ff">$board</font>;<BR>
@@ -252,7 +257,7 @@ The code is written in the procedural style:
 <div style="color:white; background-color:black; padding-left: 5px">
 <pre><font color="#FCE94F">use strict</font>;
 <font color="#FCE94F">use warnings</font>;
-<font color="#FCE94F">use</font> <a href="https://metacpan.org/pod/Algorithm::Combinatorics">Algorithm::Combinatorics</a> <font color="#AD7FA8">qw/permutations/</font>;
+<font color="#FCE94F">use</font> <a href="https://metacpan.org/pod/Algorithm::Combinatorics" title="CPAN module - Algorithm::Combinatorics">Algorithm::Combinatorics</a> <font color="#AD7FA8">qw/permutations/</font>;
 
 <font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;Give me positions with treasure!</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">unless</font> <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
 <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@treasures</b></font> = <font color="#FCE94F">map</font> <font color="#FCE94F">{</font> binumeric_position(<font color="#34E2E2"><b>$_</b></font>) <font color="#FCE94F">}</font> <font color="#34E2E2"><b>@ARGV</b></font>;
@@ -262,7 +267,7 @@ The code is written in the procedural style:
 
 
 
-<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$dist_tbl</b></font> = <font color="#34E2E2">#[[],[],...]</font>
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$dist_tbl</b></font> = <font color="#34E2E2">#[[],[],...];</font>
 
 
 <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$iter</b></font> = permutations( \<font color="#34E2E2"><b>@treasures</b></font> );
@@ -399,29 +404,65 @@ sys	0m1.240s
   <tr><td>III</td><td>12</td><td>130 min 8.447 sec</td><td>479,001,600</td></tr>
 </table>
 
-<p>12! = 10! &times; 132 = 479,001,600 and the time of Case II is approximately 75% of 1 min;
+<p>12! = 10! &times; 132 = 479,001,600; the time of Case III is 130 min
+and the time of Case II is approximately 75% of 1 min;
 not surprisingly, the implementation is <tt>ϴ(n<sup>n</sup>)</tt>. </p>
+
+
 
 <h5><u>Farewell Messages</u></h5>
 
-<p>[to be written]</p>
+<h6><u>Insight from Others</u></h6>
+<p>Peeking at <a href="https://github.com/manwar/perlweeklychallenge-club/" title="manwar/perlweeklychallenge-club: Knowledge base for The Weekly Challenge club">the team's GitHub</a>, I found a submission using <tt><a href="https://metacpan.org/pod/Algorithm::Permute" title="CPAN module - Algorithm::Permute">Algorithm::Permute</a></tt> and <tt><a href="https://metacpan.org/pod/Memoize"  title="CPAN module - Memoize">Memoize</a></tt>, within 85 lines of code, brought a faster solution for the task specific data set! Of course, I quickly kept my arrogance: it is approx. 10% slower than my code with respect to 9 spots and spent 1 min on 10 spots.</p>
 
+<p>Differences of the two permutation algorithms seems unlikely the source of power burst.
+What makes his faster than mine for those 6 spots with treasure!?</p>
+
+<p>It is <tt><strong>Memoize</strong></tt>. RJT has recommended the free book “<a href="https://hop.perl.plover.com" title="Higher-Order Perl">Higher-Order Perl</a>”(published in 2005) to me long time ago and the book has a whole chapter on “Caching and Memoization”. Ooops. I quickly put <tt>use Memoize;</tt>
+and <tt>memoize("expand");</tt> into my code (not the submitted one), and mine runs faster than his now
+(... not wasting the effort of extra dozens of codes on pre-processing) now.</p>
+
+<h6>mathematics of Knight's tour</h6>
+<p>Using <a href="https://en.wikipedia.org/wiki/Knight%27s_tour" title="Wikipedia: Knight's tour">Knight's tour</a> seems not a promising approach for a reasonably short path.
+But it solves the challenge, anyway. :)</p>
+
+<p>Here is just a short summary compiled from the Wikipedia page
+<a href="https://en.wikipedia.org/wiki/Knight's_graph" title="Wikipedia: Knight's graph">Knight's (tour) graph</a>:
+It has 64 vertices (it's kind of obvious, arrr) and 168 edges. How fast will we get if we 
+enter the data to some mathematicians' softwares? Those softwares
+(the most famous one must be Mathematica, and if you prefer FOSS,
+I could name <a href="https://maxima.sourceforge.io" title="Maxima, a Computer Algebra System">Maxima</a> and
+<a href="http://pari.math.u-bordeaux.fr" title="PARI/GP Development Headquarters">PARI/GP</a>.) have functions called 
+<tt>HamiltonianPath</tt> or <tt><a href="https://maxima.sourceforge.io/docs/manual/maxima_250.html" title="Maxima: Graph theory package">hamilton_path</a></tt> in default.</p>
+
+<p>It could be a small project on getting familiar with the computer algebra system.
+(Sorry that I am not experienced enough for trying it on Maxima as a dumb math enthusiast.)</p>
+
+<h6>a shortest path, or a reasonably short path</h6>
+<p>As the puzzle creator, what I dream to see is a script which is
+very creative or compact but providing reasonably short paths.</p>
+
+<p>For a "shortest" path solution, are there any ways besides listing the permutations?</p>
+
+<p>As a puzzle creator, maybe I should have better or more detailed wordings for a bonus next time.</p>
+
+<p>Stay alert and healthy! □</p>
 
 <hr>
 
 <p>The image of the knight (horse head) is from Wikimedia Commons; the image is
-released under <a href="https://www.gnu.org/licenses/lgpl-3.0.html">GNU Lesser General Public License</a>.
+released under <a href="https://www.gnu.org/licenses/lgpl-3.0.html" title="LGPL">GNU Lesser General Public License</a>.
 Its author is Maurizio Monge. See the
-<a href="https://commons.wikimedia.org/wiki/File:Chess_Maurizio_Monge_Spatial_bn.svg">file details</a>.</p>
+<a href="https://commons.wikimedia.org/wiki/File:Chess_Maurizio_Monge_Spatial_bn.svg" title="Wikimedia Commons: Chess_Maurizio_Monge_Spatial_bn.svg">file details</a>.</p>
 
-<p><i>link for full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl">pre-ch-2.pl</a></tt> (pre-processing), <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl">ch-2.pl</a></tt></i></p>
+<p><i>link for full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl" title="pre-ch-2.pl from Cheok-Yin Fung">pre-ch-2.pl</a></tt> (pre-processing), <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt></i></p>
 
-<p><i>link to my blogpost for <a href="challenge_118t1.html">Task 1 "Binary Palindrome" #(Being a random_sort_char("Begin")-ner)</a></i></p>
+<p><i>link to my blogpost for <a href="challenge_118t1.html" title="CY's Take on The Weekly Challenge #118 Task 1 ‐ Being a random_sort_char("Begin")-ner">Task 1 "Binary Palindrome" #(Being a random_sort_char("Begin")-ner)</a></i></p>
 
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
 
-<p>Created Date: 26th June, 2021; last updated: 15:30 HKT.</p>
+<p>Created Date: 26th June, 2021; last updated: 18:40 HKT.</p>
 
 </body>
 
