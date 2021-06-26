@@ -461,7 +461,55 @@ Its author is Maurizio Monge. See the
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
 
-<p>Created Date: 26th June, 2021; last updated: 20:10 HKT (12:10 UTC). A major update and apology: as the paths we are seeking are usually not <a href="https://en.wikipedia.org/wiki/Hamiltonian_path" title="Wikipedia: Hamiltonian path">Hamiltonian path</a>.</p>
+<p>Created Date: 26th June, 2021; last updated: 22:02 HKT (14:02 UTC). 
+
+<p>[20:10 HKT] A major update and apology: as the paths we are seeking are usually not <a href="https://en.wikipedia.org/wiki/Hamiltonian_path" title="Wikipedia: Hamiltonian path">Hamiltonian path</a>.</p>
+
+<div>[22:00 HKT] A major update: It must be unfair to E. Choroba if I do not share it:
+<a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-118/e-choroba/perl/ch-2.pl" title="ch-2.pl from E. Choroba">E. Choroba's solution</a>, employing the object-oriented paradigm, using the <a href="https://www.geeksforgeeks.org/a-search-algorithm/">A* search Algorithm</a>, finishes the 12 spots case within 8~9 seconds on my machine! I have to be more hard-working.
+
+<pre>
+Data:
+  a b c d e f g h
+8 N * * * * * * * 8
+7 * * * x * * x * 7
+6 * x * * * * * * 6
+5 * * x * * * * * 5
+4 * x * x x * * x 4
+3 * * * * * * * x 3
+2 * * x * * * x * 2
+1 * * * x * * * * 1
+  a b c d e f g h
+
+
+$ time perl choroba-ch-2.pl < data
+Steps: 154299
+17: a8, b6, d7, c5, e4, g5, h3, f2, d1, e3, g2, h4, f5, g7, f5, d4, c2, b4
+
+real	0m8.672s
+user	0m8.636s
+sys	0m0.032s
+
+$ time perl choroba-ch-2.pl < data
+Steps: 154299
+17: a8, b6, d7, c5, e4, g5, h3, f2, d1, e3, g2, h4, f5, g7, f5, d4, c2, b4
+
+real	0m8.784s
+user	0m8.744s
+sys	0m0.036s
+
+$ time perl choroba-ch-2.pl < data
+Steps: 154299
+17: a8, b6, d7, c5, e4, g5, h3, f2, d1, e3, g2, h4, f5, g7, f5, d4, c2, b4
+
+real	0m8.779s
+user	0m8.735s
+sys	0m0.040s
+</pre>
+
+</div>
+
+
 
 </body>
 
