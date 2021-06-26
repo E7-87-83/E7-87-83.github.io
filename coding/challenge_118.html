@@ -132,7 +132,7 @@ rectangle. It guarantees a solution, but may not be the <i>shortest</i> solution
     [4,3,4,3,4,5,4,5],
     [5,4,5,4,5,4,5,6]] ;</pre></blockquote>
 
-<p><i>Caution for a special case:</i> <tt>[1][1] = 2</tt> only if both departure point and destination point are not a corner;
+<p><i>Caution for a special case:</i> <tt>[1][1] = 2</tt> only if neither departure point nor destination point is a corner;
 <tt>[1][1] = 4</tt> if the starting point is a corner. My code uses a subroutine <tt>is_corner</tt>
 to work-around it.</p>
 
