@@ -406,7 +406,7 @@ sys	0m1.240s
 
 <p>12! = 10! &times; 132 = 479,001,600; the time of Case III is 130 min
 and the time of Case II is approximately 75% of 1 min;
-not surprisingly, the implementation is <tt>ϴ(n<sup>n</sup>)</tt>. </p>
+not surprisingly, the implementation is <tt>ϴ(n<sup>n+0.5</sup> exp(1/(12*n)) )</tt> <a href="https://en.wikipedia.org/wiki/Factorial#Rate_of_growth_and_approximations_for_large_n" title="Wikipedia: Factorial">ref</a>. </p>
 
 
 
@@ -419,7 +419,7 @@ not surprisingly, the implementation is <tt>ϴ(n<sup>n</sup>)</tt>. </p>
 What makes his faster than mine for those 6 spots with treasure!?</p>
 
 <p>It is <tt><strong>Memoize</strong></tt>. RJT has recommended the free book “<a href="https://hop.perl.plover.com" title="Higher-Order Perl">Higher-Order Perl</a>”(published in 2005) to me long time ago and the book has a whole chapter on “Caching and Memoization”. Ooops. I quickly put <tt>use Memoize;</tt>
-and <tt>memoize("expand");</tt> into my code (not the submitted one), and mine runs faster than his now
+and <tt>memoize("expand");</tt> into my code, and mine runs faster than his now
 (... not wasting the effort of extra dozens of codes on pre-processing) now.</p>
 
 <h6>mathematics of Knight's tour</h6>
@@ -449,10 +449,14 @@ very creative or compact but providing reasonably short paths.</p>
 
 <hr>
 
-<p><u>Update on 27th June</u>: Soon after a cry on Twitter, E. Choroba
- invited us to take a look on his A* search solution. It does not listing all permutations but find a shortest
- path. And it is much faster &dash; for cases on 6 to 12 spots, it does its responsibility within 10 seconds.
-It finishes a 16-spot case in 4 minute and 9.199 second. Bravo.</p>
+<div><h4>Update on 27th June</h4> <br>
+
+Soon after a cry on Twitter, E. Choroba
+ invited us to take a look on his <a href="https://www.geeksforgeeks.org/a-search-algorithm/">A* search</a> solution. It does not list out
+all permutations but find a shortest
+ path. And it is much faster &dash; for cases on 6 to 12 spots, it does
+its responsibility within 10 seconds
+It finishes a 16-spot case in 4 minute and 9.199 second. Bravo.</div>
 
 <hr>
 
@@ -468,7 +472,7 @@ Its author is Maurizio Monge. See the
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
 
-<p>Created Date: 26th June, 2021; last updated: 27th June, 11:38 HKT (27th June 03:38 UTC). 
+<p>Created Date: 26th June, 2021; last updated: 27th June, 12:10 HKT (27th June 04:10 UTC), a major update and apology on the bound. 
 
 <p>[20:10 HKT] A major update and apology: the paths we are seeking are usually not <a href="https://en.wikipedia.org/wiki/Hamiltonian_path" title="Wikipedia: Hamiltonian path">Hamiltonian paths</a>.</p>
 
