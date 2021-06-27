@@ -211,15 +211,15 @@ This part may have to be “aggressively” modified if the chessboard is irregu
 
 <p>The original I coded</p>
 
-<blockquote><tt>if (  defined($board->[$ai][$aj])<br> 
-       &nbsp;&nbsp;&nbsp;&nbsp;&& $board->[$ai][$aj] == -1)</tt></blockquote>
+<blockquote><tt>if (  defined($board-&gt;[$ai][$aj])<br> 
+       &nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; $board-&gt;[$ai][$aj] == -1)</tt></blockquote>
 
 <p>The code crashed. After I discovered it was caused by the
 negative index for array feature,
 I changed it into</p>
 
-<blockquote><tt>if (  $ai >= 0 && $aj >= 0 <br> 
-       &nbsp;&nbsp;&nbsp;&nbsp;&& $board->[$ai][$aj] == -1)</tt></blockquote>
+<blockquote><tt>if (  $ai &gt;= 0 &amp;&amp; $aj &gt;= 0 <br> 
+       &nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; $board-&gt;[$ai][$aj] == -1)</tt></blockquote>
 
 <p>It was still "featured" with bugs &dash; luckily, the interpreter told that the
 bug was related to uninitialized values.</p>
@@ -307,15 +307,15 @@ The given condition in the task statement has only one permutation of visiting t
 <blockquote><pre>$ time perl ch-2.pl a2 b1 b2 b3 c4 e6
 The number of minimum path(s) is more than or equal to 1.
 Path length: 11.
-Treasure spots shown only: e6=>b3=>a2=>b1=>c4=>b2
+Treasure spots shown only: e6=&gt;b3=&gt;a2=&gt;b1=&gt;c4=&gt;b2
 
 A full path:
-   a8->c7->e6
-=> e6->c5->b3
-=> b3->c1->a2
-=> a2->c3->b1
-=> b1->a3->c4
-=> c4->b2
+   a8-&gt;c7-&gt;e6
+=&gt; e6-&gt;c5-&gt;b3
+=&gt; b3-&gt;c1-&gt;a2
+=&gt; a2-&gt;c3-&gt;b1
+=&gt; b1-&gt;a3-&gt;c4
+=&gt; c4-&gt;b2
 
 real	0m0.025s
 user	0m0.024s
@@ -329,18 +329,18 @@ I have randomly generated some chessboard positions for testing.
 <blockquote><pre>$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4
 The number of minimum path(s) is more than or equal to 2.
 Path length: 14.
-Treasure spots shown only: d7=>b6=>b4=>c2=>d4=>g7=>h4=>g2=>h3
+Treasure spots shown only: d7=&gt;b6=&gt;b4=&gt;c2=&gt;d4=&gt;g7=&gt;h4=&gt;g2=&gt;h3
 
 A full path:
-   a8->b6->d7
-=> d7->b6
-=> b6->d5->b4
-=> b4->c2
-=> c2->d4
-=> d4->e6->g7
-=> g7->f5->h4
-=> h4->g2
-=> g2->f4->h3
+   a8-&gt;b6-&gt;d7
+=&gt; d7-&gt;b6
+=&gt; b6-&gt;d5-&gt;b4
+=&gt; b4-&gt;c2
+=&gt; c2-&gt;d4
+=&gt; d4-&gt;e6-&gt;g7
+=&gt; g7-&gt;f5-&gt;h4
+=&gt; h4-&gt;g2
+=&gt; g2-&gt;f4-&gt;h3
 
 real	0m2.760s
 user	0m2.759s
@@ -351,19 +351,19 @@ sys	0m0.000s
 <blockquote><pre>$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1
 The number of minimum path(s) is more than or equal to 4.
 Path length: 16.
-Treasure spots shown only: b6=>d7=>b4=>c2=>d4=>g7=>h4=>g2=>h3=>d1
+Treasure spots shown only: b6=&gt;d7=&gt;b4=&gt;c2=&gt;d4=&gt;g7=&gt;h4=&gt;g2=&gt;h3=&gt;d1
 
 A full path:
-   a8->b6
-=> b6->d7
-=> d7->b8->a6->b4
-=> b4->c2
-=> c2->d4
-=> d4->e6->g7
-=> g7->f5->h4
-=> h4->g2
-=> g2->f4->h3
-=> h3->f2->d1
+   a8-&gt;b6
+=&gt; b6-&gt;d7
+=&gt; d7-&gt;b8-&gt;a6-&gt;b4
+=&gt; b4-&gt;c2
+=&gt; c2-&gt;d4
+=&gt; d4-&gt;e6-&gt;g7
+=&gt; g7-&gt;f5-&gt;h4
+=&gt; h4-&gt;g2
+=&gt; g2-&gt;f4-&gt;h3
+=&gt; h3-&gt;f2-&gt;d1
 
 real	0m30.563s
 user	0m30.550s
@@ -375,21 +375,21 @@ sys	0m0.004s
 $ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1 c5 e4 
 The number of minimum path(s) is more than or equal to 2.
 Path length: 17.
-Treasure spots shown only: b6=>d7=>c5=>e4=>d1=>h3=>g2=>h4=>g7=>d4=>c2=>b4
+Treasure spots shown only: b6=&gt;d7=&gt;c5=&gt;e4=&gt;d1=&gt;h3=&gt;g2=&gt;h4=&gt;g7=&gt;d4=&gt;c2=&gt;b4
 
 A full path:
-   a8->b6
-=> b6->d7
-=> d7->c5
-=> c5->e4
-=> e4->c3->d1
-=> d1->f2->h3
-=> h3->f4->g2
-=> g2->h4
-=> h4->f5->g7
-=> g7->e6->d4
-=> d4->c2
-=> c2->b4
+   a8-&gt;b6
+=&gt; b6-&gt;d7
+=&gt; d7-&gt;c5
+=&gt; c5-&gt;e4
+=&gt; e4-&gt;c3-&gt;d1
+=&gt; d1-&gt;f2-&gt;h3
+=&gt; h3-&gt;f4-&gt;g2
+=&gt; g2-&gt;h4
+=&gt; h4-&gt;f5-&gt;g7
+=&gt; g7-&gt;e6-&gt;d4
+=&gt; d4-&gt;c2
+=&gt; c2-&gt;b4
 
 real	76m50.364s
 user	76m49.594s
@@ -406,7 +406,7 @@ sys	0m0.052s
 
 <p>12! = 10! &times; 132 = 479,001,600; the time of Case III is 77 min
 and the time of Case II is approximately half of 1 min;
-not surprisingly, the implementation is <tt>ϴ(n!)</tt> = <tt>ϴ(n<sup>n+0.5</sup> exp(1/(12*n)) )</tt> [<a href="https://en.wikipedia.org/wiki/Factorial#Rate_of_growth_and_approximations_for_large_n" title="Wikipedia: Factorial">ref</a>]. </p>
+not surprisingly, the implementation is <tt>ϴ(n<sup>n+0.5</sup> exp(1/(12*n)) )</tt> [<a href="https://en.wikipedia.org/wiki/Factorial#Rate_of_growth_and_approximations_for_large_n" title="Wikipedia: Factorial">ref</a>]. </p>
 
 
 
@@ -427,7 +427,7 @@ and <tt>memoize("expand");</tt> into my code, and mine runs faster than his now
 <blockquote><pre>$ time perl ch-2-memo_dist_fun.pl a2 b1 b2 b3 c4 e6
 The number of minimum path(s) is more than or equal to 1.
 Path length: 11.
-Treasure spots shown only: e6=>b3=>a2=>b1=>c4=>b2
+Treasure spots shown only: e6=&gt;b3=&gt;a2=&gt;b1=&gt;c4=&gt;b2
 
 ...
 
@@ -435,13 +435,13 @@ real	0m0.029s
 user	0m0.029s
 sys	0m0.000s</pre></blockquote>
 
-<blockquote><pre>time perl ch-2-memo_dist_fun.pl h3 d7 g7 h4 b4 c2 g2 b6 d4
+<blockquote><pre>$ time perl ch-2-memo_dist_fun.pl h3 d7 g7 h4 b4 c2 g2 b6 d4
 ...
 real	0m4.535s
 user	0m4.529s
 sys	0m0.004s</pre></blockquote>
 
-<blockquote><pre>time perl ch-2-memo_dist_fun.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1
+<blockquote><pre>$ time perl ch-2-memo_dist_fun.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1
 ...
 real	0m49.803s
 user	0m49.775s
@@ -458,11 +458,11 @@ But it solves the challenge, anyway. :)</p>
 It has 64 vertices (it's kind of obvious, arrr) and 168 edges. How fast will we get if we 
 enter the data to some mathematicians' softwares (the most famous one must be Mathematica, and if you prefer FOSS,
 I could name <a href="https://maxima.sourceforge.io" title="Maxima, a Computer Algebra System">Maxima</a> and
-<a href="http://pari.math.u-bordeaux.fr" title="PARI/GP Development Headquarters">PARI/GP</a>.)?</p>
+<a href="http://pari.math.u-bordeaux.fr" title="PARI/GP Development Headquarters">PARI/GP</a>)?</p>
 
 
 <p>It could be a small project on getting familiar with the computer algebra system.
-(Sorry that I am not experienced enough for trying it on Maxima as a dumb math enthusiast.)</p>
+(Sorry that I am not experienced enough for trying it on Maxima as a dumb math enthusiast.)</p> 
 
 <h6>a shortest path, or a reasonably short path</h6>
 <p>As the puzzle creator, what I dream to see is a script which is
@@ -500,9 +500,11 @@ title="Wikimedia Commons: Chess_Maurizio_Monge_Spatial_bn.svg">file details</a>.
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
 
-<p>Created Date: 26th June, 2021; last updated: 27th June, 15:00 HKT (27th June 07:00 UTC).
-
-<p>[27th Jun 15:00 HKT] A major update: I have improved my code by a very trivial action &amp; reducing calling to <tt>&amps;compare_mini</tt> by moving a conditional). The performance significantly improves from 130 min to 77 min (Case III), 46 sec to 31 sec (Case II), 4.263 to 2.760 sec (Case I) and 0.066 to 0.025 sec (Task Specific Case).
+<p>Created Date: 26th June, 2021; last updated: 27th June, 16:00 HKT (27th June 08:00 UTC).
+<p>[27th Jun 16:00 HKT] I found the team
+Clojure script contributor is trying to use the wholy mathematical
+approach: build a Knight's graph...! </p>
+<p>[27th Jun 15:00 HKT] A major update: I have improved my code by a very trivial action &amp; reducing calling to <tt>&amp;compare_mini</tt> by moving a conditional). The performance significantly improves from 130 min to 77 min (Case III), 46 sec to 31 sec (Case II), 4.263 to 2.760 sec (Case I) and 0.066 to 0.025 sec (Task Specific Case).
 
 <p>[27th Jun 12:10 HKT] A major update and apology on the bound of <tt>n!</tt>.</p>
 
@@ -523,7 +525,7 @@ $ cat data
   a b c d e f g h
 
 
-$ time perl choroba-ch-2.pl < data
+$ time perl choroba-ch-2.pl &lt; data
 Steps: 154299
 17: a8, b6, d7, c5, e4, g5, h3, f2, d1, e3, g2, h4, f5, g7, f5, d4, c2, b4
 
@@ -531,7 +533,7 @@ real	0m8.672s
 user	0m8.636s
 sys	0m0.032s
 
-$ time perl choroba-ch-2.pl < data
+$ time perl choroba-ch-2.pl &lt; data
 Steps: 154299
 17: a8, b6, d7, c5, e4, g5, h3, f2, d1, e3, g2, h4, f5, g7, f5, d4, c2, b4
 
@@ -539,7 +541,7 @@ real	0m8.784s
 user	0m8.744s
 sys	0m0.036s
 
-$ time perl choroba-ch-2.pl < data
+$ time perl choroba-ch-2.pl &lt; data
 Steps: 154299
 17: a8, b6, d7, c5, e4, g5, h3, f2, d1, e3, g2, h4, f5, g7, f5, d4, c2, b4
 
