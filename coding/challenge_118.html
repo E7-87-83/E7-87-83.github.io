@@ -136,7 +136,7 @@ rectangle. It guarantees a solution, but may not be the <i>shortest</i> solution
 <tt>[1][1] = 4</tt> if the starting point is a corner. My code uses a subroutine <tt>is_corner</tt>
 to work-around it.</p>
 
-<p><i>Caution:</i> Don't confuse <tt>$dist_tbl</tt> with the chessboard for this task! <font color="#CCCCCC">They are only related when the number of squares having treasure is 1 (and <tt>$dist_tbl-&gt;[1][1] = 4</tt> .</font></p>
+<p><i>Caution:</i> Don't confuse <tt>$dist_tbl</tt> with the chessboard for this task! <font color="#CCCCCC">They are only related when the number of squares having treasure is 1 (and <tt>$dist_tbl-&gt;[1][1] = 4)</tt> .</font></p>
 
 <h5>How the Distance Table is Generated</h5>
 
@@ -317,9 +317,9 @@ A full path:
 => b1->a3->c4
 => c4->b2
 
-real	0m0.066s
-user	0m0.028s
-sys	0m0.008s</pre></blockquote>
+real	0m0.025s
+user	0m0.024s
+sys	0m0.000s</pre></blockquote>
 
 <h5><u>Performance and Extensibility</u></h5>
 
@@ -329,7 +329,29 @@ I have randomly generated some chessboard positions for testing.
 <blockquote><pre>$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4
 The number of minimum path(s) is more than or equal to 2.
 Path length: 14.
-Treasure spots shown only: b6=>d7=>b4=>c2=>d4=>g7=>h4=>g2=>h3
+Treasure spots shown only: d7=>b6=>b4=>c2=>d4=>g7=>h4=>g2=>h3
+
+A full path:
+   a8->b6->d7
+=> d7->b6
+=> b6->d5->b4
+=> b4->c2
+=> c2->d4
+=> d4->e6->g7
+=> g7->f5->h4
+=> h4->g2
+=> g2->f4->h3
+
+real	0m2.760s
+user	0m2.759s
+sys	0m0.000s
+</pre></blockquote>
+
+<p>Case II: (10 spots)</p>
+<blockquote><pre>$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1
+The number of minimum path(s) is more than or equal to 4.
+Path length: 16.
+Treasure spots shown only: b6=>d7=>b4=>c2=>d4=>g7=>h4=>g2=>h3=>d1
 
 A full path:
    a8->b6
@@ -341,33 +363,11 @@ A full path:
 => g7->f5->h4
 => h4->g2
 => g2->f4->h3
+=> h3->f2->d1
 
-real	0m4.263s
-user	0m4.257s
+real	0m30.563s
+user	0m30.550s
 sys	0m0.004s
-</pre></blockquote>
-
-<p>Case II: (10 spots)</p>
-<blockquote><pre>$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1
-The number of minimum path(s) is more than or equal to 4.
-Path length: 16.
-Treasure spots shown only: d7=>b6=>b4=>c2=>d4=>g7=>h4=>g2=>d1=>h3
-
-A full path:
-   a8->b6->d7
-=> d7->b6
-=> b6->d5->b4
-=> b4->c2
-=> c2->d4
-=> d4->e6->g7
-=> g7->f5->h4
-=> h4->g2
-=> g2->e3->d1
-=> d1->f2->h3
-
-real	0m46.254s
-user	0m46.223s
-sys	0m0.000s
 </pre></blockquote>
 
 <p>Case III: (12 spots)</p>
@@ -391,22 +391,22 @@ A full path:
 => d4->c2
 => c2->b4
 
-real	130m8.447s
-user	129m54.621s
-sys	0m1.240s
+real	76m50.364s
+user	76m49.594s
+sys	0m0.052s
 </pre></blockquote>
 
 <table style="text-align:center">
   <tr><th>Case</th><th>Number of Spots</th><th>Time</th><th><small>Number of Permutations</small></th></tr>
-  <tr><td><small>Task specific</small></td><td>6</td><td>0.066 sec</td><td>720</td></tr>
-  <tr><td>I</td><td>9</td><td>4.263 sec</td><td>362,880</td></tr>
-  <tr><td>II</td><td>10</td><td>46.254 sec</td><td>3,628,800</td></tr>
-  <tr><td>III</td><td>12</td><td>130 min 8.447 sec</td><td>479,001,600</td></tr>
+  <tr><td><small>Task specific</small></td><td>6</td><td>0.025 sec</td><td>720</td></tr>
+  <tr><td>I</td><td>9</td><td>2.760 sec</td><td>362,880</td></tr>
+  <tr><td>II</td><td>10</td><td>30.563 sec</td><td>3,628,800</td></tr>
+  <tr><td>III</td><td>12</td><td>76 min 50.364 sec</td><td>479,001,600</td></tr>
 </table>
 
-<p>12! = 10! &times; 132 = 479,001,600; the time of Case III is 130 min
-and the time of Case II is approximately 75% of 1 min;
-not surprisingly, the implementation is <tt>ϴ(n<sup>n+0.5</sup> exp(1/(12*n)) )</tt> [<a href="https://en.wikipedia.org/wiki/Factorial#Rate_of_growth_and_approximations_for_large_n" title="Wikipedia: Factorial">ref</a>]. </p>
+<p>12! = 10! &times; 132 = 479,001,600; the time of Case III is 77 min
+and the time of Case II is approximately half of 1 min;
+not surprisingly, the implementation is <tt>ϴ(n!)</tt> = <tt>ϴ(n<sup>n+0.5</sup> exp(1/(12*n)) )</tt> [<a href="https://en.wikipedia.org/wiki/Factorial#Rate_of_growth_and_approximations_for_large_n" title="Wikipedia: Factorial">ref</a>]. </p>
 
 
 
@@ -421,6 +421,33 @@ What makes his faster than mine for those 6 spots with treasure!?</p>
 <p>It is <tt><strong>Memoize</strong></tt>. RJT has recommended the free book “<a href="https://hop.perl.plover.com" title="Higher-Order Perl">Higher-Order Perl</a>”(published in 2005) to me long time ago and the book has a whole chapter on “Caching and Memoization”. Ooops. I quickly put <tt>use Memoize;</tt>
 and <tt>memoize("expand");</tt> into my code, and mine runs faster than his now
 (... not wasting the effort of extra dozens of codes on pre-processing) now.</p>
+
+<p>Note that <tt>memoize("dist_fun")</tt> has an opposite effect &amp; it slows the script:</p>
+
+<blockquote><pre>$ time perl ch-2-memo_dist_fun.pl a2 b1 b2 b3 c4 e6
+The number of minimum path(s) is more than or equal to 1.
+Path length: 11.
+Treasure spots shown only: e6=>b3=>a2=>b1=>c4=>b2
+
+...
+
+real	0m0.029s
+user	0m0.029s
+sys	0m0.000s</pre></blockquote>
+
+<blockquote><pre>time perl ch-2-memo_dist_fun.pl h3 d7 g7 h4 b4 c2 g2 b6 d4
+...
+real	0m4.535s
+user	0m4.529s
+sys	0m0.004s</pre></blockquote>
+
+<blockquote><pre>time perl ch-2-memo_dist_fun.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1
+...
+real	0m49.803s
+user	0m49.775s
+sys	0m0.001s</pre></blockquote>
+
+<p>Why?</p>
 
 <h6>mathematics of Knight's tour</h6>
 <p>Using <a href="https://en.wikipedia.org/wiki/Knight%27s_tour" title="Wikipedia: Knight's tour">Knight's tour</a> seems not a promising approach for a reasonably short path.
@@ -456,7 +483,7 @@ Soon after a cry on Twitter, E. Choroba
 all permutations but find a shortest
  path. And it is much faster &dash; for cases on 6 to 12 spots, it does
 its responsibility within 10 seconds
-It finishes a 16-spot case in 4 minute and 9.199 second. Bravo.</div>
+It finishes a 16-spot case in 4 minute and 9.199 second. Bravo. □</div>
 
 <hr>
 
@@ -468,16 +495,18 @@ title="Wikimedia Commons: Chess_Maurizio_Monge_Spatial_bn.svg">file details</a>.
 
 <p><i>link for full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl" title="pre-ch-2.pl from Cheok-Yin Fung">pre-ch-2.pl</a></tt> (pre-processing), <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt></i></p>
 
-<p><i>link to my blogpost for <a href="challenge_118t1.html" title="CY's Take on The Weekly Challenge #118 Task 1 ‐ Being a random_sort_char("Begin")-ner">Task 1 "Binary Palindrome" #(Being a random_sort_char("Begin")-ner)</a></i></p>
+<p><i>link to my blogpost for <a href="challenge_118t1.html" title="CY's Take on The Weekly Challenge #118 Task 1 ‐ Being a random_sort_char("Begin")-ner">Task 1 "Binary Palindrome"</a></i></p>
 
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
 
 <p>Created Date: 26th June, 2021; last updated: 27th June, 12:10 HKT (27th June 04:10 UTC).
 
+<p>[27th Jun 15:00 HKT] A major update: I have improved my code by a very trivial action &amp; reducing calling to <tt>&amps;compare_mini</tt> by moving a conditional). The performance significantly improves from 130 min to 77 min (Case III), 46 sec to 31 sec (Case II), 4.263 to 2.760 sec (Case I) and 0.066 to 0.025 sec (Task Specific Case).
+
 <p>[27th Jun 12:10 HKT] A major update and apology on the bound of <tt>n!</tt>.</p>
 
-<div>[26th Jun 22:00 HKT] A major update: It must be unfair to E. Choroba if I do not share it:
+<div style="color:#235711">[26th Jun 22:00 HKT] A major update: It must be unfair to E. Choroba if I do not share it:
 <a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-118/e-choroba/perl/ch-2.pl" title="ch-2.pl from E. Choroba">E. Choroba's solution</a>, employing the object-oriented paradigm, using the <a href="https://www.geeksforgeeks.org/a-search-algorithm/">A* search Algorithm</a>, finishes the 12-spot case within 8~9 seconds on my machine! I have to be more hard-working.
 
 <pre>
@@ -521,7 +550,8 @@ sys	0m0.040s
 
 </div>
 
-<p>[26th Jun 20:10 HKT] A major update and apology: The paths we are seeking are usually not <a href="https://en.wikipedia.org/wiki/Hamiltonian_path" title="Wikipedia: Hamiltonian path">Hamiltonian paths</a>.</p>
+<p>[26th Jun 20:10 HKT] A major update and apology: The paths we are seeking are usually not
+<a href="https://en.wikipedia.org/wiki/Hamiltonian_path" title="Wikipedia: Hamiltonian path">Hamiltonian paths</a>.</p>
 
 </body>
 

@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="CY's Puzzle Created on The Weekly Challenge #118 Task 1 ‒ ">
+  <meta name="description" content="CY's Puzzle Created on The Weekly Challenge #118 Task 1">
   <meta name="keywords" content="Perl">
   <meta name="author" content="Cheok-Yin Fung">  
   <link rel="styleSheet" href="../docs/main.css" type="text/css" media="all">
@@ -11,7 +11,7 @@
   }
   </style>
 
-<title>CY's Take on The Weekly Challenge #118 Task 1 ‒  Being a random_sort_char("Begin")-ner </title></head>
+<title>CY's Take on The Weekly Challenge #118 Task 1</title></head>
 
 <body>
 
@@ -36,7 +36,7 @@
 </div>
 
 <div class="main">
-  <h2>CY's Take on The Weekly Challenge #118 Task 1 &dash; Being a random_sort_char("Begin")-ner</h2>
+  <h2>CY's Take on The Weekly Challenge #118 Task 1</h2>
 
 <p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku, go to <a href="https://perlweeklychallenge.org/">https://perlweeklychallenge.org</a>, code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
 
@@ -50,18 +50,6 @@
 
 <p>Task statement in one-line: Given a positive integer <tt>$N</tt> in base-10, determine whether it is a palindrome in base-2.</p>
 
-<p>First of all, I would like to talk about the blogpost title. I avoid adoring any programming languages, but I avoid (subjective)"bad" ones. At this stage, I don't adore Perl. Once I came across the book <i>Games, Diversions &amp; Perl Culture</i>, published in 2003 &dash; while Python is beginning to be popular and Ruby jumps into the stage of scripting languages. ... I have an impulse to flush opinions but, as a beginner in programming, I think it is better for me to re-read the book (and <i>Perl Best Practices</i> and comment on the current Perl culture. (Actually I found myself forgetting grammar rules of English as well... Need to work on it.)</p> 
-
-<p>As a beginner, I focus on practising programming grammar and algorithms. :D I also learn new languages when I think learning(through getting hands dirty) it benefits my scope or career of programming.</p>
-
-<p>A few times I have tried to "teach" some knowledge or skills on programming in the weekly challenge blogpost, but the outcome of attempts are so-so. It is better to save the time for reading the experts' codes and blogpost!</p>
-
-<p>It is just a matter I realized and learnt in last week that <tt>scalar $arr->[$i-1]->@* - 1</tt> is better replaced by <tt>$arr->[$i-1]->$#*</tt>. Arrrrrrrrrrrrr...</p>
-
-<p>I learnt by reading others' codes that <tt>@{$array}</tt> can be replaced by <tt>$array->@*</tt> which requires less click on position keys (usually I will write <tt>$array</tt> then <tt>@{$array}</tt>).</p>
-
-<p>In short, blogging the challenges is a real journal for me.</p>
-<p><br><br><br><br></p>
 <p>Looking at others' codes on Week #117, I have also learn the <tt color="#E78783">oct</tt> for a handy transform integer to base-2 string! I referred to the Perl Cookbook and use <tt color="#E78783">pack</tt>-<tt color="#E78783">unpack</tt>, which I have still not understood. Oooooops...</p>
 
 <p>Let's come back to the Task 1 of this week. I implemented a <tt>&amp;divmod</tt> similar to <a href="https://docs.ruby-lang.org/en/3.0.0/Numeric.html#method-i-divmod">that in Ruby</a>(but not OO, a big difference as Ruby is pure-OO language) and think it's useful and tiddying stuff, well.</p>
