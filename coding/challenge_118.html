@@ -65,7 +65,7 @@ in Week #118</a> !</i></b></p>
 
 <div style="float:right; border: 1px dotted black; font-size:x-small;">
 <image alt="" src="../docs/wiki_img/horse.png" style="float:right" />
-<p>image info at bottom</p></div>
+<p><a href="#right_of_use">image info</a></p></div>
 
 <p>TL;DR: I have demostrated the logic of getting the (length of) the shortest paths in a 4 &times; 4
 board on the beginning POD section of <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl" title="CY Fung's script for Week 118 Task 2">ch-2.pl</a></tt> .</p>
@@ -406,7 +406,7 @@ sys	0m0.052s
 
 <p>12! = 10! &times; 132 = 479,001,600; the time of Case III is 77 min
 and the time of Case II is approximately half of 1 min;
-not surprisingly, the implementation is <tt>ϴ(n<sup>n+0.5</sup> exp(1/(12*n)) )</tt> [<a href="https://en.wikipedia.org/wiki/Factorial#Rate_of_growth_and_approximations_for_large_n" title="Wikipedia: Factorial">ref</a>]. </p>
+not surprisingly, the implementation is <tt>ϴ(n<sup>n+0.5</sup> exp(1/(12*n)) )</tt> <font color="red">(may multiply one more <tt>n</tt>)</font>  [<a href="https://en.wikipedia.org/wiki/Factorial#Rate_of_growth_and_approximations_for_large_n" title="Wikipedia: Factorial">ref</a>]. </p>
 
 
 
@@ -447,7 +447,7 @@ real	0m49.803s
 user	0m49.775s
 sys	0m0.001s</pre></blockquote>
 
-<p>Why?</p>
+<p>Why?...</p>
 
 <h6>mathematics of Knight's tour</h6>
 <p>Using <a href="https://en.wikipedia.org/wiki/Knight%27s_tour" title="Wikipedia: Knight's tour">Knight's tour</a> seems not a promising approach for a reasonably short path.
@@ -476,31 +476,121 @@ very creative or compact but providing reasonably short paths.</p>
 
 <hr>
 
+<div style="color:#543210"><h4>Update on 28th June</h4>
+
+<p>Yesterday night I was impressed by, as usual for a relatively complex or complicated task,
+<a href="https://github.com/manwar/perlweeklychallenge-club/tree/master/challenge-118/abigail/perl/ch-2a.pl">Abigail's (upping the ante) solution</a>
+on the task. I did some performance tests against E. Choroba's
+and find Abigail's faster by a factor of 2 to 4. </p>
+
+<p>Abigail's script is essentially composed of less than 65 lines. Impressive.</p>
+
+
+<p>This morning I took a look on the team's repository and found "CY" mentioned in a pull request comment. 
+James Smith, another experienced coder in the team, has written
+<a href="https://github.com/manwar/perlweeklychallenge-club/tree/master/challenge-118/james-smith/perl/ch-2-using-precomputed-distances.pl">a new solution</a> using
+the idea of pre-processing the distance and other techniques. Thank Mr Smith for reading my blogpost.</p>
+
+<p>Note that this round I tested the scripts on Windows, which usually runs slower Perl,
+because Abigail's solution requests features in Perl 5.32
+but my Linuxmint has only 5.30 installed. I think the choice of the operating
+system is not a big deal because they won't give me 2-hour solutions. X)</p>
+
+<p>Here are test results on Abigail's script and James Smith's script.</p>
+
+<pre>DATA: h3 d7 g7 h4 b4 c2 g2 b6 d4 d1 c5 e4 h8
+Number of spots: 13
+
+C:\work-now&gt;perl abigail-ch-2.pl &lt; data.1
+a8
+h3 f2 d1 c3 e4 c5 d7 b6 d5 b4 c2 d4 e6 g7 e6 f4 g2 h4 g6 h8
+Overall time:  10.199467
+
+C:\work-now&gt;perl smith-ch-2.pl
+
+Minimal length: 21
+Minimal route:  a8  b6* d7* b6* d5  b4* c2* d4* f5  g7* e6
+c5* e4* f2  h3* f2  d1* e3  g2* h4* g6  h8*
+
+Permutations:   6227020800
+Function calls: 319502
+Cache entries:  53249
+Speed up:       116941.553831997
+
+Timings:
+Pre^2-compute:  0.000116
+Pre-compute:    0.005239
+Find path:      1.712727
+Overall time:   1.718082
+
+
+
+---
+
+DATA: h3 d7 g7 h4 b4 c2 g2 b6 d4 d1 c5 e4 h8 a1 h1 a3
+Number of spots: 16
+
+C:\work-now&gt;perl abigail-ch-2.pl &lt; data.2
+a8
+h3 f2 d1 f2 h1 f2 e4 c5 d7 b6 c4 a3 c2 a1 c2 b4 c6 d4 e6 g7 e6 f4 g2 h4 g6 h8
+Overall time:  107.617590
+
+C:\work-now&gt;perl smith-ch-2.pl
+
+Minimal length: 27
+Minimal route:  a8  b6* d7* b6* c4  a3* c2* b4* c2* a1* c2* d4* f5  g7* e6
+c5* e4* f2  h1* f2  h3* f2  d1* e3  g2* h4* g6  h8*
+
+Permutations:   20922789888000
+Function calls: 3932177
+Cache entries:  524289
+Speed up:       39906978.570979
+
+Timings:
+Pre^2-compute:  0.000623
+Pre-compute:    0.013825
+Find path:     31.986586
+Overall time:  32.001034
+
+
+
+---</pre></blockquote>
+
+<p>James Smith's implementation is really, FAST and EXACT! Bravo for Abigail and James Smith. □</p>
+<p><i>Note that I am not trying to take on the job of code reviewer as my Perl programming is still weak,
+for two instances among many instances,
+I haven't understood the use of </i><tt>%CACHE</tt><i>
+in James's code or which new features from Perl 5.32 is used by Abigail's script.</i></p>
+
+</div>
+
 <div><h4>Update on 27th June</h4> <br>
 
 Soon after a cry on Twitter, E. Choroba
- invited us to take a look on his <a href="https://www.geeksforgeeks.org/a-search-algorithm/">A* search</a> solution. It does not list out
-all permutations but find a shortest
+ invited us to take a look on his <a href="https://www.geeksforgeeks.org/a-search-algorithm/" title="geeksforgeeks: A* search Algorithm">A* search</a>
+solution [<a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-118/e-choroba/perl/ch-2.pl" title="ch-2.pl from E. Choroba">code here</a>].
+It does not list out
+all permutations but finds a shortest
  path. And it is much faster &dash; for cases on 6 to 12 spots, it does
 its responsibility within 10 seconds
 It finishes a 16-spot case in 4 minute and 9.199 second. Bravo. □</div>
 
 <hr>
 
-<p>The image of the knight (horse head) is from Wikimedia Commons; the image is
+<p><a name="right_of_use" />The image of the knight (horse head) is from Wikimedia Commons; the image is
 released under <a href="https://www.gnu.org/licenses/lgpl-3.0.html" title="LGPL">GNU Lesser General Public License</a>.
 Its author is Maurizio Monge. See the
 <a href="https://commons.wikimedia.org/wiki/File:Chess_Maurizio_Monge_Spatial_bn.svg"
 title="Wikimedia Commons: Chess_Maurizio_Monge_Spatial_bn.svg">file details</a>.</p>
 
-<p><i>link for full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl" title="pre-ch-2.pl from Cheok-Yin Fung">pre-ch-2.pl</a></tt> (pre-processing), <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt></i></p>
+<p><i>link for CY's full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl" title="pre-ch-2.pl from Cheok-Yin Fung">pre-ch-2.pl</a></tt> (pre-processing), <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt></i></p>
 
 <p><i>link to my blogpost for <a href="challenge_118t1.html" title="CY's Take on The Weekly Challenge #118 Task 1">Task 1 "Binary Palindrome"</a></i></p>
 
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
 
-<p>Created Date: 26th June, 2021; last updated: 27th June, 16:00 HKT (27th June 08:00 UTC).
+<p>Created Date: 26th June, 2021; last updated: 28th June, 12:00 HKT (28th June, 04:00 UTC).
 <p>[27th Jun 16:00 HKT] I found the team
 Clojure script contributor is trying to use the wholy mathematical
 approach: build a Knight's graph...! </p>
