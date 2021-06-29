@@ -1,0 +1,652 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Puzzle Created on The Weekly Challenge #118 ‒ Pre-processing">
+  <meta name="keywords" content="Perl, Chess, Programming, Algorithms">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="all">
+  <style>
+    #wk118 tt {
+      color:#E78783;
+    }
+    table td {
+      border: 1px dotted black;
+    }
+    table th {
+      border: 1px solid black;
+    }
+
+    h6 {
+      font-size: medium;
+    }
+  </style>
+
+<title>CY's Puzzle Created for The Weekly Challenge #118 ‒ Pre-processing </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li>Reserved</li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Puzzle Created for The Weekly Challenge #118 &dash; Pre-processing</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://perlweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://perlweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://perlweeklychallenge.org/blog/perl-weekly-challenge-118/" title="The Weekly Challenge #118">challenges
+in Week #118</a> !</i></b></p>
+
+<hr>
+
+<h4>Task 2: Adventure of Knight</h4>
+
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<image alt="" src="../docs/wiki_img/horse.png" style="float:right" />
+<p><a href="#right_of_use">image info</a></p></div>
+
+<p>TL;DR: I have demostrated the logic of getting the (length of) the shortest paths in a 4 &times; 4
+board on the beginning POD section of <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl" title="CY Fung's script for Week 118 Task 2">ch-2.pl</a></tt> .</p>
+
+<h5><u>Puzzle Creation</u></h5>
+<p>This week I am not only one of the participants, but also a coding puzzle creator!
+I was quite excited about it.</p>
+
+<p>Many people recognized that this task can be related to <a href="https://en.wikipedia.org/wiki/Knight%27s_tour" title="Wikipedia: Knight's tour">Knight's tour</a>. It is really
+one of inspirations &dash; other important source of inspirations is "checkmate" exercises for chess
+players.</p>
+
+<p>Let's explain a bit on checkmate exercises. A checkmate exercise asks the chess
+player moves one of its pieces to checkmate the opponent in a few steps
+("a few", normally for newbie). Here is a Twitter account providing these puzzles: <a href="https://twitter.com/HourlyChess" title="Chess Puzzle Every Hour">@HourlyChess</a>.
+Sometimes a form of related exercise
+may be presented, it is "capture an important piece" exercise.
+I found <a href="http://www.chesscuriosities.com/worksheets/worksheets" title="Chess Worksheets">
+a nice collection</a>
+by Mr David Petty. <font color="#CCCCCC">(Sorry for the site is commerical, as I could not find a non-commerical
+site having these exercises.)</font></p>
+
+<p><font color="#CCCCCC">Yes, having experience of practising chess gains advantage in this task.
+Since there are tasks which people familiar with number theory have advantage,
+I put this puzzle to submit. Isn't chess a popular game?</font></p>
+
+<h5><u>Warm-Up</u></h5>
+
+<h5>The Knight's Property</h5>
+<blockquote><div border="1"><pre>N  3  2 
+3     1
+2  1  4
+</pre></div></blockquote>
+
+<p>The above small box often appears on my mind this week. It indicates number of steps of a knight
+to move towards the other squares. In this 3 &times; 3 chessboard, the knight cannot
+move to the diagonal immediate neighbour.</p>
+
+<p>So imagine there are paddings that the knight can move to:</p>
+
+<blockquote><div border="1"><pre>   ~  ~  ~
+~  N  3  2 
+~  3  2^ 1
+~  2  1  4
+</pre></div></blockquote>
+
+<p>Here <tt>^</tt> temporarily indicates a value appears only when there are paddings.</p>
+
+<h5>Move from A Square to Another Square</h5>
+
+<p>The main purpose of this section is a discussion of how to get a shortest path to another square.</p>
+
+<p>(I have thought of whether using a smaller distance table can solve the puzzle exactly. Like,
+since 5 &times; 5 distance tables of two knights will ultimately overlap a
+rectangle. It guarantees a solution, but may not be the <i>shortest</i> solution(s).)</p>
+
+<blockquote><pre>my $dist_tbl = 
+   [[0,3,2,3,2,3,4,5],
+    [3,2,1,2,3,4,3,4],
+    [2,1,4,3,2,3,4,5],
+    [3,2,3,2,3,4,3,4],
+    [2,3,2,3,4,3,4,5],
+    [3,4,3,4,3,4,5,4],
+    [4,3,4,3,4,5,4,5],
+    [5,4,5,4,5,4,5,6]] ;</pre></blockquote>
+
+<p><i>Caution for a special case:</i> <tt>[1][1] = 2</tt> only if neither departure point nor destination point is a corner;
+<tt>[1][1] = 4</tt> if the starting point is a corner. My code uses a subroutine <tt>is_corner</tt>
+to work-around it.</p>
+
+<p><i>Caution:</i> Don't confuse <tt>$dist_tbl</tt> with the chessboard for this task! <font color="#CCCCCC">They are only related when the number of squares having treasure is 1 (and <tt>$dist_tbl-&gt;[1][1] = 4)</tt> .</font></p>
+
+<h5>How the Distance Table is Generated</h5>
+
+<p>The pre-processing is in <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl" title="CY Fung's pre-processing script for Week 118 Task 2">pre-ch-2.pl</a></tt>.</p>
+
+<p>The core of the pre-processing codes is only roughly 40 lines, let us see:</p>
+
+<div><tt>
+<b>my</b>&nbsp;<font color="#0000ff">$board</font>;<BR>
+<BR>
+<BR>
+<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$k</font>&nbsp;(<font color="#00007f">1..63</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#007f00">int</font>&nbsp;<font color="#0000ff">$k</font>&nbsp;/&nbsp;<font color="#00007f">8</font>][<font color="#0000ff">$k</font>&nbsp;%&nbsp;<font color="#00007f">8</font>]&nbsp;=&nbsp;<font color="#00007f">-1</font>;<BR>
+}<BR>
+<BR>
+<font color="#0000ff">$board</font>-&gt;[0][0]&nbsp;=&nbsp;0;<BR>
+<font color="#0000ff">$board</font>-&gt;[<font color="#00007f">1</font>][<font color="#00007f">1</font>]&nbsp;=&nbsp;<font color="#00007f">2</font>;<BR>
+<BR>
+<b>my</b>&nbsp;<font color="#0000ff">$total</font>&nbsp;=&nbsp;<font color="#00007f">62</font>;<BR>
+<b>my</b>&nbsp;<font color="#0000ff">$t</font>&nbsp;=&nbsp;0;<BR>
+<b>while</b>&nbsp;(<font color="#0000ff">$total</font>&nbsp;&gt;&nbsp;0)&nbsp;{<BR>
+&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$i</font>&nbsp;(0.<font color="#00007f">.7</font>)&nbsp;{&nbsp;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$j</font>&nbsp;(0.<font color="#00007f">.7</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$i</font>][<font color="#0000ff">$j</font>]&nbsp;==&nbsp;<font color="#0000ff">$t</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$a</font>&nbsp;(&nbsp;[<font color="#00007f">-2</font>,<font color="#00007f">-1</font>],&nbsp;&nbsp;[<font color="#00007f">-1</font>,<font color="#00007f">-2</font>],&nbsp;&nbsp;[<font color="#00007f">-2</font>,&nbsp;<font color="#00007f">1</font>],&nbsp;&nbsp;[&nbsp;<font color="#00007f">1</font>,<font color="#00007f">-2</font>],&nbsp;&nbsp;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<font color="#00007f">-1</font>,&nbsp;<font color="#00007f">2</font>],&nbsp;&nbsp;[&nbsp;<font color="#00007f">2</font>,<font color="#00007f">-1</font>],&nbsp;&nbsp;[&nbsp;<font color="#00007f">1</font>,&nbsp;<font color="#00007f">2</font>],&nbsp;&nbsp;[&nbsp;<font color="#00007f">2</font>,&nbsp;<font color="#00007f">1</font>])<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$ai</font>&nbsp;=&nbsp;<font color="#0000ff">$i</font>+<font color="#0000ff">$a</font>-&gt;[0];<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$aj</font>&nbsp;=&nbsp;<font color="#0000ff">$j</font>+<font color="#0000ff">$a</font>-&gt;[<font color="#00007f">1</font>];<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(&nbsp;&nbsp;<font color="#0000ff">$ai</font>&nbsp;&gt;=&nbsp;0&nbsp;&amp;&amp;&nbsp;<font color="#0000ff">$aj</font>&nbsp;&gt;=&nbsp;0&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#no&nbsp;negative&nbsp;index</i></font><font color="#7f7f7f"><i><BR>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp;&nbsp;<font color="#007f00">defined</font>(<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$ai</font>][<font color="#0000ff">$aj</font>])&nbsp;<font color="#7f7f7f"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<i>#&nbsp;&nbsp;no&nbsp;running&nbsp;outside&nbsp;board</i></font><font color="#7f7f7f"><i><BR>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp;&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$ai</font>][<font color="#0000ff">$aj</font>]&nbsp;==&nbsp;<font color="#00007f">-1</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$ai</font>][<font color="#0000ff">$aj</font>]&nbsp;=&nbsp;<font color="#00007f">1</font>&nbsp;+&nbsp;<font color="#0000ff">$t</font>;&nbsp;&nbsp;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$total</font>--;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;<font color="#0000ff">$t</font>++;<BR>
+}<BR>
+<BR>
+<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$i</font>&nbsp;(0.<font color="#00007f">.7</font>)&nbsp;{<BR>
+&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$j</font>&nbsp;(0.<font color="#00007f">.7</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">print</font>&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$i</font>][<font color="#0000ff">$j</font>],&nbsp;<font color="#ffa500">"</font><font color="#ff0000">&nbsp;</font><font color="#ffa500">"</font>&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$i</font>][<font color="#0000ff">$j</font>]&nbsp;&gt;=&nbsp;0;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">print</font>&nbsp;<font color="#ffa500">"</font><font color="#ff0000">*</font><font color="#ffa500">"</font>,&nbsp;<font color="#ffa500">"</font><font color="#ff0000">&nbsp;</font><font color="#ffa500">"</font>&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$board</font>-&gt;[<font color="#0000ff">$i</font>][<font color="#0000ff">$j</font>]&nbsp;==&nbsp;<font color="#00007f">-1</font>;<BR>
+&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;<font color="#007f00">print</font>&nbsp;<font color="#ffa500">"</font><font color="#ff00ff">\n</font><font color="#ffa500">"</font>;<BR>
+}<BR>
+</tt></div>
+
+<p>Yup, there are so many nested blocks hence 4-space-indentation has to be replaced by
+2-space-indentation.</p>
+
+<p>When it comes to squares reachable within 3 steps, <tt>$board</tt> in <tt>pre-ch-2.pl</tt>,
+corresponds to <tt>$dist_tbl</tt> in <tt>ch-2.pl</tt>, is like this:</p>
+
+<blockquote><pre><tt>0 3 2 3 2 3 * * 
+3 2 1 2 3 * 3 * 
+2 1 * 3 2 3 * * 
+3 2 3 2 3 * 3 * 
+2 3 2 3 * 3 * * 
+3 * 3 * 3 * * * 
+* 3 * 3 * * * * 
+* * * * * * * * </tt></pre></blockquote>
+
+<p>By luck(?), the number of steps to reach every square is consecutive from 0 to 6…
+This part may have to be “aggressively” modified if the chessboard is irregular.</p>
+
+<div><font color="#999999"><u>Story on logical errors:</u>
+
+<p>The original I coded</p>
+
+<blockquote><tt>if (  defined($board-&gt;[$ai][$aj])<br> 
+       &nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; $board-&gt;[$ai][$aj] == -1)</tt></blockquote>
+
+<p>The code crashed. After I discovered it was caused by the
+negative index for array feature,
+I changed it into</p>
+
+<blockquote><tt>if (  $ai &gt;= 0 &amp;&amp; $aj &gt;= 0 <br> 
+       &nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; $board-&gt;[$ai][$aj] == -1)</tt></blockquote>
+
+<p>It was still "featured" with bugs &dash; luckily, the interpreter told that the
+bug was related to uninitialized values.</p>
+
+<p>As you can see the final version above, I omit it here.</p>
+
+<p>(Much earlier: I created a <tt>$visited</tt> variable for saving whether
+a square is traversed and whether a square computes its possible next step.)
+</font></p></div>
+
+<h5><u>Main Dish</u></h5>
+
+<p>Since a large part of problem-solving is done by <tt>pre-ch-2.pl</tt>,
+the main code consists of only 6 subroutines:</p>
+
+<blockquote><pre>dist_fun
+compare_mini
+alphanumeric
+binumeric_position
+is_corner
+expand</pre></blockquote>
+<ul id="wk118">
+<li>(Supportive:) <tt>&amp;alphanumeric</tt> and <tt>&amp;binumeric_position</tt> interchange the
+notation of a position. For example, <code>a6</code>→<code>[0,2]</code>, <code>b2</code>→<code>[1,6]</code>, <code>d4</code>→<code>[3,4]</code>, etc.. </li>
+<li><tt>&amp;expand</tt> will return a knight's path with a pre-set number of steps between two positions.
+Its internal is very similar to <tt>pre-ch-2.pl</tt>.</li>
+<li><tt>&amp;dist_fun</tt> uses <tt>$dist_tbl</tt> as a reference and handle the corner case.
+It returns the minimum number of steps between two position.</li>
+<li><tt>&amp;is_corner</tt> is a supportive subroutine to <tt>&amp;dist_fun</tt>. It returns whether a position is one of the chessboard four corners.</li>
+<li><tt>&amp;compare_mini</tt> compares a path with information of positions having treasure, sees whether the order of traversing the positions with treasure is a candidate for the shortest path.</li>
+</ul>
+
+The code is written in the procedural style:
+
+<div style="color:white; background-color:black; padding-left: 5px">
+<pre><font color="#FCE94F">use strict</font>;
+<font color="#FCE94F">use warnings</font>;
+<font color="#FCE94F">use</font> <a href="https://metacpan.org/pod/Algorithm::Combinatorics" title="CPAN module - Algorithm::Combinatorics">Algorithm::Combinatorics</a> <font color="#AD7FA8">qw/permutations/</font>;
+
+<font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;Give me positions with treasure!</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">unless</font> <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@treasures</b></font> = <font color="#FCE94F">map</font> <font color="#FCE94F">{</font> binumeric_position(<font color="#34E2E2"><b>$_</b></font>) <font color="#FCE94F">}</font> <font color="#34E2E2"><b>@ARGV</b></font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$min_path_length</b></font> = <font color="#AD7FA8">1000</font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@min_paths</b></font> = ();
+
+
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$dist_tbl</b></font> = <font color="#34E2E2">#[[],[],...];</font>
+
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$iter</b></font> = permutations( \<font color="#34E2E2"><b>@treasures</b></font> );
+<font color="#FCE94F">while</font> (<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$iter-&gt;next</b></font>) {
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$path_length</b></font> = dist_fun([<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>], <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$i</b></font> &lt; <font color="#34E2E2"><b>$p-&gt;$#*</b></font>) {
+        <font color="#34E2E2"><b>$path_length</b></font> += dist_fun(<font color="#34E2E2"><b>$p-&gt;[$i]</b></font>, <font color="#34E2E2"><b>$p-&gt;[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>);
+        <font color="#34E2E2"><b>$i</b></font>++;
+    }
+    compare_mini(<font color="#34E2E2"><b>$path_length</b></font>, <font color="#34E2E2"><b>$p</b></font>);
+}
+
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$total</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@min_paths</b></font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;The number of minimum path(s) is more than or equal to </font><font color="#34E2E2"><b>$total</b></font><font color="#AD7FA8">.</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;Path length: </font><font color="#34E2E2"><b>$min_path_length</b></font><font color="#AD7FA8">.</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$gd</b></font> = <font color="#FCE94F">int</font>(<font color="#FCE94F">rand</font>(<font color="#34E2E2"><b>$total</b></font>));
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;Treasure spots shown only: &quot;</font>;
+<font color="#FCE94F">print</font> <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;=&gt;&quot;</font>, <font color="#FCE94F">map</font> <font color="#FCE94F">{</font>alphanumeric(<font color="#34E2E2"><b>$_</b></font>)<font color="#FCE94F">}</font> <font color="#34E2E2"><b>$min_paths[$gd]-&gt;@*</b></font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;</font><font color="#FFD7D7">\n\n</font><font color="#AD7FA8">&quot;</font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;A full path:</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;   &quot;</font>, <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;-&gt;&quot;</font>, <font color="#FCE94F">map</font> <font color="#FCE94F">{</font>alphanumeric(<font color="#34E2E2"><b>$_</b></font>)<font color="#FCE94F">}</font>
+                expand([<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>], <font color="#34E2E2"><b>$min_paths[$gd]-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>)-&gt;@*;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;
+<font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$s</b></font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$#treasures</b></font>-<font color="#AD7FA8">1</font>) {
+    <font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;=&gt; &quot;</font>;
+    <font color="#FCE94F">print</font> <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;-&gt;&quot;</font>, <font color="#FCE94F">map</font> <font color="#FCE94F">{</font>alphanumeric(<font color="#34E2E2"><b>$_</b></font>)<font color="#FCE94F">}</font>
+                expand(<font color="#34E2E2"><b>$min_paths[$gd]-&gt;[$s]</b></font>, <font color="#34E2E2"><b>$min_paths[$gd]-&gt;[$s</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)-&gt;@*;
+    <font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;
+}
+
+</pre>
+</div>
+
+The given condition in the task statement has only one permutation of visiting the spots is minimum; see the output of the program:
+<blockquote><pre>$ time perl ch-2.pl a2 b1 b2 b3 c4 e6
+The number of minimum path(s) is more than or equal to 1.
+Path length: 11.
+Treasure spots shown only: e6=&gt;b3=&gt;a2=&gt;b1=&gt;c4=&gt;b2
+
+A full path:
+   a8-&gt;c7-&gt;e6
+=&gt; e6-&gt;c5-&gt;b3
+=&gt; b3-&gt;c1-&gt;a2
+=&gt; a2-&gt;c3-&gt;b1
+=&gt; b1-&gt;a3-&gt;c4
+=&gt; c4-&gt;b2
+
+real	0m0.025s
+user	0m0.024s
+sys	0m0.000s</pre></blockquote>
+
+<h5><u>Performance and Extensibility</u></h5>
+
+I have randomly generated some chessboard positions for testing.
+
+<p>Case I: (9 spots)</p>
+<blockquote><pre>$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4
+The number of minimum path(s) is more than or equal to 2.
+Path length: 14.
+Treasure spots shown only: d7=&gt;b6=&gt;b4=&gt;c2=&gt;d4=&gt;g7=&gt;h4=&gt;g2=&gt;h3
+
+A full path:
+   a8-&gt;b6-&gt;d7
+=&gt; d7-&gt;b6
+=&gt; b6-&gt;d5-&gt;b4
+=&gt; b4-&gt;c2
+=&gt; c2-&gt;d4
+=&gt; d4-&gt;e6-&gt;g7
+=&gt; g7-&gt;f5-&gt;h4
+=&gt; h4-&gt;g2
+=&gt; g2-&gt;f4-&gt;h3
+
+real	0m2.760s
+user	0m2.759s
+sys	0m0.000s
+</pre></blockquote>
+
+<p>Case II: (10 spots)</p>
+<blockquote><pre>$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1
+The number of minimum path(s) is more than or equal to 4.
+Path length: 16.
+Treasure spots shown only: b6=&gt;d7=&gt;b4=&gt;c2=&gt;d4=&gt;g7=&gt;h4=&gt;g2=&gt;h3=&gt;d1
+
+A full path:
+   a8-&gt;b6
+=&gt; b6-&gt;d7
+=&gt; d7-&gt;b8-&gt;a6-&gt;b4
+=&gt; b4-&gt;c2
+=&gt; c2-&gt;d4
+=&gt; d4-&gt;e6-&gt;g7
+=&gt; g7-&gt;f5-&gt;h4
+=&gt; h4-&gt;g2
+=&gt; g2-&gt;f4-&gt;h3
+=&gt; h3-&gt;f2-&gt;d1
+
+real	0m30.563s
+user	0m30.550s
+sys	0m0.004s
+</pre></blockquote>
+
+<p>Case III: (12 spots)</p>
+<blockquote><pre>
+$ time perl ch-2.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1 c5 e4 
+The number of minimum path(s) is more than or equal to 2.
+Path length: 17.
+Treasure spots shown only: b6=&gt;d7=&gt;c5=&gt;e4=&gt;d1=&gt;h3=&gt;g2=&gt;h4=&gt;g7=&gt;d4=&gt;c2=&gt;b4
+
+A full path:
+   a8-&gt;b6
+=&gt; b6-&gt;d7
+=&gt; d7-&gt;c5
+=&gt; c5-&gt;e4
+=&gt; e4-&gt;c3-&gt;d1
+=&gt; d1-&gt;f2-&gt;h3
+=&gt; h3-&gt;f4-&gt;g2
+=&gt; g2-&gt;h4
+=&gt; h4-&gt;f5-&gt;g7
+=&gt; g7-&gt;e6-&gt;d4
+=&gt; d4-&gt;c2
+=&gt; c2-&gt;b4
+
+real	76m50.364s
+user	76m49.594s
+sys	0m0.052s
+</pre></blockquote>
+
+<table style="text-align:center">
+  <tr><th>Case</th><th>Number of Spots</th><th>Time</th><th><small>Number of Permutations</small></th></tr>
+  <tr><td><small>Task specific</small></td><td>6</td><td>0.025 sec</td><td>720</td></tr>
+  <tr><td>I</td><td>9</td><td>2.760 sec</td><td>362,880</td></tr>
+  <tr><td>II</td><td>10</td><td>30.563 sec</td><td>3,628,800</td></tr>
+  <tr><td>III</td><td>12</td><td>76 min 50.364 sec</td><td>479,001,600</td></tr>
+</table>
+
+<p>12! = 10! &times; 132 = 479,001,600; the time of Case III is 77 min
+and the time of Case II is approximately half of 1 min;
+not surprisingly, the implementation is <tt>ϴ(n<sup>n+0.5</sup> exp(1/(12*n)) )</tt> <font color="red">(may multiply one more <tt>n</tt>)</font>  [<a href="https://en.wikipedia.org/wiki/Factorial#Rate_of_growth_and_approximations_for_large_n" title="Wikipedia: Factorial">ref</a>]. </p>
+
+
+
+<h5><u>Farewell Messages</u></h5>
+
+<h6>Insight from Others</h6>
+<p>Peeking at <a href="https://github.com/manwar/perlweeklychallenge-club/" title="manwar/perlweeklychallenge-club: Knowledge base for The Weekly Challenge club">the team's GitHub</a>, I found a submission using <tt><a href="https://metacpan.org/pod/Algorithm::Permute" title="CPAN module - Algorithm::Permute">Algorithm::Permute</a></tt> and <tt><a href="https://metacpan.org/pod/Memoize"  title="CPAN module - Memoize">Memoize</a></tt>, within 85 lines of code, brought a faster solution for the task specific data set! Of course, I quickly kept my arrogance: it is approx. 10% slower than my code with respect to 9 spots and spent 1 min on 10 spots.</p>
+
+<p>Differences of the two permutation algorithms seems unlikely the source of power burst.
+What makes his faster than mine for those 6 spots with treasure!?</p>
+
+<p>It is <tt><strong>Memoize</strong></tt>. RJT has recommended the free book “<a href="https://hop.perl.plover.com" title="Higher-Order Perl">Higher-Order Perl</a>”(published in 2005) to me long time ago and the book has a whole chapter on “Caching and Memoization”. Ooops. I quickly put <tt>use Memoize;</tt>
+and <tt>memoize("expand");</tt> into my code, and mine runs faster than his now
+(... not wasting the effort of extra dozens of codes on pre-processing) now.</p>
+
+<p>Note that <tt>memoize("dist_fun")</tt> has an opposite effect &amp; it slows the script:</p>
+
+<blockquote><pre>$ time perl ch-2-memo_dist_fun.pl a2 b1 b2 b3 c4 e6
+The number of minimum path(s) is more than or equal to 1.
+Path length: 11.
+Treasure spots shown only: e6=&gt;b3=&gt;a2=&gt;b1=&gt;c4=&gt;b2
+
+...
+
+real	0m0.029s
+user	0m0.029s
+sys	0m0.000s</pre></blockquote>
+
+<blockquote><pre>$ time perl ch-2-memo_dist_fun.pl h3 d7 g7 h4 b4 c2 g2 b6 d4
+...
+real	0m4.535s
+user	0m4.529s
+sys	0m0.004s</pre></blockquote>
+
+<blockquote><pre>$ time perl ch-2-memo_dist_fun.pl h3 d7 g7 h4 b4 c2 g2 b6 d4 d1
+...
+real	0m49.803s
+user	0m49.775s
+sys	0m0.001s</pre></blockquote>
+
+<p>Why?...</p>
+
+<h6>mathematics of Knight's tour</h6>
+<p>Using <a href="https://en.wikipedia.org/wiki/Knight%27s_tour" title="Wikipedia: Knight's tour">Knight's tour</a> seems not a promising approach for a reasonably short path.
+But it solves the challenge, anyway. :)</p>
+
+<p>Here is just a short summary compiled from the Wikipedia page
+<a href="https://en.wikipedia.org/wiki/Knight's_graph" title="Wikipedia: Knight's graph">Knight's (tour) graph</a>:
+It has 64 vertices (it's kind of obvious, arrr) and 168 edges. How fast will we get if we 
+enter the data to some mathematicians' softwares (the most famous one must be Mathematica, and if you prefer FOSS,
+I could name <a href="https://maxima.sourceforge.io" title="Maxima, a Computer Algebra System">Maxima</a> and
+<a href="http://pari.math.u-bordeaux.fr" title="PARI/GP Development Headquarters">PARI/GP</a>)?</p>
+
+
+<p>It could be a small project on getting familiar with the computer algebra system.
+(Sorry that I am not experienced enough for trying it on Maxima as a dumb math enthusiast.)</p> 
+
+<h6>a shortest path, or a reasonably short path</h6>
+<p>As the puzzle creator, what I dream to see is a script which is
+very creative or compact but providing reasonably short paths.</p>
+
+<p>For a "shortest" path solution, are there any ways besides listing the permutations?</p>
+
+<p>As a puzzle creator, maybe I should have better or more detailed wordings for a bonus next time.</p>
+
+<p>Stay alert and healthy! □</p>
+
+<hr>
+
+<div style="color:#543210"><h4>Update on 28th June</h4>
+
+<p>Yesterday night I was impressed by, as usual for a relatively complex or complicated task,
+<a href="https://github.com/manwar/perlweeklychallenge-club/tree/master/challenge-118/abigail/perl/ch-2a.pl">Abigail's (upping the ante) solution</a>
+on the task. I did some performance tests against E. Choroba's
+and found Abigail's faster by a factor of 2 to 4. </p>
+
+<p>Abigail's script is essentially composed of less than 65 lines. Impressive.</p>
+
+
+<p>This morning I took a look on the team's repository and found "CY" mentioned in a pull request comment. 
+James Smith, another experienced coder in the team, has written
+<a href="https://github.com/manwar/perlweeklychallenge-club/tree/master/challenge-118/james-smith/perl/ch-2-using-precomputed-distances.pl">a new solution</a> using
+the idea of pre-processing the distance and other techniques. Thank Mr Smith for reading my blogpost.</p>
+
+<p>Note that this round I tested the scripts on Windows, which usually runs slower Perl,
+because Abigail's solution requests features in Perl 5.32
+but my Linuxmint has only Perl 5.30 installed. I think the choice of the operating
+system is not a big deal because they won't give me 2-hour solutions. X)</p>
+
+<p>Here are test results on Abigail's script and James Smith's script.</p>
+
+<pre>DATA: h3 d7 g7 h4 b4 c2 g2 b6 d4 d1 c5 e4 h8
+Number of spots: 13
+
+C:\work-now&gt;perl abigail-ch-2.pl &lt; data.1
+a8
+h3 f2 d1 c3 e4 c5 d7 b6 d5 b4 c2 d4 e6 g7 e6 f4 g2 h4 g6 h8
+Overall time:  10.199467
+
+C:\work-now&gt;perl smith-ch-2.pl
+
+Minimal length: 21
+Minimal route:  a8  b6* d7* b6* d5  b4* c2* d4* f5  g7* e6
+c5* e4* f2  h3* f2  d1* e3  g2* h4* g6  h8*
+
+Permutations:   6227020800
+Function calls: 319502
+Cache entries:  53249
+Speed up:       116941.553831997
+
+Timings:
+Pre^2-compute:  0.000116
+Pre-compute:    0.005239
+Find path:      1.712727
+Overall time:   1.718082
+
+
+
+---
+
+DATA: h3 d7 g7 h4 b4 c2 g2 b6 d4 d1 c5 e4 h8 a1 h1 a3
+Number of spots: 16
+
+C:\work-now&gt;perl abigail-ch-2.pl &lt; data.2
+a8
+h3 f2 d1 f2 h1 f2 e4 c5 d7 b6 c4 a3 c2 a1 c2 b4 c6 d4 e6 g7 e6 f4 g2 h4 g6 h8
+Overall time:  107.617590
+
+C:\work-now&gt;perl smith-ch-2.pl
+
+Minimal length: 27
+Minimal route:  a8  b6* d7* b6* c4  a3* c2* b4* c2* a1* c2* d4* f5  g7* e6
+c5* e4* f2  h1* f2  h3* f2  d1* e3  g2* h4* g6  h8*
+
+Permutations:   20922789888000
+Function calls: 3932177
+Cache entries:  524289
+Speed up:       39906978.570979
+
+Timings:
+Pre^2-compute:  0.000623
+Pre-compute:    0.013825
+Find path:     31.986586
+Overall time:  32.001034
+
+
+
+---</pre></blockquote>
+
+<p>James Smith's implementation is really, FAST and EXACT! Bravo for Abigail and James Smith. □</p>
+<p><i>Note that I am not trying to take on the job of code reviewer as my Perl programming is still weak,
+for two instances among many instances,
+I haven't understood the use of </i><tt>%CACHE</tt><i>
+in James's code or which new features from Perl 5.32 are used by Abigail's script.</i></p>
+
+</div>
+
+<div><h4>Update on 27th June</h4> <br>
+
+Soon after a cry on Twitter, E. Choroba
+ invited us to take a look on his <a href="https://www.geeksforgeeks.org/a-search-algorithm/" title="geeksforgeeks: A* search Algorithm">A* search</a>
+solution [<a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-118/e-choroba/perl/ch-2.pl" title="ch-2.pl from E. Choroba">code here</a>].
+It does not list out
+all permutations but finds a shortest
+ path. And it is much faster &dash; for cases on 6 to 12 spots, it does
+its responsibility within 10 seconds
+It finishes a 16-spot case in 4 minute and 9.199 second. Bravo. □</div>
+
+<hr>
+
+<p><a name="right_of_use"></a>The image of the knight (horse head) is from Wikimedia Commons; the image is
+released under <a href="https://www.gnu.org/licenses/lgpl-3.0.html" title="LGPL">GNU Lesser General Public License</a>.
+Its author is Maurizio Monge. See the
+<a href="https://commons.wikimedia.org/wiki/File:Chess_Maurizio_Monge_Spatial_bn.svg"
+title="Wikimedia Commons: Chess_Maurizio_Monge_Spatial_bn.svg">file details</a>.</p>
+
+<p><i>link for CY's full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/pre-ch-2.pl" title="pre-ch-2.pl from Cheok-Yin Fung">pre-ch-2.pl</a></tt> (pre-processing), <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-118/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt></i></p>
+
+<p><i>link to my blogpost for <a href="challenge_118t1.html" title="CY's Take on The Weekly Challenge #118 Task 1">Task 1 "Binary Palindrome"</a></i></p>
+
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+
+<p>Created Date: 26th June, 2021; last updated: 28th June, 12:00 HKT (28th June, 04:00 UTC).
+<p>[27th Jun 16:00 HKT] I found the team
+Clojure script contributor is trying to use the wholy mathematical
+approach: build a Knight's graph...! </p>
+<p>[27th Jun 15:00 HKT] A major update: I have improved my code by a very trivial action (reducing calling to <tt>&amp;compare_mini</tt> by moving a conditional). The performance significantly improves from 130 min to 77 min (Case III), 46 sec to 31 sec (Case II), 4.263 to 2.760 sec (Case I) and 0.066 to 0.025 sec (Task Specific Case).
+
+<p>[27th Jun 12:10 HKT] A major update and apology on the bound of <tt>n!</tt>.</p>
+
+<div style="color:#235711">[26th Jun 22:00 HKT] A major update: It must be unfair to E. Choroba if I do not share it:
+<a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-118/e-choroba/perl/ch-2.pl" title="ch-2.pl from E. Choroba">E. Choroba's solution</a>, employing the object-oriented paradigm, using the <a href="https://www.geeksforgeeks.org/a-search-algorithm/">A* search Algorithm</a>, finishes the 12-spot case within 8~9 seconds on my machine! I have to be more hard-working.
+
+<pre>
+$ cat data
+  a b c d e f g h
+8 N * * * * * * * 8
+7 * * * x * * x * 7
+6 * x * * * * * * 6
+5 * * x * * * * * 5
+4 * x * x x * * x 4
+3 * * * * * * * x 3
+2 * * x * * * x * 2
+1 * * * x * * * * 1
+  a b c d e f g h
+
+
+$ time perl choroba-ch-2.pl &lt; data
+Steps: 154299
+17: a8, b6, d7, c5, e4, g5, h3, f2, d1, e3, g2, h4, f5, g7, f5, d4, c2, b4
+
+real	0m8.672s
+user	0m8.636s
+sys	0m0.032s
+
+$ time perl choroba-ch-2.pl &lt; data
+Steps: 154299
+17: a8, b6, d7, c5, e4, g5, h3, f2, d1, e3, g2, h4, f5, g7, f5, d4, c2, b4
+
+real	0m8.784s
+user	0m8.744s
+sys	0m0.036s
+
+$ time perl choroba-ch-2.pl &lt; data
+Steps: 154299
+17: a8, b6, d7, c5, e4, g5, h3, f2, d1, e3, g2, h4, f5, g7, f5, d4, c2, b4
+
+real	0m8.779s
+user	0m8.735s
+sys	0m0.040s
+</pre>
+
+</div>
+
+<p>[26th Jun 20:10 HKT] A major update and apology: The paths we are seeking are usually not
+<a href="https://en.wikipedia.org/wiki/Hamiltonian_path" title="Wikipedia: Hamiltonian path">Hamiltonian paths</a>.</p>
+
+</body>
+
+</html>
+
+
