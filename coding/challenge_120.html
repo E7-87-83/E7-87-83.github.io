@@ -102,7 +102,7 @@ The core of the Perl script:
 
 <p>I have made "virtual" friends with programmers through The Weekly Challenge, and, as a reversal, I have recommended a friend to join the challenges and succeded!</p>
 
-<p>Both sides have been rewarding. I am blessed. I coded the Perl scripts at Monday night, but I was a bit sceptical on the output "5 deg" for an input "11:59". As lazy as usual, I did not do pen-and-pencil check and went to bed. Eric sent me <a href="https://www.omnicalculator.com/math/clock-angle">a link</a> in Tuesday morning while I was working on the bash scripts, but I checked for the time "11:59" first: the clock angle at 11:59 should be 5.5&deg;!</p>
+<p>Both sides have been rewarding. I am blessed. The story is like this. I coded the Perl scripts at Monday night, but I was a bit sceptical on the output "5 deg" for an input "11:59". As lazy as usual, I did not do pen-and-pencil check and went to bed. Eric sent me <a href="https://www.omnicalculator.com/math/clock-angle">a link</a> in Tuesday morning while I was working on the bash scripts, but I checked for the time "11:59" first: the clock angle at 11:59 should be 5.5&deg;!</p>
 
 <p>I found the buggy code is the use of the modulo operator <tt>%</tt>. In Perl, it makes every output become integer:</p>
 
@@ -162,7 +162,7 @@ $7 ==&gt; -1.7000000000000002</pre></blockquote>
 
 </pre></div>
 
-<p>Back to a linear narration. The fact that bash does NOT support floating-point operations was hit me as a bolt out of the blue. By luck(?), 360 is a "friendly" composite number, the inverse of the hour hand rate (0.5) is an integer, hence a roundabout was not hard to get. I also stole the idea of seperating the hour hand angle calculation and minute hand angle calculation from the website mentioned.</p>
+<p>Back to a linear narration. The fact that bash does NOT support floating-point operations was hit me as a bolt out of the blue. By luck(?), 360 is a "friendly" composite number, the inverse of the hour hand rate (0.5) is an integer, hence a roundabout was not hard to get. I also stole the idea of seperating the hour hand angle calculation and minute hand angle calculation from the weblink mentioned.</p>
 
 <div style="color:white; background-color:black; padding-left: 5px;"><pre>&nbsp;<br><font color="#34E2E2"><b>deg_h</b></font>=<font color="#5FD7FF">$((($h</font><font color="#FFD7D7">*</font><font color="#AD7FA8">30</font><font color="#FFD7D7">+</font><font color="#5FD7FF">$m</font><font color="#FFD7D7">/</font><font color="#5FD7FF">$hr_hand_inc)</font><font color="#FFD7D7">%</font><font color="#AD7FA8">360</font><font color="#5FD7FF">))</font>
 <font color="#34E2E2"><b>deg_m</b></font>=<font color="#5FD7FF">$((($minute_hand_rate</font><font color="#FFD7D7">*</font><font color="#5FD7FF">$m)</font><font color="#FFD7D7">%</font><font color="#AD7FA8">360</font><font color="#FFD7D7"> </font><font color="#5FD7FF">))</font>
