@@ -7,13 +7,13 @@
   <link rel="styleSheet" href="../docs/main.css" type="text/css" media="all">
 
 
-<title>CY's Take on The Weekly Challenge #120 </title>
+<title>CY's Take on The Weekly Challenge #120 ‐ Histories, Experiences, Reflections</title>
 </head>
 
 <body>
 
 <div class="heading">
-<h1 align="right">General Programming / The Weekly Challenge &dash; Perl and Raku</h1>
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
 </div>
 
 <div class="bar">
@@ -52,13 +52,13 @@ in Week #120</a> !</i></b></p>
 
 <p align="right">"One must have good tools in order to do a good job." &dash; Confucius</p>
 
-<p>I am learning bash recently therefore I have coded the tasks in both Perl and bash.</p>
+<p>I am learning bash recently therefore the tasks were coded in both Perl and bash.</p>
 
 <h4>Task 1: Swap Odd/Even bits</h4>
 
-<p>I have been noticed (or even "used", just copied from <i>Perl Cookbook</i>) <tt>pack</tt> and <tt>unpack</tt> recently and want an opportunity to practise on them. However this task is closely related to base-4, rather than base-8 or base-16. Then I have chosen an analytical approach towards the task. I want to "show-off" on bitwise operations but what I have used is only <tt><font color="#E78783">$ans &gt;&gt;=2</font></tt>.</p>
+<p>I have been noticed (or even "used", just copied from <i>Perl Cookbook</i>) <tt>pack</tt> and <tt>unpack</tt> recently and want an opportunity to practise on them. However this task is closely related to base-4, rather than base-8 or base-16. Then I have chosen an analytical approach towards the task. I want to "show-off" on bitwise operations but what I have used is only <tt><font color="#E78783">$ans &lt;&lt;= 2</font></tt>.</p>
 
-<p>My idea is simple: get the modulo of the number modulo 4, swap odd-even bits, put the result (0, 1, 2, or 3) into a quene, <tt>$NUMBER=int $NUMBER/4</tt>, until the nmuber becomes zero.</p>
+<p>My idea is simple: get the modulo of the number modulo 4, swap odd-even bits, put the result (0, 1, 2, or 3) into a quene, <tt>$NUMBER=int $NUMBER/4</tt>, until the number becomes zero. The rest should be history.</p>
 
 The core of the script:
 <div style="color:white; background-color:black; padding-left: 5px;"><pre>&nbsp;<br><font color="#FCE94F">sub </font><font color="#34E2E2"><b>soeb </b></font>{
@@ -102,9 +102,9 @@ The core of the script:
 
 <p>I have made "virtual" friends with programmers through The Weekly Challenge, and, as a reversal, I have recommended a friend to join the challenges and succeded!</p>
 
-<p>Both sides are rewarding. I am blessed. I coded the Perl scripts at Monday night, but I was a bit sceptical on the output "5 deg" for an input "11:59". As lazy as usual, I did not do pen-and-pencil check and went to bed. Eric sent me a link in Tuesday morning and I checked: the clock angle at 11:59 should be 5.5 &deg;.</p>
+<p>Both sides have been rewarding. I am blessed. I coded the Perl scripts at Monday night, but I was a bit sceptical on the output "5 deg" for an input "11:59". As lazy as usual, I did not do pen-and-pencil check and went to bed. Eric sent me <a href="https://www.omnicalculator.com/math/clock-angle">a link</a> in Tuesday morning while I was working on the bash scripts, but I checked for the time "11:59" first: the clock angle at 11:59 should be 5.5 &deg;!</p>
 
-<p>I found the questioning code is the use of the modulo operator <tt>%</tt> &dash; in Perl, it makes everything becoming integer:</p>
+<p>I found the buggy code is the use of the modulo operator <tt>%</tt>. In Perl, it makes everything becoming integer:</p>
 
 <blockquote><pre>$ perl -E 'say 6.7 % 5'
 1
@@ -115,52 +115,125 @@ $ perl -E 'say -6.7 % 5'
 $ perl -E 'say -6.7 % -5'
 -1</pre></blockquote>
 
-<p>Trained in math, I don't get what the output of a modulo operation when floating point numbers or negative integers should be given as operands. See what happens in Java:</p>
+<p>Trained in math, I don't get what the output of a modulo operation when floating point numbers or negative integers should be given as operands. See what happens in Java for example:</p>
 
 <blockquote><pre>|  Welcome to JShell -- Version 11.0.11
 |  For an introduction type: /help intro
 
-jshell> 26 % -5
-$1 ==> 1
+jshell&gt; 26 % -5
+$1 ==&gt; 1
 
-jshell> -26 % 5
-$2 ==> -1
+jshell&gt; -26 % 5
+$2 ==&gt; -1
 
-jshell> -26 % -5
-$3 ==> -1
+jshell&gt; -26 % -5
+$3 ==&gt; -1
 
-jshell> 6.7 % 5
-$4 ==> 1.7000000000000002
+jshell&gt; 6.7 % 5
+$4 ==&gt; 1.7000000000000002
 
-jshell> 6.7 % -5
-$5 ==> 1.7000000000000002
+jshell&gt; 6.7 % -5
+$5 ==&gt; 1.7000000000000002
 
-jshell> -6.7 % 5
-$6 ==> -1.7000000000000002
+jshell&gt; -6.7 % 5
+$6 ==&gt; -1.7000000000000002
 
-jshell> -6.7 % -5
-$7 ==> -1.7000000000000002</pre></blockquote>
+jshell&gt; -6.7 % -5
+$7 ==&gt; -1.7000000000000002</pre></blockquote>
 
-<p>Anyway, after using a while-loop instead of the modulo, the Perl scipts works well. I even add a feature to display the clock angle of the current time when there are no input arguments.</p>
+<p>Anyway, after using a while-loop instead of the modulo, the Perl scipt works well. Later I even added a feature to display the clock angle of the current time (via <tt><a href="https://perldoc.perl.org/functions/localtime">localtime</a>(time)</tt>) when there are no input arguments.</p>
+
+<p>My idea is primitive &dash; just calculating the difference of angles:</p>
+
+<div style="color:white; background-color:black; padding-left: 5px;"><pre>&nbsp;<br><font color="#34E2E2">#unit: degree(s) per minute</font>
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$hour_hand_rate</b></font> = <font color="#AD7FA8">0.5</font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$minute_hand_rate</b></font> = <font color="#AD7FA8">6.0</font>;
+
+&nbsp;<br><font color="#FCE94F">sub </font><font color="#34E2E2"><b>clock_angle </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$time</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$h</b></font> = <font color="#FCE94F">substr</font>(<font color="#34E2E2"><b>$time</b></font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">2</font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$m</b></font> = <font color="#FCE94F">substr</font>(<font color="#34E2E2"><b>$time</b></font>,-<font color="#AD7FA8">2</font>,<font color="#AD7FA8">2</font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$deg</b></font> = <font color="#FCE94F">abs</font>((<font color="#34E2E2"><b>$h</b></font>*<font color="#AD7FA8">30</font>+<font color="#34E2E2"><b>$hour_hand_rate</b></font>*<font color="#34E2E2"><b>$m</b></font> - <font color="#34E2E2"><b>$minute_hand_rate</b></font>*<font color="#34E2E2"><b>$m</b></font>));
+    <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$deg</b></font> &gt;= <font color="#AD7FA8">360</font>) {
+        <font color="#34E2E2"><b>$deg</b></font>-=<font color="#AD7FA8">360</font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$deg</b></font> &gt; <font color="#AD7FA8">180</font> ? <font color="#AD7FA8">360</font>-<font color="#34E2E2"><b>$deg</b></font> : <font color="#34E2E2"><b>$deg</b></font>;
+}
+
+</pre></div>
+
+<p>Back to a linear narration. The fact that bash does NOT support floating-point operations was hit me as a bolt out of the blue. By luck(?), 360 is a "friendly" composite number, the inverse of the hour hand rate (0.5) is an integer, hence a roundabout was not hard to get. I also stole the idea of seperating the hour hand angle calculation and minute hand angle calculation from the website mentioned.</p>
+
+<div style="color:white; background-color:black; padding-left: 5px;"><pre>&nbsp;<br><font color="#34E2E2"><b>deg_h</b></font>=<font color="#5FD7FF">$((($h</font><font color="#FFD7D7">*</font><font color="#AD7FA8">30</font><font color="#FFD7D7">+</font><font color="#5FD7FF">$m</font><font color="#FFD7D7">/</font><font color="#5FD7FF">$hr_hand_inc)</font><font color="#FFD7D7">%</font><font color="#AD7FA8">360</font><font color="#5FD7FF">))</font>
+<font color="#34E2E2"><b>deg_m</b></font>=<font color="#5FD7FF">$((($minute_hand_rate</font><font color="#FFD7D7">*</font><font color="#5FD7FF">$m)</font><font color="#FFD7D7">%</font><font color="#AD7FA8">360</font><font color="#FFD7D7"> </font><font color="#5FD7FF">))</font>
+<font color="#34E2E2"><b>half</b></font>=<font color="#AD7FA8">0</font>
+<font color="#FCE94F">if [</font> <font color="#5FD7FF">$(($m</font><font color="#FFD7D7">%</font><font color="#5FD7FF">$hr_hand_inc))</font> <font color="#FCE94F">-eq</font> <font color="#AD7FA8">1</font> <font color="#FCE94F">];</font>
+<font color="#FCE94F">then</font>
+    <font color="#34E2E2"><b>half</b></font>=<font color="#AD7FA8">5</font>
+    <font color="#FCE94F">if [</font> <font color="#5FD7FF">$deg_h</font> <font color="#FCE94F">-gt</font> <font color="#5FD7FF">$deg_m</font> <font color="#FCE94F">];</font>
+    <font color="#FCE94F">then</font>
+        <font color="#34E2E2"><b>deg_h</b></font>=<font color="#5FD7FF">$(($deg_h))</font>
+    <font color="#FCE94F">else</font>
+        <font color="#34E2E2"><b>deg_h</b></font>=<font color="#5FD7FF">$(($deg_h</font><font color="#FFD7D7">+</font><font color="#AD7FA8">1</font><font color="#5FD7FF">))</font>
+    <font color="#FCE94F">fi</font>
+<font color="#FCE94F">fi</font>
+
+<font color="#FCE94F">if [</font> <font color="#5FD7FF">$deg_h</font> <font color="#FCE94F">-ge</font> <font color="#5FD7FF">$deg_m</font> <font color="#FCE94F">];</font>
+<font color="#FCE94F">then</font>
+    <font color="#34E2E2"><b>deg</b></font>=<font color="#5FD7FF">$(($deg_h</font><font color="#FFD7D7">-</font><font color="#5FD7FF">$deg_m))</font>
+<font color="#FCE94F">else</font>
+    <font color="#34E2E2"><b>deg</b></font>=<font color="#5FD7FF">$(($deg_m</font><font color="#FFD7D7">-</font><font color="#5FD7FF">$deg_h))</font>
+<font color="#FCE94F">fi</font>
+
+<font color="#FCE94F">if [</font> <font color="#5FD7FF">$deg</font> <font color="#FCE94F">-gt</font> <font color="#AD7FA8">180</font> <font color="#FCE94F">];</font>
+<font color="#FCE94F">then</font>
+    <font color="#FCE94F">if [</font> <font color="#5FD7FF">$half</font> <font color="#FCE94F">-eq</font> <font color="#AD7FA8">5</font> <font color="#FCE94F">];</font>
+    <font color="#FCE94F">then</font>
+        <font color="#34E2E2"><b>deg</b></font>=<font color="#5FD7FF">$((</font><font color="#FFD7D7">361-</font><font color="#5FD7FF">$deg))</font>
+    <font color="#FCE94F">else</font>
+        <font color="#34E2E2"><b>deg</b></font>=<font color="#5FD7FF">$((</font><font color="#FFD7D7">360-</font><font color="#5FD7FF">$deg))</font>
+    <font color="#FCE94F">fi</font>
+<font color="#FCE94F">fi</font>
+
+<font color="#FCE94F">echo</font><font color="#AD7FA8"> </font><font color="#5FD7FF">$deg</font><font color="#AD7FA8">.</font><font color="#5FD7FF">$half</font><font color="#AD7FA8"> deg</font>
+
+</pre></div>
+
+<p>I had gave up using input format "hh:mm" and relied on the user entering space-seperated integers instead. That was because from the bash scripting books available on my hand, I couldn't find how to extract a substring.</p>
+
+<p>I thought everything was well settled. No more ripples in still water. By luck again(?), at Tuesday night, I checked out the experience team member, Abigail's bash solution, and learnt that 01,..,07 are treated as base-8 numbers, therefore 08 and 09 would be issues for the task. </p>
+
+<p>Finally in this morning, I also found <a href="https://riptutorial.com/bash/example/19469/regex-matching">a tutorial on regular expressions in bash</a>, the script can now have the "hh:mm" as the default input. I also took the trick that Abigail mentioned. The script has been fixed and I checked it manually against all nine test cases in the corresponding Perl script. </p>
+
+<p>Departing words: Well, we should not blame bash for having no floating-point-arithmetic (as well as bitwise operation) because its main purpose is in shell scripting and, as I could construe, one of the motives of the creation of Perl from Mr Larry Wall was an one-off alternative for awk, bash, sed, grep, (C? C shell?)... . (By the way awk treats every numeric variable as floating point variable.) However, the bash requirement on spacing has made me annoyed. However, if any one of the tasks next week is not heavily relying on floating point or number of lines, I am going to continue practising coding in bash (and Perl, of course).</p>
 
 <p>Stay alert and healthy! □</p>
 
 <hr>
 
+<h4>Links</h4>
+
+<ul><li><a href="http://www.softpanorama.org/People/Wall/index.shtml">Slightly Skeptical View on Larry Wall and Perl</a>, from Softpanorama (Last modified: September 08, 2020). </li>
+<li>I have been thinking about the learning curve of Perl. <a href="https://twitter.com/e7_87/status/1411187163694198787">Links to the Tweets.</a></li>
+
+</ul>
+
+<hr>
+
 <p><a name="right_of_use"></a>The image of the clock is from Wikimedia Commons; the image is released under <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Its author is Scott Martin. See the <a href="https://commons.wikimedia.org/wiki/File:Time_travel_warning_icon.svg">file details</a>. </p> 
 
-<p><small>Except from images and codes from personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
 
 <p><i>link for CY's full codes: <tt><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-120/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>, 
 <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-120/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>, 
 <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-120/cheok-yin-fung/bash/ch-1.sh" title="ch-2.sh from Cheok-Yin Fung">ch-1.sh</a></tt>, 
-<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-120/cheok-yin-fung/bash/ch-2.pl" title="ch-2.sh from Cheok-Yin Fung">ch-2.sh</a></tt>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-120/cheok-yin-fung/bash/ch-2.sh" title="ch-2.sh from Cheok-Yin Fung">ch-2.sh</a></tt>
 </i>
 </p>
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
 
-<p>Created Date: ddd mmmmmmm, 2021.</p>
+<p>Created Date: 7th July, 2021.</p>
 
 </body>
 
