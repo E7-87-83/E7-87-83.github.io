@@ -52,14 +52,96 @@ in Week #120</a> !</i></b></p>
 
 <p align="right">"One must have good tools in order to do a good job." &dash; Confucius</p>
 
-<p>I am learning bash recently therefore I coded the tasks in both Perl and bash.</p>
+<p>I am learning bash recently therefore I have coded the tasks in both Perl and bash.</p>
 
 <h4>Task 1: Swap Odd/Even bits</h4>
 
-<p>I have been noticed (or even "used", just copied from <i>Perl Cookbook</i>) <tt>pack</tt> and <tt>unpack</tt> recently and want an opportunity to practise on them. However this task is closely related to base-4, rather than base-8 or base-16. Then I have chosen an analytical approach towards the task. I want to "show-off" on bitwise operation but what I have used is only <tt><font color="#E78783">$ans &gt;&gt;=2</font></tt>.</p>
+<p>I have been noticed (or even "used", just copied from <i>Perl Cookbook</i>) <tt>pack</tt> and <tt>unpack</tt> recently and want an opportunity to practise on them. However this task is closely related to base-4, rather than base-8 or base-16. Then I have chosen an analytical approach towards the task. I want to "show-off" on bitwise operations but what I have used is only <tt><font color="#E78783">$ans &gt;&gt;=2</font></tt>.</p>
+
+<p>My idea is simple: get the modulo of the number modulo 4, swap odd-even bits, put the result (0, 1, 2, or 3) into a quene, <tt>$NUMBER=int $NUMBER/4</tt>, until the nmuber becomes zero.</p>
+
+The core of the script:
+<div style="color:white; background-color:black; padding-left: 5px;"><pre>&nbsp;<br><font color="#FCE94F">sub </font><font color="#34E2E2"><b>soeb </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$x</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@ans_arr</b></font>;
+    <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$x</b></font> != <font color="#AD7FA8">0</font>) {
+        <font color="#FCE94F">unshift</font> <font color="#34E2E2"><b>@ans_arr</b></font>, qp(<font color="#34E2E2"><b>$x</b></font> % <font color="#AD7FA8">4</font>);
+        <font color="#34E2E2"><b>$x</b></font> = <font color="#FCE94F">int</font> <font color="#34E2E2"><b>$x</b></font> / <font color="#AD7FA8">4</font>;
+    }
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ans</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">for</font> (<font color="#34E2E2"><b>@ans_arr</b></font>) {
+        <font color="#34E2E2"><b>$ans</b></font> &lt;&lt;= <font color="#AD7FA8">2</font>;
+        <font color="#34E2E2"><b>$ans</b></font> += <font color="#34E2E2"><b>$_</b></font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$ans</b></font>;
+}
+
+</pre></div>
+
+<tt>&amp;qp</tt> does this: 0 → 0,  1 → 2,  2 → 1,  3 → 3. The bash script:
+
+<div style="color:white; background-color:black; padding-left: 5px;"><pre>
+&nbsp;<br><font color="#FCE94F">while [</font> <font color="#5FD7FF">$x</font> <font color="#FCE94F">-ne</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">]</font>
+<font color="#FCE94F">do</font>
+    <font color="#34E2E2"><b>arr+</b></font>=<font color="#5FD7FF">($(</font><font color="#FFD7D7">qp </font><font color="#5FD7FF">$x</font><font color="#FFD7D7">%</font><font color="#AD7FA8">4</font><font color="#5FD7FF">))</font>
+    <font color="#34E2E2"><b>x</b></font>=<font color="#5FD7FF">$(($x</font><font color="#FFD7D7">/</font><font color="#AD7FA8">4</font><font color="#5FD7FF">))</font>
+<font color="#FCE94F">done</font>
+
+<font color="#34E2E2"><b>ANS</b></font>=<font color="#AD7FA8">0</font>
+
+<font color="#FCE94F">for ((i=</font><font color="#5FD7FF">$((${#arr[</font>@<font color="#5FD7FF">]}</font><font color="#AD7FA8">-1</font><font color="#5FD7FF">))</font><font color="#FCE94F">; i&gt;=</font><font color="#AD7FA8">0</font><font color="#FCE94F">; i=</font><font color="#5FD7FF">$i</font><font color="#FCE94F">-1))</font>
+<font color="#FCE94F">do</font>
+    <font color="#34E2E2"><b>ANS</b></font>=<font color="#5FD7FF">$(($ANS</font><font color="#FFD7D7">*</font><font color="#AD7FA8">4</font><font color="#FFD7D7">+</font><font color="#5FD7FF">$[</font><font color="#FFD7D7">arr[</font><font color="#5FD7FF">$i]</font><font color="#FFD7D7">]</font><font color="#5FD7FF">))</font>
+<font color="#FCE94F">done</font>
+
+<font color="#FCE94F">echo</font><font color="#AD7FA8"> </font><font color="#5FD7FF">$ANS</font>
+
+</pre></div>
 
 <h4>Task 2: Clock Angle</h4>
 
+<p>I have made "virtual" friends with programmers through The Weekly Challenge, and, as a reversal, I have recommended a friend to join the challenges and succeded!</p>
+
+<p>Both sides are rewarding. I am blessed. I coded the Perl scripts at Monday night, but I was a bit sceptical on the output "5 deg" for an input "11:59". As lazy as usual, I did not do pen-and-pencil check and went to bed. Eric sent me a link in Tuesday morning and I checked: the clock angle at 11:59 should be 5.5 &deg;.</p>
+
+<p>I found the questioning code is the use of the modulo operator <tt>%</tt> &dash; in Perl, it makes everything becoming integer:</p>
+
+<blockquote><pre>$ perl -E 'say 6.7 % 5'
+1
+$ perl -E 'say 6.7 % -5'
+-4
+$ perl -E 'say -6.7 % 5'
+4
+$ perl -E 'say -6.7 % -5'
+-1</pre></blockquote>
+
+<p>Trained in math, I don't get what the output of a modulo operation when floating point numbers or negative integers should be given as operands. See what happens in Java:</p>
+
+<blockquote><pre>|  Welcome to JShell -- Version 11.0.11
+|  For an introduction type: /help intro
+
+jshell> 26 % -5
+$1 ==> 1
+
+jshell> -26 % 5
+$2 ==> -1
+
+jshell> -26 % -5
+$3 ==> -1
+
+jshell> 6.7 % 5
+$4 ==> 1.7000000000000002
+
+jshell> 6.7 % -5
+$5 ==> 1.7000000000000002
+
+jshell> -6.7 % 5
+$6 ==> -1.7000000000000002
+
+jshell> -6.7 % -5
+$7 ==> -1.7000000000000002</pre></blockquote>
+
+<p>Anyway, after using a while-loop instead of the modulo, the Perl scipts works well. I even add a feature to display the clock angle of the current time when there are no input arguments.</p>
 
 <p>Stay alert and healthy! □</p>
 
