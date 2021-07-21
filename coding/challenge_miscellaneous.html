@@ -59,9 +59,28 @@ code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
 
 <hr>
 
-<h4>Week #118 Task 2 Adventure of Knight and Week #121 Task 2 Travelling Salesman</h4>
+<h4>Week #118 Adventure of Knight and Week #121 Travelling Salesman</h4>
 
-<p>I had just been lazy and use permutations again: </p>
+<h5>Performance</h5>
+
+<p>In previous blogpost on Week 118, I mentioned that "...I have improved my code by a very trivial action (reducing calling to &compare_mini by moving a conditional).". The performance changed is shown below:</p>
+
+<p><table style="text-align:center">
+  <tr><th>Case</th><th>Number of Spots</th><th>Time<br>before</th><th>Time<br>after</th><th><small>Number of Permutations</small></th></tr>
+  <tr><td><small>Task specific</small></td><td>6</td><td>0.066 sec</td><td>0.025 sec</td><td>720</td></tr>
+  <tr><td>I</td><td>9</td><td>4.263 sec</td><td>2.760 sec</td><td>362,880</td></tr>
+  <tr><td>II</td><td>10</td><td>46 sec</td><td>30.563 sec</td><td>3,628,800</td></tr>
+  <tr><td>III</td><td>12</td><td>130 min</td><td>76 min 50.364 sec</td><td>479,001,600</td></tr>
+</table></p>
+
+Here is what changed:
+
+<center><img src="../docs/assets/wk118_improve.png"></center>
+
+
+<p>---</p>
+
+<p>For Week #121 Task 2, I had just been lazy and use permutations again: </p>
 
 
 <div style="color:white; background-color:black; padding-left: 5px;"><pre>&nbsp;<br><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$v</b></font> = <font color="#FCE94F">chr</font>(<font color="#FCE94F">ord</font>(<font color="#AD7FA8">&quot;A&quot;</font>)+<font color="#34E2E2"><b>$N</b></font>-<font color="#AD7FA8">2</font>);
@@ -78,19 +97,21 @@ code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
 }
 </pre></div>
 
-<h5>Performance</h5>
-
-<p>In previous blogpost on Week 118, I mentioned that "...I have improved my code by a very trivial action (reducing calling to &compare_mini by moving a conditional).". The performance changed is shown below:</p>
-
-<p><table style="text-align:center">
-  <tr><th>Case</th><th>Number of Spots</th><th>Time<br>before</th><th>Time<br>after</th><th><small>Number of Permutations</small></th></tr>
-  <tr><td><small>Task specific</small></td><td>6</td><td>0.066 sec</td><td>0.025 sec</td><td>720</td></tr>
-  <tr><td>I</td><td>9</td><td>4.263 sec</td><td>2.760 sec</td><td>362,880</td></tr>
-  <tr><td>II</td><td>10</td><td>46 sec</td><td>30.563 sec</td><td>3,628,800</td></tr>
-  <tr><td>III</td><td>12</td><td>130 min</td><td>76 min 50.364 sec</td><td>479,001,600</td></tr>
-</table></p>
-
 <p>Using a similar and a logically same trick, I have improved my codes (place marked with [*]):</p>
+
+<div style="color:white; background-color:black; padding-left: 5px;"><pre>&nbsp;<br>
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>calc_dist </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@seq</b></font> = <font color="#34E2E2"><b>@{$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]}</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$dist</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#34E2E2"><b>$dist</b></font> += <font color="#34E2E2"><b>$M-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>][</b></font> alp2n(<font color="#34E2E2"><b>$seq[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>) <font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$#seq</b></font>-<font color="#AD7FA8">1</font>) {
+        <font color="#34E2E2"><b>$dist</b></font> += <font color="#34E2E2"><b>$M-&gt;[</b></font> alp2n(<font color="#34E2E2"><b>$seq[$i]</b></font>) <font color="#34E2E2"><b>][</b></font> alp2n(<font color="#34E2E2"><b>$seq[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>) <font color="#34E2E2"><b>]</b></font>;
+        <font color="#FCE94F">return</font> <font color="#FCE94F">undef</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$dist</b></font> &gt;= <font color="#34E2E2"><b>$min</b></font>;  <font color="#34E2E2"># [*]   </font>         
+    }
+    <font color="#34E2E2"><b>$dist</b></font> += <font color="#34E2E2"><b>$M-&gt;[</b></font>alp2n(<font color="#34E2E2"><b>$seq[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)<font color="#34E2E2"><b>][</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+}
+
+</pre></div>
 
 <p><table style="text-align:center">
   <tr><th>Case</th><th>Number of Cities</th><th>Time<br>before</th><th>Time<br>after</th><th><small>Number of Permutations</small></th></tr>
