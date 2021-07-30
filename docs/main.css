@@ -25,6 +25,12 @@ div.bar {
 
 }
 
+div.code_vim_hl {
+    color:white; 
+    background-color:black; 
+    padding-left: 5px;
+}
+
 .bar li {
 	list-style-type:none;
 	border: 1px #666633 outset;
@@ -84,6 +90,9 @@ div.main {
 .main a:hover {
 	border-top: 1px dotted blue; background-color:aqua }
 
+
+div.tiz {color:yellow; font-size: x-small; padding-top:20px; padding-bottom:20px;}
+div:hover.tiz {color:black; font-size: medium;}
 
 
 h1 {
