@@ -528,7 +528,7 @@ It was found that Perl 5 (maybe many other programming language which
 are not built-in radical or "good <tt>sin</tt> function").
  does not work well. 
 Luckily a rouadabout is found:<br>
-<tt>use sprintf("%f", $non-integer-value)</tt>.</p>
+<tt>sprintf("%f", $non-integer-value)</tt>.</p>
 <p>Here are code excepts from <tt>ch-2-cube-hypercube.pl</tt>:
 </p>
 <div class="code_vim_hl">
@@ -590,11 +590,11 @@ Luckily a rouadabout is found:<br>
 <p>self made</p></div>
 <p>
 It is possible to calculate all the lengths between points, sort them,
-and compare whether a cluster of them is equal (or whether they are correct
-multiples of the length of the edges.
+and compare whether a cluster of them is equally valued (or whether they are correct
+multiples of the length of the edges).
 However, the number of total segments exponentially increases as the dimension increases.
-And I don't know yet what is the minimum number of segment length (the norm, squared)
-to be check except for squares.
+And I don't know yet what the minimum number of segment length
+to be checked is (except for squares).
 <br><br>
 Another mathematical point is, if we fix a point as "reference origin",
 we only need to calculate and sort 2<sup><tt>N</tt></sup>-1 vectors.
