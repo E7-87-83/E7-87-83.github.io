@@ -56,7 +56,7 @@ if it wants.
 </p>
 
 <div style="float:right; border: 1px dotted black; font-size:x-small;">
-<image alt="" src="../docs/wiki_img/hypercube_ori.png" width="240px" style="float:right" />
+<img alt="" src="../docs/wiki_img/hypercube_ori.png" width="240px" style="float:right" />
 <br>
 <p><a href="#right_of_use">image info</a></p></div>
 
@@ -65,7 +65,7 @@ noted in the Wikipedia</a>, the generation of ugly numbers is "often used to dem
 of a lazy functional programming language", and I haven't known what functional programming is
 (find some interesting resources like
 <a title="the Dao of FP" href="https://github.com/BartoszMilewski/Publications/tree/master/TheDaoOfFP">
-here</a> or <a href="www.cs.toronto.edu/~sme/presentations/cat101.pdf">here</a>recently, however I guess, for me, it is better to learn Haskell, 
+here</a> or <a href="www.cs.toronto.edu/~sme/presentations/cat101.pdf">here</a> recently, however I guess, for me, it is better to learn Haskell, 
 a purely functional programming language, /*with Category theory in math, */
 in order to grasp the idea of FP throughfully; I need discipline to learn skills
 OR I WILL STRAY TOO FAR LIKE FOR TASK TWO THIS WEEK).
@@ -179,7 +179,7 @@ ok is_square( [<font color="#AD7FA8">1</font>, <font color="#AD7FA8">1</font>] ,
 <div style="border: 2px solid #999333; padding: 3px">
 <h5>Math Fun: Properties of n-hypercube</h5>
 <div style="float:right; border: 1px dotted black; font-size:x-small;">
-<image alt="" src="../docs/wiki_img/Cube_diagonals.png" width="240px" style="float:right" />
+<img alt="" src="../docs/wiki_img/Cube_diagonals.png" width="240px" style="float:right" />
 <p><a href="#right_of_use_1">image info</a></p></div>
 
 
@@ -198,19 +198,28 @@ Number of face diagonals: 12<br>
 Number of body diagonals: 4<br>
 Total Number of Segments: 28
 </p>
+<div class="tiz">
+<i>Calculate again for the properties of a cube from those of a square:</i><br>
+Cube:<br>
+Number of vertices: num of vertices in a square &times; 2 = 4 &times; 2 = 8<br>
+Number of edges: num of edges in a square &times; 2 + 4 edges from the self replicating process (black and red in the diagram) = 4 &times; 2 + 4 = 12<br>
+Number of faces: 6<br>
+Number of cubes: 1<br><br>
+<a href="#sq_to_cub"><i>See a supporting diagram.</i></a>
+</div>
 <p>Look at the diagram of the hypercube on right in order to get some sensation on it.
 </p>
 <div style="float:right; border: 1px dotted black; font-size:x-small;">
 <a href="../docs/wiki_img/hypercube.png">
-<image alt="" src="../docs/wiki_img/hypercube.png" width="240px" style="float:right" />
+<img alt="" src="../docs/wiki_img/hypercube.png" width="240px" style="float:right" />
 </a>
 <p><a href="#right_of_use">image info</a></p></div>
 <p>
-<i>Now we proceed:</i><br>
+<i>Now we proceed (can be counted from looking at the diagram):</i><br>
 Hypercube:<br>
-Number of vertices: 16<br>
-Number of edges: 12&times;2 + 8 = 32<br>
-Number of faces: 6&times;2 + 4&times;6&divide;2 = 24<br>
+Number of vertices: 8 &times; 2 = 16<br>
+Number of edges: num of edges in a cube &times; 2 + 8 edges from the self replicating process = 12&times;2 + 8 = 32<br>
+Number of faces: num of faces in a cube &times; 2 + 12 faces new =  6&times;2 + 4&times;6&divide;2 = 24<br>
 Number of cubes: 2 + 6 = 8<br><br>
 Especially for the segments between pairs of vertices:<br>
 Number of edges: 32<br>
@@ -225,7 +234,7 @@ as I think it might be the most difficult for us to catch them by intuition.</p>
 
 <p>Though we are not going to code for the 5-hypercube, we may try some calculations based on above.<br><br>
 5-hypercube. Yup, disclamier: I cannot "sense" how the 5-hypercube looks like. Here are just calculations
-(number of edges verified on <a href="oeis.org/A001787">OEIS sequence A001787</a>)
+(number of edges verified on <a href="https://oeis.org/A001787">OEIS sequence A001787</a>)
 :<br>
 Number of vertices: 32<br>
 Number of edges: 32&times;2 + 16 = 80<br>
@@ -551,18 +560,18 @@ Luckily a rouadabout is found:<br>
 
 <h5>Discussion for the Norm-ONLY Approach</h5>
 <div style="float:right; border: 1px dotted black; font-size:xx-small;">
-<image alt="" src="../docs/assets/wk123_t2.png" width="340px" style="float:right" />
+<img alt="" src="../docs/assets/wk123_t2.png" width="340px" style="float:right" />
 <br>
 <p>self made</p></div>
 <p>
-It is possible that calculate all the lengths between points, sort them,
+It is possible to calculate all the lengths between points, sort them,
 and compare whether a cluster of them is equal (or whether they are correct
 multiples of the length of the edges.
 However, the number of total segments exponentially increases as the dimension increases.
 And I don't know yet what is the minimum number of segment length (the norm, squared)
 to be check except for squares.
 <br><br>
-Another mathematical point is if we fix a point as "reference origin",
+Another mathematical point is, if we fix a point as "reference origin",
 we only need to calculate and sort 2<sup><tt>N</tt></sup>-1 vectors.
 Not out of surprise is that the distribution of lengths of the vectors
 follow the Pascal triangle:
@@ -586,11 +595,16 @@ For <tt>N</tt> = 4, check (48, 32, 8) diagonals;<br>
 ...</p>
 
 <h5>Summary</h5>
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<a name="sq_to_cub"></a><img alt="" src="../docs/assets/sq_to_cub.png" width="240px" style="float:right" />
+<br>
+<p>Replication of a square makes a cube; self made</p></div>
+
 <p>
 I don't do the <tt>&amp;is_<b>5</b>-hypercube</tt>. But you can see
 it will be about sorting the norms of 31 vectors origined in one of the vertices, 
-just get in mind the distribution of the lengths of the vectors
-is (5, 10, 10, 5, 1), then check their lengths...
+just bear in mind the distribution of the lengths of the vectors
+is (5, 10, 10, 5, 1), then check their norms, sort...
 </p>
 
 <p>Stay alert and healthy! □</p>
