@@ -34,7 +34,6 @@
 <div class="main">
   <h2>CY's Take on The Weekly Challenge #123 &dash; N-cube</h2>
 
-<p><i>about 1500 words</i></p>
 
 <p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
 go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
@@ -44,10 +43,36 @@ code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
 
 <p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-123/" title="The Weekly Challenge #123">challenges
 in Week #123</a> !</i></b></p>
-
+<hr>
+<p><i>about 1500 words</i>, so a brief content:</p>
+<div style="border: 1px solid #CCCCCC; padding:3px;">
+Prelude<br><br>
+Task 2: Square Points
+<ul>
+    <li>Math Fun: On the Geometry of 3D and 4D space</li>
+    <li>Properties of Squares (and Cubes) and a Primitive Algorithm </li>
+    <li>Math Fun: Properties of n-hypercube</li>
+    <li>Vector Sum Approach</li>
+    <li>Adventure to Cube and Hypercube</li>
+    <li>Numerical Inaccuracy</li>
+    <li>Discussion for the Norm-ONLY Approach</li>
+    <li>Summary</li>
+    <li>Acknowledgement</li>
+</ul>
+<br>
+Links<br>
+Snapshots of Recent Life<br>
+Images Credits<br>
+<i>links to full codes: <tt><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-123/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>,
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-123/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>,
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-123/cheok-yin-fung/perl/ch-2-cube-hypercube.pl" title="ch-2-cube-hypercube.pl from Cheok-Yin Fung">
+ch-2-cube-hypercube.pl
+</a></tt>
+</i>
+</div>
 <hr>
 
-<h4>Preclude</h4>
+<h4>Prelude</h4>
 
 <p>I often wrote my blogpost for TWC in a storytelling style, but I feel that its my time to
 put it more "coding-ly" as my knowledge on programming increases. Arrrrrrr... Sometimes
@@ -87,7 +112,7 @@ Write a script to find out if the given four points form a square.</blockquote>
 
 <p>After seeing the task statements I immediately decided to extend it as <u>a square+cube+hypercube task</u> in arbitary dimensions!</p>
 
-<h5>Math for Fun: On the Geometry of 3D and 4D space</h5>
+<h5>Math Fun: On the Geometry of 3D and 4D space</h5>
 <p>Hey, do allow me introduce two cool terms I recently learnt: "ana" and "kata". In an Euclidean 3D space,
 which most of us believe ourselves are familiar with, we can have
 Up/Down/North/East/South/West (or Up/Down/Back/Left/Front/Right, esp. if you have
@@ -346,11 +371,11 @@ I will discuss the ugly <tt>&amp;sprintf()</tt> (gonna be replaced by <tt>&amp;n
 on the later section "Numerical Inaccuracy". 
 See also the reason of not using dot product test;
 honestly I am not sure which
-(dot product test or checking the norm)
+(dot product test or checking the norms)
  is a better combat against numerical inaccuracy;
 therefore they are being "comment out" via <tt>=pod</tt>.</p>
 
-<h5>Adventure to cube and hypercube</h5>
+<h5>Adventure to Cube and Hypercube</h5>
 <p>
 I intentionally avoid using permutations in
 the <tt>&amp;is_cube</tt> here but using permtutations in 
@@ -690,7 +715,7 @@ eleased under CC-BY-SA <a href="https://creativecommons.org/licenses/by-sa/4.0/"
 
 <p><small>Except from images and codes from other personnels (including derived works), the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
 
-<p><i>link for CY's full codes: <tt><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-123/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>,
+<p><i>links for CY's full codes: <tt><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-123/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>,
 <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-123/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>,
 <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-123/cheok-yin-fung/perl/ch-2-cube-hypercube.pl" title="ch-2-cube-hypercube.pl from Cheok-Yin Fung">
 ch-2-cube-hypercube.pl
