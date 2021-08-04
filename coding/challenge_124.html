@@ -1,0 +1,550 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Puzzle Created on The Weekly Challenge #xxx - ">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="all">
+  <style>
+    pre.number {background-color: #CCC333; color: #333CCC; }
+  </style>
+
+<title>
+CY's Take on The Weekly Challenge #124 - Least Difference Partition
+</title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>
+CY's Take on The Weekly Challenge #124 &dash; Least Difference Partition
+</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-124/" title="The Weekly Challenge #124">challenges
+in Week #124</a> !</i></b></p>
+
+<hr>
+
+
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<img alt="" src="../docs/wiki_img/balance.png" style="float:right" />
+<p><a href="#right_of_use">image info</a></p></div>
+
+<h4>Task 1: o+</h4>
+<div class="tiz">
+The 8th of March (2.67, or 0.375?) is International Women's Day.<br><br>As a sportsperson, I notice that there are many political arguments or discussions during the Tokyo Olympiad.<br><br>
+I would like to mention the kneeling of members of many women soccer teams which I read from news reports. The US female soccer team player, a first coming-out LGBT+ US soccer team player, <a style="color:FF00FF" href="https://twitter.com/mPinoe" title="Megan Rapinoe's Twitter Account">Megan Rapinoe</a>, did kneeling for "Black Lives Matter" shortly after coming out and has fought for equal pay between two main genders in sports, has voiced out on BLM as mentioned, of course has voiced on LGBT+ issues as well...
+<br><br>Besides Rapinoe, I would like to mention the female 100m event on the 31st of July, in which three <a style="color:aqua" href="https://en.wikipedia.org/wiki/Jamaica">Jamaican</a> athletes &dash;
+<a style="color:FF00FF" href="https://en.wikipedia.org/wiki/Jamaica_at_the_2020_Summer_Olympics">
+ Thompson-Herah, Fraser-Pryce and Jackson </a>&dash; won all the three medals.
+Simply amazing. A deep respect for the hard work of their training.
+<br><br>
+<br><br>Due to time constraint, timidity and potential readers' interest, random discussions about biological sex and sports are here ended. <small>(It is difficult for me to structure.)</small></div>
+<p>...Due to time constraint, I decide to neither formally attempt this task, nor formally discuss the Tokyo Olympiad 2020. <small>(Identity politics is neither easy nor simple.)</small></p>
+
+<h4>Task 2: Tug of War</h4>
+
+<p>Task Statement: <small>(with minor edit)</small></p>
+<blockquote>
+<p><i>Submitted by: Mohammad S Anwar</i>
+</p><p>
+You are given a set of $n integers.
+</p><p>
+Write a script to divide the set in two subsets of $n/2 sizes each so that the difference of the sum of two subsets is the least. If $n is even then each subset must be of size $n/2 each. In case $n is odd then one subset must be ($n-1)/2 and other must be ($n+1)/2.
+</p></blockquote>
+<p>
+The code is lengthy though my accumulation of TODO tasks
+in programming/IT
+ is too much, 
+I should give an explanation to my solution and
+my thoughts can be organized as a side-effect.
+</p> 
+
+<p>
+There is a lazy approach towards the task:
+use combinatorics module and select combinations of 
+cardinality <tt>$n/2</tt> 
+(or <tt>($n&PlusMinus;1)/2</tt>),
+compare which combination is closest to the target(s)
+(<tt>TOTALSUM/2</tt> or <tt>(TOTALSUM&PlusMinus;1)/2</tt>).
+</p>
+
+<p>If I had used this approach, I would have skipped blogging. :)</p>
+
+<h5>Sorting</h5>
+
+<p>
+Suppose the given sequence <i>after sorting from small to large</i> is:
+<tt>(-3, -2, 0, 1, 2, 3, 4, 5, 6, 10, 13)</tt>.</p>
+<pre class="number">
+# 0  1  2  3  4  5  6  7  8   9  10 
+! 0  1  0  1  0  1  0  1  0   1   0 
+ -3 -2  0  1  2  3  4  5  6  10  13
+</pre>
+
+<p>The sequence is divided into two subsequences alternatively:</p>
+
+<p>Members in <tt>@arr0</tt>:
+<pre class="number">
+  0  0  0  0  0   0 
+ -3  0  2  4  6  13
+</pre></p>
+
+<p>Members in <tt>@arr1</tt>:
+<pre class="number">
+  1  1  1  1   1 
+ -2  1  3  5  10
+</pre></p>
+
+<p>Two useful points to note:</p>
+<ol>
+<li><tt>$arr1[$_-1]</tt> &ge; <tt>$arr0[$_]</tt> for all valid positive <tt>$_</tt>. [Section "h"]</li>
+<li><tt>$arr1[$_]</tt> &ge; <tt>$arr0[$_]</tt> for all valid non-negative <tt>$_</tt>.[Section "m"]</li>
+</ol>
+
+<p>The differences with <tt>$arr1[0]</tt> ignored: [Section "h"]
+<pre class="number">
+@arr0    -3  0  2  4  <s>6</s>  <s>13</s>
+@arr1 <s>-2</s>  1  3  5 10
+ DIFF     4  3  3  6
+</pre></p>
+
+<p>Difference of which the subsequneces start at the same index [Section "m"]
+<pre class="number">
+@arr0 -3  0  2  4   6  <s>13</s>
+@arr1 -2  1  3  5  10
+ DIFF  1  1  1  1   4
+</pre></p>
+
+<p>On these two different sections, if we swap a term of <tt>@arr0</tt> with the corresponding term of <tt>@arr1</tt>, <tt>@arr0</tt> and <tt>@arr1</tt> are still sorted.</p>
+<div style="border: 2px solid #999333; padding: 3px">
+<p>For demostration, let see also a case of even numbers of integers:</p>
+
+<tt>(2, 6, 11, 16, 20, 23, 27, 29)</tt>.</p>
+<pre class="number">
+# 0  1  2  3  4  5  6  7 
+! 0  1  0  1  0  1  0  1
+  2  6 11 16 20 23 27 29 
+</pre>
+
+<p>Members in <tt>@arr0</tt>:
+<pre class="number">
+  0  0  0  0 
+  2 11 20 27
+</pre></p>
+
+<p>Members in <tt>@arr1</tt>:
+<pre class="number">
+  1  1  1  1 
+  6 16 23 29
+</pre></p>
+
+<p>[Section "h"]
+<pre class="number">
+@arr0     2  11  20  <s>27</s>
+@arr1 <s>6</s>  16  23  29
+ DIFF    14  12   9
+</pre>
+
+<p>[Section "m"]
+<pre class="number">
+@arr0  2  11  20  27
+@arr1  6  16  23  29
+ DIFF  4   5   3   2
+</pre></p></p>
+</div>
+<p>Since swapping preserves the numbers of terms of the two subsequences,
+the script trys to do summations again and again with the aim of 
+making the two sums of the two subsequences(or said, subsets) as close as
+possible. But —
+</p><p>
+We can concern only <tt>@arr0</tt> makes its sum as close to <tt>TOTALSUM/2</tt>, or <tt>(TOTALSUM&PlusMinus;1)/2</tt>, as possible.
+</p>
+
+<div class="code_vim_hl">
+<pre>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$temp_m</b></font> = min (<font color="#34E2E2"><b>$#arr1</b></font>, <font color="#FCE94F">int</font> <font color="#34E2E2"><b>$#S</b></font>/<font color="#AD7FA8">2</font>);
+    <font color="#34E2E2"><b>$diff_arr_h</b></font> = [<font color="#FCE94F">map</font> <font color="#FCE94F">{</font> <font color="#34E2E2"><b>$arr1[$_]</b></font> - <font color="#34E2E2"><b>$arr0[$_</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> <font color="#FCE94F">}</font> (<font color="#AD7FA8">1.</font>.<font color="#34E2E2"><b>$#arr1</b></font>)];
+    <font color="#34E2E2"><b>$diff_arr_m</b></font> = [<font color="#FCE94F">map</font> <font color="#FCE94F">{</font> <font color="#34E2E2"><b>$arr1[$_]</b></font> - <font color="#34E2E2"><b>$arr0[$_]</b></font> <font color="#FCE94F">}</font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$temp_m</b></font>)];
+
+<font color="#FCE94F">=pod</font>
+<font color="#5FD7FF">  #  TESTING INFO</font>
+<font color="#5FD7FF">    say &quot;@S&quot;;</font>
+<font color="#5FD7FF">    print &quot;sum of \@S: &quot;, $s, &quot;\n&quot;;</font>
+<font color="#5FD7FF">    say &quot;sum of \@arr0: &quot;, $sum_initial;</font>
+<font color="#5FD7FF">    print &quot;sum of \@arr1: &quot;, (sum @arr1), &quot;\n&quot;; </font>
+<font color="#5FD7FF">    say &quot;mark(s): &quot;, $mark1, &quot; &quot;, $mark2;</font>
+<font color="#5FD7FF">    say &quot;arr0: &quot;, &quot;@arr0&quot;;</font>
+<font color="#5FD7FF">    say &quot;arr1: &quot;, &quot;@arr1&quot;;</font>
+<font color="#5FD7FF">    say &quot; h  :   @{$diff_arr_h}&quot;;</font>
+<font color="#5FD7FF">    say &quot; m  : @{$diff_arr_m}&quot;;</font>
+<font color="#FCE94F">=cut</font>
+    <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$odd_term</b></font>) {
+        <font color="#FCE94F">if</font> (<font color="#AD7FA8">2</font>*<font color="#34E2E2"><b>$sum_initial</b></font> &gt; <font color="#34E2E2"><b>$s</b></font>) {
+            # <span style="font-family:Times New Roman,Georgia,serif">special case to be discussed</span>
+        }
+        <font color="#FCE94F">elsif</font> (<font color="#AD7FA8">2</font>*<font color="#34E2E2"><b>$sum_initial</b></font> == <font color="#34E2E2"><b>$s</b></font>) {
+            # <span style="font-family:Times New Roman,Georgia,serif">... to be discussed</span>
+        }
+    }
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$soln_h</b></font> = closest_sum_to_target(
+                    <font color="#34E2E2"><b>$diff_arr_h</b></font>,
+                    <font color="#34E2E2"><b>$mark1</b></font> - <font color="#34E2E2"><b>$sum_initial</b></font>,
+                    <font color="#34E2E2"><b>$mark2</b></font> - <font color="#34E2E2"><b>$sum_initial</b></font>,
+                 );
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$soln_m</b></font> = closest_sum_to_target(
+                    <font color="#34E2E2"><b>$diff_arr_m</b></font>,
+                    <font color="#34E2E2"><b>$mark1</b></font> - <font color="#34E2E2"><b>$sum_initial</b></font>,
+                    <font color="#34E2E2"><b>$mark2</b></font> - <font color="#34E2E2"><b>$sum_initial</b></font>,
+                 );
+    <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$soln_m-&gt;[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &lt;= <font color="#34E2E2"><b>$soln_h-&gt;[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>) {
+        <font color="#FCE94F">foreach</font> (<font color="#34E2E2"><b>@{$soln_m-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]}</b></font>) {
+            <font color="#34E2E2"># &quot;use m&quot;</font>
+            <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$temp_c</b></font> = <font color="#34E2E2"><b>$arr0[$_]</b></font>;
+            <font color="#34E2E2"><b>$arr0[$_]</b></font> = <font color="#34E2E2"><b>$arr1[$_]</b></font>;
+            <font color="#34E2E2"><b>$arr1[$_]</b></font> = <font color="#34E2E2"><b>$temp_c</b></font>;
+        }
+    }
+    <font color="#FCE94F">else</font> {
+        <font color="#FCE94F">foreach</font> (<font color="#34E2E2"><b>@{$soln_h-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]}</b></font>) {
+            <font color="#34E2E2"># &quot;use h&quot;;</font>
+            <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$temp_c</b></font> = <font color="#34E2E2"><b>$arr0[$_]</b></font>;
+            <font color="#34E2E2"><b>$arr0[$_]</b></font> = <font color="#34E2E2"><b>$arr1[</b></font><font color="#AD7FA8">1</font>+<font color="#34E2E2"><b>$_]</b></font>;
+            <font color="#34E2E2"><b>$arr1[$_</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> = <font color="#34E2E2"><b>$temp_c</b></font>;
+        }
+    }
+    <font color="#FCE94F">return</font> [ [<font color="#34E2E2"><b>@arr0</b></font>], [<font color="#34E2E2"><b>@arr1</b></font>] ];
+</pre></div>
+
+
+<h5>Dynamic Programming of Generation X &dash;
+<br>subroutine <tt>closest_sum_to_target</tt>
+</h5>
+<p>
+I came across this stackexchange post
+"<a href="https://stackoverflow.com/questions/19572043/given-a-target-sum-and-a-set-of-integers-find-the-closest-subset-of-numbers-tha" title="stackexchange post of summation to a target">
+given a target sum and a set of integers, find the closest subset of numbers that add to the target</a>".
+I don't think I can non-lazily do the task without the post.
+</p>
+
+<p>On the post, it is said that it is a dynamic programming solution with time complexity O(number_of_elements_in_the_set<sup>4</sup>).</p>
+<p>
+(As seen from above, there are two allowable DIFF sequences,
+called as "Section 'h'" and "Section 'm'". The logic is almostly equivalent.
+Temporarily discuss one of them only.)
+Make a hash, the keys are the array of the indices of
+numbers in DIFF sequence,
+each corresponding value is the sum of the subset of the DIFF sequence.
+</p><p>
+They are calculated from "generation 0" (which is the empty set) to 
+"generation <i>length of <tt>@DIFF</tt></i>" (book-keeping by <tt>$n</tt>) ‐ 
+except for a sum found being exactly what we want.
+</p>
+
+<div class="code_vim_hl">
+<pre>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$exact</b></font> = <font color="#FCE94F">undef</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>%indices_to_values</b></font> = ( [] =&gt; <font color="#AD7FA8">0</font> );
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$generation_aged</b></font> = [ [] ];
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$generation_new</b></font> = [];
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$current_sum_smaller</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$current_ind_smaller</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$current_sum_larger</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$current_ind_larger</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">while</font> ( !<font color="#34E2E2"><b>$exact</b></font> &amp;&amp; <font color="#34E2E2"><b>$n</b></font> &lt; <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@array</b></font> ) {
+        <font color="#FCE94F">foreach</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$arr</b></font> (<font color="#34E2E2"><b>$generation_aged-&gt;@*</b></font>) {
+            <font color="#FCE94F">foreach</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$#array</b></font>) {
+               <font color="#34E2E2"># check_if_@array_contain_i, _if_yes_then_next__</font>
+                <font color="#FCE94F">next</font> <font color="#FCE94F">if</font> any { <font color="#34E2E2"><b>$_</b></font> == <font color="#34E2E2"><b>$i</b></font> } <font color="#34E2E2"><b>$arr-&gt;@*</b></font>;
+                <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$arr_cp</b></font> = <font color="#34E2E2"><b>$n</b></font>&gt;<font color="#AD7FA8">0</font> ? [<font color="#34E2E2"><b>$arr-&gt;@*</b></font>] : [] ;
+                <font color="#FCE94F">push</font> <font color="#34E2E2"><b>$arr_cp-&gt;@*</b></font>, <font color="#34E2E2"><b>$i</b></font>;
+                <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$my_sum</b></font> = <font color="#34E2E2"><b>$array[$i]</b></font>;
+                <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$n</b></font> &gt; <font color="#AD7FA8">0</font>) {
+                    <font color="#34E2E2"><b>$my_sum</b></font> += <font color="#34E2E2"><b>$indices_to_values{$arr}</b></font>;
+                }
+               <font color="#34E2E2"># check_if_values_of_hash_indices_to_values_contain_i, _if_yes_then_next__</font>
+                <font color="#FCE94F">next</font> <font color="#FCE94F">if</font> any { <font color="#34E2E2"><b>$_</b></font> == <font color="#34E2E2"><b>$my_sum</b></font> &amp;&amp; <font color="#34E2E2"><b>$_</b></font> != <font color="#AD7FA8">0</font> } <font color="#FCE94F">values</font> <font color="#34E2E2"><b>%indices_to_values</b></font>;    <font color="#34E2E2">#[*]</font>
+                <font color="#FCE94F">push</font> <font color="#34E2E2"><b>$generation_new-&gt;@*</b></font>, <font color="#34E2E2"><b>$arr_cp</b></font>;
+                <font color="#34E2E2"><b>$indices_to_values{$arr_cp}</b></font> = <font color="#34E2E2"><b>$my_sum</b></font>;
+                <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$my_sum</b></font> == <font color="#34E2E2"><b>$target1</b></font> || <font color="#34E2E2"><b>$my_sum</b></font> == <font color="#34E2E2"><b>$target2</b></font>) {
+                    <font color="#34E2E2"><b>$exact</b></font> = <font color="#34E2E2"><b>$arr_cp</b></font>;
+                }
+                <font color="#FCE94F">elsif</font> (<font color="#34E2E2"><b>$my_sum</b></font> &lt; <font color="#34E2E2"><b>$target1</b></font>) {
+                    <font color="#FCE94F">if</font> (!<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$current_sum_smaller</b></font>) || <font color="#34E2E2"><b>$current_sum_smaller</b></font> &lt; <font color="#34E2E2"><b>$my_sum</b></font>) {
+                        <font color="#34E2E2"><b>$current_sum_smaller</b></font> = <font color="#34E2E2"><b>$my_sum</b></font>;
+                        <font color="#34E2E2"><b>$current_ind_smaller</b></font> = <font color="#34E2E2"><b>$arr_cp</b></font>;
+                    }
+                }
+                <font color="#FCE94F">elsif</font> (<font color="#34E2E2"><b>$my_sum</b></font> &gt; <font color="#34E2E2"><b>$target2</b></font>) {
+                    <font color="#FCE94F">if</font> (!<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$current_sum_larger</b></font>) || <font color="#34E2E2"><b>$my_sum</b></font> &lt; <font color="#34E2E2"><b>$current_sum_larger</b></font>) {
+                        <font color="#34E2E2"><b>$current_sum_larger</b></font> = <font color="#34E2E2"><b>$my_sum</b></font>;
+                        <font color="#34E2E2"><b>$current_ind_larger</b></font> = <font color="#34E2E2"><b>$arr_cp</b></font>;
+                    }
+                }
+                <font color="#FCE94F">last</font> <font color="#FCE94F">if</font> <font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$exact</b></font>);
+            }
+            <font color="#FCE94F">last</font> <font color="#FCE94F">if</font> <font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$exact</b></font>);
+        }
+        <font color="#34E2E2"><b>$generation_aged</b></font> = <font color="#34E2E2"><b>$generation_new</b></font>;
+        <font color="#34E2E2"><b>$generation_new</b></font> = [];
+        <font color="#34E2E2"><b>$n</b></font>++;
+    }
+</pre>
+</div>
+
+<p>
+If the sum of a subset is not one of the two "<tt>target</tt>s",
+it will be put to compare with the currently closest
+and smaller than <tt>$target1</tt> value, or compare with the 
+currently closest and larger than <tt>$target2</tt> value. If it
+gets closer, update the corresponding value.
+</p>
+
+<div class="code_vim_hl">
+<pre>    <font color="#FCE94F">if</font> (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$exact</b></font>)) {
+        <font color="#FCE94F">return</font> [ <font color="#34E2E2"><b>$exact</b></font>, <font color="#AD7FA8">0</font> ];
+    }
+    <font color="#FCE94F">else</font> {
+       <font color="#34E2E2"># &quot;No exact solutions.&quot;</font>
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$temp_smaller</b></font> = <font color="#34E2E2"><b>$current_sum_smaller</b></font>;
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$temp_larger</b></font> = <font color="#34E2E2"><b>$current_sum_larger</b></font>;
+        <font color="#FCE94F">if</font> ( <font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$temp_smaller</b></font>) &amp;&amp;
+                (    !<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$temp_larger</b></font>)
+                  || ((<font color="#34E2E2"><b>$target1</b></font> - <font color="#34E2E2"><b>$temp_smaller</b></font>) &lt;= (<font color="#34E2E2"><b>$temp_larger</b></font> - <font color="#34E2E2"><b>$target2</b></font>))
+                )
+           ) {
+            <font color="#FCE94F">return</font> [
+                <font color="#34E2E2"><b>$current_ind_smaller</b></font>,
+                <font color="#34E2E2"><b>$target1</b></font> - <font color="#34E2E2"><b>$temp_smaller</b></font>
+            ];
+        }
+        <font color="#FCE94F">else</font> {
+            <font color="#FCE94F">return</font> [
+                <font color="#34E2E2"><b>$current_ind_larger</b></font>,
+                <font color="#34E2E2"><b>$temp_larger</b></font> - <font color="#34E2E2"><b>$target2</b></font>
+            ];
+        }
+    }
+</pre>
+</div>
+<h5>Solution Demostrations</h5>
+<div class="code_vim_hl">
+<pre>$ the first sequence we meet in this blogpost
+TESTING INFO
+<b>-3 -2 0 1 2 3 4 5 6 10 13</b>
+sum of @S: 39
+sum of @arr0: 22
+sum of @arr1: 17
+mark(s): 19 20
+arr0: -3 0 2 4 6 13
+arr1: -2 1 3 5 10
+ h  :   4 3 3 6
+ m  : 1 1 1 1 4
+TESTING INFO
+-13 -10 -6 -5 -4 -3 -2 -1 0 2 3
+sum of @S: -39
+sum of @arr0: -22
+sum of @arr1: -17
+mark(s): -20 -19
+arr0: -13 -6 -4 -2 0 3
+arr1: -10 -5 -3 -1 2
+ h  :   8 3 3 4
+ m  : <b>3</b> 1 1 1 2
+<b>TOTAL: 39</b>
+
+<b>(-3 0 2 4 6 10) ==&gt; 19
+(-2 1 3 5 13) ==&gt; 20</b>
+</pre>
+<br>
+<pre>$   the case of even cardinality of the set of integers
+TESTING INFO
+<b>2 6 11 16 20 23 27 29</b>
+sum of @S: 134
+sum of @arr0: 60
+sum of @arr1: 74
+mark(s): 67 67
+arr0: 2 11 20 27
+arr1: 6 16 23 29
+ h  :   14 12 9
+ m  : <b>4</b> 5 <b>3</b> 2
+<b>TOTAL: 134</b>
+
+<b>(6 11 23 27) ==&gt; 67
+(2 16 20 29) ==&gt; 67</b>
+</pre>
+</div>
+
+<p>For the first sequence, why did the script go through <tt>(-13, -10, -6, -5, -4, -3, -2, -1, 0, 2, 3)</tt>
+ for getting the solution? This is the topic of the next section.</p>
+
+<h5>Bugs and Follow-ups I: Large <tt>$arr0[-1]</tt></h5>
+<p> 
+I knew the sorting approach would not work well with a large value
+of <tt>$arr0[-1]</tt> while <tt>TOTAL_NUMBER_OF_INTEGERS</tt> is odd at the draft stage.</p>
+
+<p>The first case is: <tt>$arr0[-1]</tt> could be large that <tt>sum @arr0</tt> &gt; <tt>sum @arr1</tt> 
+(with respect to the sorting and grouping which makes <tt>$arr0[$_]</tt> &le; <tt>$arr1[$_]</tt> for <tt>0</tt> to <tt>$arr1-&gt;$#*</tt>).
+The other possibility, is, <tt>sum @arr0</tt> == <tt>sum @arr1</tt>. We can quickly return the two subsequences for the second case! How about the first case?</p>
+
+<p>
+I solved it by <tt>map {-$_}</tt>:
+</p>
+
+<div class="code_vim_hl"><pre>
+&nbsp;
+<font color="#FCE94F">my</font> ( <font color="#34E2E2"><b>$na0</b></font>, <font color="#34E2E2"><b>$na1</b></font> ) = tug_of_war([<font color="#FCE94F">map</font> <font color="#FCE94F">{</font> -<font color="#34E2E2"><b>$_</b></font> <font color="#FCE94F">}</font> <font color="#34E2E2"><b>@S</b></font>])-&gt;@*;
+<font color="#FCE94F">return</font> [ [ <font color="#FCE94F">reverse map</font> <font color="#FCE94F">{</font>-<font color="#34E2E2"><b>$_</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>$na0-&gt;@*</b></font>  ] , [<font color="#FCE94F">reverse map</font> <font color="#FCE94F">{</font>-<font color="#34E2E2"><b>$_</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>$na1-&gt;@*</b></font> ]  ];
+&nbsp;
+</pre>
+</div>
+
+<p>Honestly, I got this fix, by, no reasons. (The script jumped into deep recursions before it is fixed for zeros.) Are there any
+specific jargon for this kind of transformation?</p>
+
+<h5>Bugs and Follow-ups II: Small Set of Integers</h5>
+<p>
+The <tt>$temp_larger</tt> and <tt>$temp_smaller</tt> can be undefined,
+especially for small sets of integers.
+I put some <tt>defined()</tt> boolean test.
+For a more safe arrangement, <tt>&amp;tug_of_small_war</tt> is written:
+</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>tug_of_small_war </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@inp</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]-&gt;@*</b></font>;
+    <font color="#34E2E2"><b>@inp</b></font> = <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@inp</b></font>;
+    <font color="#FCE94F">given</font>(<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@inp</b></font>) {
+        <font color="#FCE94F">when</font> (<font color="#AD7FA8">4</font>) { <font color="#FCE94F">return</font> [ [<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>] , [ <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font> ] ];
+                 }
+        <font color="#FCE94F">when</font> (<font color="#AD7FA8">2</font>) { <font color="#FCE94F">return</font> [ [<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>] , [<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>] ];
+                 }
+        <font color="#FCE94F">when</font> (<font color="#AD7FA8">3</font>) {
+                  <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sum01</b></font> = <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>+<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+                  <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sum02</b></font> = <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>+<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>;
+                  <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sum12</b></font> = <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>+<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>;
+                  <font color="#FCE94F">if</font> (<font color="#FCE94F">abs</font>(<font color="#34E2E2"><b>$sum01</b></font>-<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>)&lt;=<font color="#FCE94F">abs</font>(<font color="#34E2E2"><b>$sum02</b></font>-<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)) {
+                      <font color="#FCE94F">return</font> [ [<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> ] , [ <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font> ] ]
+                          <font color="#FCE94F">if</font> <font color="#FCE94F">abs</font>(<font color="#34E2E2"><b>$sum12</b></font>-<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>) &gt;= <font color="#FCE94F">abs</font>(<font color="#34E2E2"><b>$sum01</b></font>-<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>);
+                  }
+                  <font color="#FCE94F">else</font> {
+                      <font color="#FCE94F">return</font> [ [<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font> ] , [ <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> ] ]
+                          <font color="#FCE94F">if</font> <font color="#FCE94F">abs</font>(<font color="#34E2E2"><b>$sum12</b></font>-<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>) &gt;= <font color="#FCE94F">abs</font>(<font color="#34E2E2"><b>$sum02</b></font>-<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>);
+                  }
+                  <font color="#FCE94F">return</font> [ [<font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font> ] , [ <font color="#34E2E2"><b>$inp[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> ] ];
+                 }
+    }
+}
+</pre>
+</div>
+
+<h5>Bugs and Follow-ups III: Many Zeros</h5>
+
+Originally, it was:
+
+<div class="code_vim_hl"><pre>&nbsp;
+<font color="#FCE94F">next</font> <font color="#FCE94F">if</font> any { <font color="#34E2E2"><b>$_</b></font> == <font color="#34E2E2"><b>$my_sum</b></font>} <font color="#FCE94F">values</font> <font color="#34E2E2"><b>%indices_to_values</b></font>;
+&nbsp;
+</pre></div>
+
+Finding the test case <tt>(-1, 0, 0, 1, 5)</tt> unsuccessful, I got a fix by changing the line to :
+
+<div class="code_vim_hl"><pre>&nbsp;
+<font color="#FCE94F">next</font> <font color="#FCE94F">if</font> any { <font color="#34E2E2"><b>$_</b></font> == <font color="#34E2E2"><b>$my_sum</b></font> &amp;&amp; <font color="#34E2E2"><b>$_</b></font> != <font color="#AD7FA8">0</font> } <font color="#FCE94F">values</font> <font color="#34E2E2"><b>%indices_to_values</b></font>;
+&nbsp;
+</pre></div>
+
+
+<h5>Problem Solving Insight</h5>
+<p>I have to admit that my algorithm and the 3 fixes seem popped out from the nowhere.
+(The sorting and alternative grouping can be initutive for some(?).)
+</p>
+
+<p>The relavent stuff I have read before coding the task is resources on paritions and dynamic programming...</p>
+
+<p>That's all I would like to share about the task.</p>
+
+<p>Stay alert and healthy! □</p>
+
+<h4>Snapshot of Recent Life</h4>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<a href="../docs/assets/CPdict_hand.jpg" target="_blank">
+<img alt="" width="100px" src="../docs/assets/CPdict_hand.jpg" style="float:right" />
+</a>
+</div>
+
+<div class="tiz">
+<p>1. I wanna complete the contract bridge modules 
+as fast as possible and then start to concentrate study a
+cerification test on MySQL. </p>
+
+<p>
+2. Using 
+<a title="CPAN module -- Object::Pad" href="https://metacpan.org/pod/Object::Pad">
+Object::Pad</a>
+ though my OOP experience is limited. Have just discovered "PAD"
+can be an abbreviation for "Paradigm", "Analysis" and "Design". 
+I am often blessed: I hadn't started to try <tt>Moo</tt>,
+and I like <tt>Object::Pad</tt>; one of the reasons is that
+ it uses <tt>class</tt>and <tt>method</tt> as keywords. 
+Honestly one thing from the first day
+I started to use Perl til now that is I like Perl, are the sigils which
+some programmers dislike. Is this because my native language is of 
+more than 
+<a href="https://en.wikipedia.org/wiki/Kangxi_Dictionary">30 thoursands characters</a>
+but with a system of
+<a href="https://en.wikipedia.org/wiki/Radical_(Chinese_characters)">radicals</a>?
+I was very keen on reading the dictionary by sections of radicals when I was small.
+</p>
+</div>
+
+<hr>
+
+<p><a name="right_of_use"></a>The image of a balance is in the public domain. It is taken from <a href="https://commons.wikimedia.org/wiki/File:Meyers_b8_s0842_b1.png">Wikimedia Commons</a>.
+I don't know why its right side is immersed into liquid.
+</p> 
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-124/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Created Date: 4th August, 2021 HKT 15:55.</p>
+
+</body>
+
+</html>
+
+
