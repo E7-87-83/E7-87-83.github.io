@@ -126,7 +126,7 @@ Suppose the given sequence <i>after sorting from small to large</i> is:
 
 <p>Two useful points to note:</p>
 <ol>
-<li><tt>$arr1[$_-1]</tt> &ge; <tt>$arr0[$_]</tt> for all valid positive <tt>$_</tt>. [Section "h"]</li>
+<li><tt>$arr1[$_]</tt> &ge; <tt>$arr0[$_-1]</tt> for all valid positive <tt>$_</tt>. [Section "h"]</li>
 <li><tt>$arr1[$_]</tt> &ge; <tt>$arr0[$_]</tt> for all valid non-negative <tt>$_</tt>.[Section "m"]</li>
 </ol>
 
@@ -481,6 +481,23 @@ Finding the test case <tt>(-1, 0, 0, 1, 5)</tt> unsuccessful, I got a fix by cha
 &nbsp;
 </pre></div>
 
+<h5>Speed</h5>
+
+<div class="code_vim_hl">
+<pre>
+$ time perl ch-2.pl 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97
+
+TOTAL: 1060
+
+(2 5 11 17 23 31 41 47 53 61 71 79 89) ==&gt; 530
+(3 7 13 19 29 37 43 59 67 73 83 97) ==&gt; 530
+
+real    0m0.085s
+user    0m0.069s
+sys 0m0.016s
+
+</pre>
+</div>
 
 <h5>Problem Solving Insight</h5>
 <p>I have to admit that my algorithm and the 3 fixes seem popped out from the nowhere.
@@ -514,7 +531,7 @@ Object::Pad</a>
 can be an abbreviation for "Paradigm", "Analysis" and "Design". 
 I am often blessed: I hadn't started to try <tt>Moo</tt>,
 and I like <tt>Object::Pad</tt>; one of the reasons is that
- it uses <tt>class</tt>and <tt>method</tt> as keywords. 
+ it uses <tt>class</tt> and <tt>method</tt> as keywords. 
 Honestly one thing from the first day
 I started to use Perl til now that is I like Perl, are the sigils which
 some programmers dislike. Is this because my native language is of 
@@ -541,10 +558,14 @@ I don't know why its right side is immersed into liquid.
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
 <p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
-<p>Created Date: 4th August, 2021 HKT 15:55.</p>
+<p>Created Date: 4th August, 2021 HKT 15:55.</p> 
+
+<p>Modified Date: 5th August, 2021 HKT 00:05 &dash; Errata are fixed. "Speed" section is added after reading James Smith's code.
+And ... <br>
+<font color="red">Don't you think I haven't proved the mathematical feasibility of the approach?</font>
+</p>
 
 </body>
 
 </html>
-
 
