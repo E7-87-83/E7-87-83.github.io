@@ -144,7 +144,8 @@ Suppose the given sequence <i>after sorting from small to large</i> is:
  DIFF  1  1  1  1   4
 </pre></p>
 
-<p>On these two different sections, if we swap a term of <tt>@arr0</tt> with the corresponding term of <tt>@arr1</tt>, <tt>@arr0</tt> and <tt>@arr1</tt> are still sorted.</p>
+<p>On the "Section 'm'", if we swap a term of <tt>@arr0</tt> with the corresponding term of <tt>@arr1</tt>, <tt>@arr0</tt> and <tt>@arr1</tt> are still sorted.</p>
+<!--<p>On these two different sections, if we swap a term of <tt>@arr0</tt> with the corresponding term of <tt>@arr1</tt>, <tt>@arr0</tt> and <tt>@arr1</tt> are still sorted.</p>  5th Aug 2021 HKT 00:05-->
 <div style="border: 2px solid #999333; padding: 3px">
 <p>For demostration, let see also a case of even numbers of integers:</p>
 
@@ -484,6 +485,10 @@ Finding the test case <tt>(-1, 0, 0, 1, 5)</tt> unsuccessful, I got a fix by cha
 <h5>Speed</h5>
 
 <div class="code_vim_hl">
+
+
+
+
 <pre>
 $ time perl ch-2.pl 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97
 
@@ -496,7 +501,7 @@ real    0m0.085s
 user    0m0.069s
 sys 0m0.016s
 </pre>
-<div><code>$ time perl ch-2.pl 836 -34 2172 1931 96 1712 2759 2028 1857 -484 2087 2060 2921 2250 -808 2519 96 666 184 -157 2022 2988 -967 -528 -736 2477 525 1561 -203 279 2168 623 1501 -839 866 -852 -960 2492 623 1876 -80 1891 -860 -817 2641 1745 1250 789 -47 2273 554 735 2266 2440 -937 1999 -136 1038 1235 2384 1603 182 -240 -805 2033 407 1459 2856 2826 817 2835 1211 1422 -1 -317 -377 263 2454 -342 1517 509 1385 1530 2388 -20 827 1241 548 1806 -450 2010 1846 1973 373 -805 380 2665 2040 875 -209
+<div># 2nd test<br><code>$ time perl ch-2.pl 836 -34 2172 1931 96 1712 2759 2028 1857 -484 2087 2060 2921 2250 -808 2519 96 666 184 -157 2022 2988 -967 -528 -736 2477 525 1561 -203 279 2168 623 1501 -839 866 -852 -960 2492 623 1876 -80 1891 -860 -817 2641 1745 1250 789 -47 2273 554 735 2266 2440 -937 1999 -136 1038 1235 2384 1603 182 -240 -805 2033 407 1459 2856 2826 817 2835 1211 1422 -1 -317 -377 263 2454 -342 1517 509 1385 1530 2388 -20 827 1241 548 1806 -450 2010 1846 1973 373 -805 380 2665 2040 875 -209
 <br><br>
 TOTAL: 100685
 <br><br>
@@ -507,9 +512,52 @@ real    0m2.232s
 user    0m2.198s
 sys     0m0.020s
 </pre>
+<br><br>
+<div># 3rd test<br><code>$ time perl ch-2.pl -2564 -2699 -2933 4905 -846 -4655 -3175 1288 2926 1090 4183 -2507 -2531 -2222 1801 -2378 1418 4641 -4519 -3040 -2459 -4101 4773 -2193 -3028 -574 -952 -3334 4343 460 -2898 3597 877 2226 -3847 4001 -2494 2489 -1293 3624 1037 -1583 4898 3171 -2412 3129 4356 -48 1508 -255 1282 -4464 3577 -2047 -4463 4151 1980 1974 -4459 4035 -1627 3754 -76 2085 -3596 1116 -104 -1978 75 -488 -4286 3444 -4152 967 4344 -3559 822 36 -764 -4049 44 1961 3042 -3629 -4675 -49 2329 1411 355 4957 284 4870 2492 995 2716 -1935 -1660 -3409 -3949 -670<br><br>
+TOTAL: 211
+<br><br>
+(-4675 -4519 -4463 -4152 -4101 -3949 -3629 -3409 -3175 -3040 -2933 -2699 -2531 -2494 -2412 -2222 -2047 -1660 -1627 -952 -846 -670 -255 -104 -49 36 284 355 822 967 1037 1282 1288 1508 1961 1974 2085 2329 2716 2926 3129 3444 3597 4001 4035 4183 4344 4641 4870 4905) ==> 106<br>
+(-4655 -4464 -4459 -4286 -4049 -3847 -3596 -3559 -3334 -3028 -2898 -2564 -2507 -2459 -2378 -2193 -1978 -1935 -1583 -1293 -764 -574 -488 -76 -48 44 75 460 877 995 1090 1116 1411 1418 1801 1980 2226 2489 2492 3042 3171 3577 3624 3754 4151 4343 4356 4773 4898 4957) ==> 105
+</code></div>
+<pre>
+real    0m9.818s
+user    0m9.798s
+sys 0m0.005s
+</pre>
+<div># 4th test<br><code>$ time perl ch-2.pl -2510 1213 -1763 -1635 -3514 -3506 -893 -3789 -1688 2355 -4215 -2915 -1691 -4556 -4947 3979 3856 -3032 -1045 1541 -1363 4990 3432 -3734 835 -4522 785 -3129 -2933 953 2793 2387 1422 3612 -1950 4991 2460 2363 -2083 -127 4717 3793 -771 2756 2829 -2390 553 4008 -4987 3486 -4688 -875 -4910 -1389 2760 -709 -3087 4772 -18 3521 2439 -560 3782 -2942 2743 -4570 4862 994 -2114 3553 -4652 2222 -3576 -4008 -776 -1866 -2716 -2101 -4490 -1727 1371 -868 -3893 3639 -1388 4146 -4986 -2818 2951 1423 3460 -3050 4885 -3111 4942 425 -3229 -3475 4973 3053
+<br><br>
+TOTAL: -15255
+<br><br>
+(-4987 -4947 -4652 -4570 -4522 -4008 -3893 -3734 -3514 -3229 -3129 -3087 -3032 -2933 -2818 -2510 -2114 -2083 -1866 -1727 -1688 -1389 -1045 -893 -868 -771 -127 425 785 835 994 1371 1423 2222 2363 2439 2743 2760 2829 3432 3460 3521 3612 3782 3856 4146 4717 4862 4942 4990) ==> -7627<br>
+(-4986 -4910 -4688 -4556 -4490 -4215 -3789 -3576 -3506 -3475 -3111 -3050 -2942 -2915 -2716 -2390 -2101 -1950 -1763 -1691 -1635 -1388 -1363 -875 -776 -709 -560 -18 553 953 1213 1422 1541 2355 2387 2460 2756 2793 2951 3053 3486 3553 3639 3793 3979 4008 4772 4885 4973 4991) ==> -7628
+</code></div>
+<pre>real	0m6.599s
+user	0m6.581s
+sys	0m0.009s</pre>
+
+<div># 5th test<br><code>
+$ time perl ch-2.pl 7370 16442 -28894 -6587 -3667 -11884 5020 3196 22003 6518 -19805 30590 21875 10371 -4133 20218 -5329 784 13838 30017 2657 21122 -25919 -23226 -3928 -4672 -557 -30339 21689 13952 21709 -22539 -2239 19620 -18730 8679 -11976 9007 17869 -4295
+TOTAL: 95827
+<br><br>
+(-28894 -25919 -22539 -11976 -6587 -4672 -4295 -3928 -2239 784 3196 6518 9007 13838 13952 17869 20218 21689 21875 30017) ==> 47914
+(-30339 -23226 -19805 -18730 -11884 -5329 -4133 -3667 -557 2657 5020 7370 8679 10371 16442 19620 21122 21709 22003 30590) ==> 47913
+<br><br></code></div><pre>
+real 0m39.349s
+user 0m39.210s
+sys 0m0.021s</pre>
+
+
+
+
 </div>
 
 <p>The second data set has 100 integers in between -1000 to 3000, generated by <a href="https://www.random.org/integers/">RANDOM.ORG</a>.</p>
+
+<p>The third and fourth data set has 100 integers respectively, in between -5000 to 5000, generated by <a href="https://www.random.org/integers/">RANDOM.ORG</a>.</p>
+
+<p>The fifth data set has 40 integers, in between -32768 to 32767, generated by <a href="https://www.random.org/integers/">RANDOM.ORG</a>.</p>
+
+<p>More test data (including two cases which the script failed to get an exact solution) <a href="challenge_124.out">here</a>.</p>
 
 <h5>Problem Solving Insight</h5>
 <p>I have to admit that my algorithm and the 3 fixes seem popped out from the nowhere.
@@ -575,6 +623,9 @@ I don't know why its right side is immersed into liquid.
 <p>Modified Date: 5th August, 2021 HKT 00:35 &dash; Errata are fixed. "Speed" section is added after reading James Smith's code.
 And ... <br>
 <font color="red">Don't you think I haven't proved the feasibility of the approach mathematically?</font>
+
+<p>Further Modified: 5th August, 2021 HKT 12:23
+
 </p>
 
 </body>
