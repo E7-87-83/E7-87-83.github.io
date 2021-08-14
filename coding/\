@@ -34,8 +34,6 @@
 
 <h2>How I Uploaded a CPAN Module</h2>
 
-<p><big><b><font color="red">An updated <small><small>but yet to be completed</small></small> version is <a href="cpan_module_Aug2021.html">here</a>.</font></b></big></p>
-
 <p>So, accumulating effort from Wednesday, today(Friday) I become a <b><a href="https://www.metacpan.org">CPAN</a></b> contributor!</p>
 
 <p>I got a <b><a href="https://pause.perl.org/">PAUSE</a></b> ID 2 weeks ago. If you are also interested in the Perl ecosystem, you may consider to apply for a PAUSE ID as well.</p>
@@ -113,24 +111,59 @@ And I converted the format of (3) into POD format, and checked the content. A he
     ├── MANIFEST
     ├── README
     └── t
-        └── test.t</pre></div>
+        └── Math-Cryptarithm.t</pre></div>
 
 
 <p>I had mainly edited <tt>Cryptarithm.pm</tt>, put the content of (1) onto it (update the version number!), and then put the POD-formatted content of (3) after <tt>__END__</tt> in <tt>Cryptarithm.pm</tt> .</p>
 
 <h4> Packaging </h4>
-<p>Almostly exactly follow the instructions on <a href="https://www.perlmonks.com/?node_id=158999">the PerlMonks article by tachyon</a>:</p>
 
 <div style="color:white; background-color:black; padding-left: 5px;"><pre>
-$ tar -czf Math-Cryptarithm-0.02.tar.gz Math-Cryptarithm-0.02</pre>
+$ perl Makefile.PL
+Checking if your kit is complete...
+Looks good
+Generating a Unix-style Makefile
+Writing Makefile for Math::Cryptarithm
+Writing MYMETA.yml and MYMETA.json</pre>
 </div>
 
-Then I copied the <tt>Math-Cryptarithm-0.02.tar.gz</tt> to "<tt>~/test</tt>" directory via Linux Desktop Environment. Back to the shell:
+It seems that there are enough data for GNU make.
+
+<div style="color:white; background-color:black; padding-left: 5px;"><pre>
+$ make dist
+rm -rf Math-Cryptarithm-<i>version</i>
+"/home/linuxbrew/.linuxbrew/Cellar/perl/5.34.0/bin/perl" "-MExtUtils::Manifest=manicopy,maniread" \
+	-e "manicopy(maniread(),'Math-Cryptarithm-<i>version</i>', 'best');"
+mkdir Math-Cryptarithm-<i>version</i>
+mkdir Math-Cryptarithm-<i>version</i>/t
+mkdir Math-Cryptarithm-<i>version</i>/lib
+mkdir Math-Cryptarithm-<i>version</i>/lib/Math
+Generating META.yml
+Generating META.json
+tar cvf Math-Cryptarithm-<i>version</i>.tar Math-Cryptarithm-<i>version</i>
+Math-Cryptarithm-<i>version</i>/
+Math-Cryptarithm-<i>version</i>/MANIFEST
+Math-Cryptarithm-<i>version</i>/Changes
+Math-Cryptarithm-<i>version</i>/README
+Math-Cryptarithm-<i>version</i>/META.json
+Math-Cryptarithm-<i>version</i>/t/
+Math-Cryptarithm-<i>version</i>/t/Math-Cryptarithm.t
+Math-Cryptarithm-<i>version</i>/META.yml
+Math-Cryptarithm-<i>version</i>/lib/
+Math-Cryptarithm-<i>version</i>/lib/Math/
+Math-Cryptarithm-<i>version</i>/lib/Math/Cryptarithm.pm
+Math-Cryptarithm-<i>version</i>/Makefile.PL
+rm -rf Math-Cryptarithm-<i>version</i>
+gzip --best Math-Cryptarithm-<i>version</i>.tar
+Created Math-Cryptarithm-<i>version</i>.tar.gz
+</pre>
+</div>
+Then I copied the <tt>Math-Cryptarithm-<i>version</i>.tar.gz</tt> to "<tt>~/test</tt>" directory via Linux Desktop Environment. Back to the shell:
 
 <div style="color:white; background-color:black; padding-left: 5px;"><pre>
 $ cd ~/test
-$ tar -xzvf Math-Cryptarithm-0.02.tar.gz
-$ cd Math-Cryptarithm-0.02
+$ tar -xzvf Math-Cryptarithm-<i>version</i>.tar.gz
+$ cd Math-Cryptarithm-<i>version</i>
 $ perl Makefile.PL
 Checking if your kit is complete...
 Looks good
@@ -144,7 +177,7 @@ $ make test
 PERL_DL_NONLAZY=1 "/home/linuxbrew/.linuxbrew/Cellar/perl/5.34.0/bin/perl" "-MExtUtils::Command::MM" "-MTest::Harness" "-e" "undef *Test::Harness::Switches; test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
 t/test.t .. ok     
 All tests successful.
-Files=1, Tests=10, 34 wallclock secs ( 0.00 usr  0.02 sys + 34.47 cusr  0.00 csys = 34.49 CPU)
+Files=1, Tests=10, 34 wallclock secs ( 0.00 usr  <i>version</i> sys + 34.47 cusr  0.00 csys = 34.49 CPU)
 Result: PASS
 $ sudo make install
 [sudo] password for <i>user_name</i>:
@@ -161,11 +194,11 @@ Appending installation info to /home/<i>user_name</i>/perl5/lib/perl5/x86_64-lin
 
 <blockquote>"The uploaded file<br>
 <br>
-    Math-Cryptarithm-0.02.tar.gz<br>
+    Math-Cryptarithm-<i>version</i>.tar.gz<br>
 <br>
 has entered CPAN as<br>
 <br>
-  file: $CPAN/authors/id/C/CY/<i>myPAUSEID</i>/Math-Cryptarithm-0.02.tar.gz<br>
+  file: $CPAN/authors/id/C/CY/<i>myPAUSEID</i>/Math-Cryptarithm-<i>version</i>.tar.gz<br>
   size: XX bytes<br>
    md5: XX<br>
   sha1: XX<br>
@@ -175,8 +208,8 @@ CPAN Testers will start reporting results in an hour or so:<br>
   http://matrix.cpantesters.org/?dist=Math-Cryptarithm<br>
 <br>
 Request entered by: <i>myPAUSEID</i> (<i>my name</i>)<br>
-Request entered on: Fri, 09 Jul 2021 08:09:53 GMT<br>
-Request completed:  Fri, 09 Jul 2021 08:10:59 GMT<br>
+Request entered on: XXX, XX Aug 2021 XXXXXXXX GMT
+Request completed:  XXX, XX Aug 2021 XXXXXXXX GMT
 <br>
 Thanks,<br>
 -- <br>
@@ -184,21 +217,21 @@ paused, v1049"</blockquote>
 
 <p>Passing <a href="http://www.cpantesters.org">the CPAN Testers</a> is NOT necessary for the module to appear on CPAN. </p>
 
-<p>Within three minutes after receiving the above email from PAUSE, I got another email from them, with the title "PAUSE indexer report <i>myPAUSEID</i>/Math-Cryptarithm-0.02.tar.gz":</p>
+<p>Within three minutes after receiving the above email from PAUSE, I got another email from them, with the title "PAUSE indexer report <i>myPAUSEID</i>/Math-Cryptarithm-<i>version</i>.tar.gz":</p>
 
 <blockquote>"The following report has been written by the PAUSE namespace indexer.<br>
 ...<br>
 <br>
   User: ...<br>
-  Distribution file: Math-Cryptarithm-0.02.tar.gz<br>
+  Distribution file: Math-Cryptarithm-<i>version</i>.tar.gz<br>
   Number of files: 6<br>
   *.pm files: 1<br>
-  README: Math-Cryptarithm-0.02/README<br>
+  README: Math-Cryptarithm-<i>version</i>/README<br>
   META-File: No META.yml or META.json found<br>
   META-Parser: Parse::CPAN::Meta 1.4414<br>
   META-driven index: no<br>
-  Timestamp of file: Fri Jul  9 08:10:58 2021 UTC<br>
-  Time of this run: Fri Jul  9 08:12:30 2021 UTC<br>
+  Timestamp of file: XXXXXXX 2021 UTC<br>
+  Time of this run: XXXXXXXX 2021 UTC<br>
 <br>
 Status of this distro: OK<br>
 =========================<br>
@@ -216,19 +249,14 @@ Status: Successfully indexed<br>
 
 <hr>
 
-<div><font color="red">[Update: 10th July, 2021 07:20 (HKT)]<br>
-Feedback from the posting on blogs.perl.org [<a href="http://blogs.perl.org/users/c_y_fung/2021/07/how-i-uploaded-a-cpan-module.html#comments">here</a>]:<br>
-<br>
-Grinnz:<br>
+<div>Update: following the advice from Grinnz and use `make dist`.</div>
 
-<blockquote>Do not use tar to create tarballs for CPAN. Always use `make dist` or `./Build dist` or the release building mechanism of your author tool. This creates the correct metadata.</blockquote>
-
-</font></div>
+<div><a href="cpan_module_Jul2021.html">old version of this post</a></div>
 
 <hr>
 <p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
 
-<p>Created Date: 9th July, 2021; Last Update: 14th August, 2021 </p>
+<p>Created Date: 9th July, 2021 (HKT); Last Update: 9 July, 2021 (20:00 HKT)</p>
 
 </div>
 
