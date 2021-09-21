@@ -1,0 +1,39 @@
+MAIN TEXTS:
+
+提升程式設計的邏輯思考力／劉汝佳
+
+Structure and Interpretation of Computer Programs (SICP)
+(https://mitpress.mit.edu/sites/default/files/sicp/index.html)
+
+Common Lisp: A Gentle Introduction to Symbolic Computation (lisp_book.pdf)
+
+Practical Common Lisp, Chapter 7 and 8 - Macros
+
+Higher Order Perl (hop.pdf)
+
+Core Java SE 9 for the impatient / Cay S. Horstmann.
+(HKPL code: 005.133 HOR)
+
+Computer systems : a programmer's perspective / Randal E. Bryant, David R. O'Hallaron.
+(HKPL code: 004 BRY)
+
+A Java Library of Graph Algorithms and Optimization / Hang T. Lau
+(HKPL code: 005.133 LAU)
+
+System Analysis and Design / A. Dennis, B. H. Wixom, R. M. Roth
+
+An Introduction to the Analysis of Algorithms / R. Sedgewick and P. Flajolet
+
+Mastering algorithms with Perl / Jarkko Hietaniemi, Jon Orwant, John Macdonald
+
+Head First OODA (traditional Chinese version)
+
+
+
+
+REFERENCE TEXTS:
+
+Java 11 Cookbook / N. Samoylov & M. Sanaulla
+(HKPL code: 005.133 SAM)
+
+Tuesday, September 21, 2021 PM04:53:20 
