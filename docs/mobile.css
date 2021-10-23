@@ -3,6 +3,7 @@ body {
     margin: 0;
     border: 0;
     font-family: serif;
+    padding: 2ex;
 }
 
 div.heading {
@@ -30,6 +31,8 @@ div.code_vim_hl {
     margin-bottom:0.5ex;
     text-align:left;
     background-color:#EEEEFF;
+    width: 100%;
+    clear:both;
 }
 
 .bar li a {
