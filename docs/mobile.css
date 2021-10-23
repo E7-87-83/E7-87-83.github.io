@@ -27,12 +27,11 @@ div.code_vim_hl {
 .bar li {
 	list-style-type:none;
 	border: 1px #666633 outset;
-	width:25ex;
 	padding-top:0.5ex;
 	padding-bottom:0.6ex;
 	padding-right:0.3ex;
-	margin-top:2ex;
-	margin-bottom:2ex;
+	margin-top:0.5ex;
+	margin-bottom:0.5ex;
 	text-align:left;
 	background-color:#EEEEFF;
 }
@@ -86,7 +85,7 @@ div:hover.tiz {color:black; font-size: medium;}
 
 h1 {
 	margin-bottom:2ex;
-	color:#333300;
+	color:red;
 	border-bottom:1px dotted green;
 }
 
