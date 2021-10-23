@@ -3,13 +3,9 @@ body {
     margin: 0;
     border: 0;
     font-family: serif;
-    font-size: 16px;
 }
 
 div.heading {
-    clear:both;
-    height:75px;
-    position:fixed;
     border-bottom: 1px black solid;
     width:100%; 
 }
@@ -61,7 +57,7 @@ div.code_vim_hl {
     font-weight:bold;
     background-color:#FFEFDD;
 
-    }
+}
 
 div.main {
     color:#000033;
@@ -71,6 +67,7 @@ div.main {
     border-right: 1px outset gray;
     border-bottom: 1px outset gray;
     padding:1ex;
+    width:100%; 
 }
 
 .main a { 
