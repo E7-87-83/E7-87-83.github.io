@@ -15,8 +15,20 @@ div.heading p {}
 
 div.code_vim_hl {
     color:white; 
-    background-color:black; 
-    padding-left: 5px;
+    background-color:black;
+}
+
+
+
+/* https://www.w3docs.com/snippets/css/
+    how-to-wrap-text-in-a-pre-tag-with-css.html */
+pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
 }
 
 
@@ -41,18 +53,6 @@ div.code_vim_hl {
 }
 
 
-.bar li:hover {
-    background-color:#CCCCFF;
-    border:1px #666633 inset;
-}
-
-.bar li a:hover {
-    text-decoration:none;
-    color:yellow;
-    background-color:#CCCCFF;
-}
-
-.bar li a:active {color:#CCFFCC}
 
 .bar li.here {
     color:#CC0000;
@@ -85,8 +85,7 @@ div.main {
 }
 
 
-div.tiz {color:yellow; font-size: x-small; padding-top:20px; padding-bottom:20px;}
-div:hover.tiz {color:black; font-size: medium;}
+div.tiz {color:yellow;}
 
 
 h1 {
@@ -103,5 +102,3 @@ h2 {
 
 h3 {
 }
-
-/* under construction */
