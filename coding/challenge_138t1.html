@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #xxx">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+
+<title>CY's Take on The Weekly Challenge #138 Task 1 and Some Previous Tasks on Calendar Date</title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #138 Task 1 and Some Previous Tasks on Calendar Date</h2>
+  <h2><small>Comparing Perl, Java and Julia</small></h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-138/#TASK1" title="The Weekly Challenge #138">challenges
+in Week #138, specific in Task 1</a> !</i></b></p>
+
+<p><b>But you gonna also see details to <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-132/#TASK1" title="The Weekly Challenge #132">Week #132 Task 1</a> and <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-137/#TASK1" title="The Weekly Challenge #137">Week #137 Task 1</a> on this blogpost.</b></p>
+
+<hr>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small; width: 220px">
+<image alt="" src="../docs/assets/dodecahedron.png" style="float:right" /><br>
+(fair use, from Ole Arntzen)<br><a href="https://folk.uib.no/nmioa/kalender/" title="Download a 12 sided calendar" target="_blank">Download Your 12 sided calendar</a></div>
+
+
+
+<h5>Week #132 Task 1: Mirror Dates</h5>
+
+<p>Input: a date (yyyy/mm/dd). Output: "backward mirror date" and "forward mirror date".</p>
+
+<blockquote>[For the task.] <i>Assuming today is 2021/09/22.</i><br>
+Example 1:<br><br>
+
+Input: 2021/09/18<br>
+Output: 2021/09/14, 2021/09/26<br><br>
+
+On the date you were born, someone who was your current age, would have been born on 2021/09/14.<br>
+Someone born today will be your current age on 2021/09/26.
+</blockquote>
+
+
+<h5>Week #137 Task 1: Long Year</h5>
+
+<p>Input: N/A. Output: number of long years between 1900 and 2100.</p>
+
+<blockquote>A year is Long if it has 53 weeks. (For more information...) <a href="https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year">wikipedia</a> </blockquote>
+
+<h5>Week #138 Task 1: Work Days</h5>
+
+<p>Input: a positive integer indicated the year. Output: number of work days in that year.</p>
+
+<blockquote>For the task, we consider, Monday - Friday as workdays.</blockquote>
+
+<p>
+Note that I decide not to use any modules outside the standard library of each programming language. I just checked out the handy <tt><a href="https://metacpan.org/pod/Date::Calc">Date::Calc</a></tt> on <span title="Comprehensive Perl Archive Network">CPAN</span>, and it equips programmer many handy functions (like what are in the standard libary of Java or Julia), better than my struggling usage of <tt><a href="https://metacpan.org/pod/Time::Local">Time::Local</a></tt>.
+</p>
+
+<p>
+In terms of data structures or algorithms, these three tasks are quite simple. On the practical side, we have to be familiar with the date(/time) library we are using. As an early hint for the summary, "the standard library" of Perl solutions are the most complicated.
+</p>
+
+<h4>Overview for the Languages</h4>
+<h5>Java</h5>
+<p>
+Though not being a <i>pure</i> object-oriented programming language (because of the primitives(?)), one must know the rules of Java's typing and Java's OO system in order to use it effectively. For the tasks mentioned, <tt>java.time.LocalDate</tt> has been my friend. (Besides <tt>java.time.LocalDate</tt>, there are <tt>java.time.LocalDateTime</tt>, <tt>java.time.Year</tt>, <tt>java.time.YearMonth</tt> and <tt>java.time.ZonedDateTime</tt> to handle the date and/or time operation.)
+</p>
+
+<h5>Julia</h5>
+<p>
+The <tt>Dates</tt> module is within standard library of Julia and it handles both date and time operation. I made the largest advantage of the library through using <tt>Dates.week</tt> in Week 137. The resulting code has just 15 lines essentially.
+</p>
+
+<p>Julia is a very young dynamic language. From the info from its official website, Julia 1.0 was released in August 2018, and I am using version 1.6.3.</p>
+
+<p>The developers <a href="https://julialang.org/blog/2012/02/why-we-created-julia/">stated that they are "greedy" and want a multi-purpose language</a>. Many fans of Julia seems agree to the ambition. Besides scientific computing and (pure/applied) math modules, for evidence of the ambition, they have also module for documentation(<a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a>).</p>
+<p>By the way, the developers also said they want the language "as natural for string processing as <i>Perl</i>" and "as good at gluing programs together as the shell". I haven't tried Julia's capacity on these areas.
+</p>
+<p>
+I also have to admit here that I haven't well handle many features of Julia, e.g. macro (idea from LISP) and its rich type system. In order to keep being (relatively) rich, one has to be careful and make some inconvenience in life. To see an example:
+</p>
+<div class="code_vim_hl">
+<pre>               <font color="#8AE234"><b>_</b></font>
+   <font color="#729FCF"><b>_</b></font>       _ <font color="#EF2929"><b>_</b></font><font color="#8AE234"><b>(_)</b></font><font color="#AD7FA8"><b>_</b></font>     |  Documentation: https://docs.julialang.org
+  <font color="#729FCF"><b>(_)</b></font>     | <font color="#EF2929"><b>(_)</b></font> <font color="#AD7FA8"><b>(_)</b></font>    |
+   _ _   _| |_  __ _   |  Type &quot;?&quot; for help, &quot;]?&quot; for Pkg help.
+  | | | | | | |/ _` |  |
+  | | |_| | | | (_| |  |  Version 1.6.3 (2021-09-23)
+ _/ |\__&apos;_|_|_|\__&apos;_|  |  Official https://julialang.org/ release
+|__/                   |
+
+<font color="#8AE234"><b>julia&gt; </b></font>B = rand(3, 3)  # a random matrix, so few code to generate
+3×3 Matrix{Float64}:
+ 0.780488  0.758598   0.0491861
+ 0.612032  0.0468023  0.0547018
+ 0.131136  0.334803   0.170626
+
+<font color="#8AE234"><b>julia&gt; </b></font>variable = B[1,2] # get its entry on row 1 and col 2
+0.758597987877625
+
+<font color="#8AE234"><b>julia&gt; </b></font># note that Julia&apos;s arrays begin with 1 by default 
+
+<font color="#8AE234"><b>julia&gt; </b></font># Now I want an 3 x 3 identity matrix...
+
+<font color="#8AE234"><b>julia&gt; </b></font>I = Matrix{Int}(I, 3, 3)
+<font color="#EF2929"><b>ERROR: </b></font>UndefVarError: I not defined
+Stacktrace:
+ [1] top-level scope
+<font color="#555753">   @ </font><font color="#555753"><u style="text-decoration-style:single">REPL[5]:1</u></font>
+
+<font color="#8AE234"><b>julia&gt; </b></font>I = ([1, 0, 0], [0, 1, 0], [0, 0, 1])
+([1, 0, 0], [0, 1, 0], [0, 0, 1])
+
+<font color="#8AE234"><b>julia&gt; </b></font>B + I
+<font color="#EF2929"><b>ERROR: </b></font>MethodError: no method matching +(::Matrix{Float64}, ::Tuple{Vector{Int64}, Vector{Int64}, Vector{Int64}})
+Closest candidates are:
+  +(::Any, ::Any, <font color="#EF2929">::Any</font>, <font color="#EF2929">::Any...</font>) at operators.jl:560
+  +(::Array, <font color="#EF2929">::Array...</font>) at arraymath.jl:43
+  +(::Array, <font color="#EF2929">::SparseArrays.AbstractSparseMatrixCSC</font>) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.6/SparseArrays/src/sparsematrix.jl:1745
+  ...
+Stacktrace:
+ [1] top-level scope
+<font color="#555753">   @ </font><font color="#555753"><u style="text-decoration-style:single">REPL[7]:1</u></font>
+
+<font color="#8AE234"><b>julia&gt; </b></font>I = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+3-element Vector{Vector{Int64}}:
+ [1, 0, 0]
+ [0, 1, 0]
+ [0, 0, 1]
+
+<font color="#8AE234"><b>julia&gt; </b></font>B + I
+<font color="#EF2929"><b>ERROR: </b></font>DimensionMismatch(&quot;dimensions must match: a has dims (Base.OneTo(3), Base.OneTo(3)), must have singleton at dim 2&quot;)
+Stacktrace:
+<i>skipped</i>
+
+<font color="#8AE234"><b>julia&gt; </b></font>I = [1, 0, 0; 0, 1, 0; 0, 0, 1]
+<font color="#EF2929"><b>ERROR: </b></font>syntax: unexpected semicolon in array expression around REPL[10]:1
+Stacktrace:
+ [1] top-level scope
+<font color="#555753">   @ </font><font color="#555753"><u style="text-decoration-style:single">REPL[10]:1</u></font>
+
+<font color="#8AE234"><b>julia&gt; </b></font>I = [1 0 0; 0 1 0; 0 0 1]
+3×3 Matrix{Int64}:
+ 1  0  0
+ 0  1  0
+ 0  0  1
+
+<font color="#8AE234"><b>julia&gt; </b></font>B + I
+3×3 Matrix{Float64}:
+ 1.78049   0.758598  0.0491861
+ 0.612032  1.0468    0.0547018
+ 0.131136  0.334803  1.17063
+
+<font color="#8AE234"><b>julia&gt; </b></font># finally get it right after referencing some materials
+
+<font color="#8AE234"><b>julia&gt; </b></font>using LinearAlgebra
+WARNING: using LinearAlgebra.I in module Main conflicts with an existing identifier.
+
+<font color="#8AE234"><b>julia&gt; </b></font>B + LinearAlgebra.I
+3×3 Matrix{Float64}:
+ 1.78049   0.758598  0.0491861
+ 0.612032  1.0468    0.0547018
+ 0.131136  0.334803  1.17063
+
+<font color="#8AE234"><b>julia&gt; </b></font>A = rand(2, 2)
+2×2 Matrix{Float64}:
+ 0.158673    0.498452
+ 0.00449048  0.731519
+
+<font color="#8AE234"><b>julia&gt; </b></font>A + LinearAlgebra.I
+2×2 Matrix{Float64}:
+ 1.15867     0.498452
+ 0.00449048  1.73152
+
+<font color="#8AE234"><b>julia&gt; </b></font># get it right by standard module
+
+</pre>
+
+</div>
+
+<h5>Perl</h5>
+<p>
+(It is most likely Perl hackers, especially TWC participants, would read this blogpost, should I still introduce Perl for consistency? For the virtue of Laziness, and self knowledge of the limitations of my ability, I should skip it!)
+</p>
+<p>(Why don't you just refer people to Wikipedia?)</p>
+<p>
+(Just discover a concept interesting: <a href="https://en.wikipedia.org/wiki/Expressive_power_(computer_science)">Expressive power</a>, after reading the wikipedia line "Perl is a highly expressive language".)
+</p>
+
+
+
+<!--<p>Stay alert and healthy! □</p>-->
+<p>To be continued...</p>
+<hr>
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i><b>References</b><br><br>
+
+Perl:<br>
+<a href="https://metacpan.org/pod/Time::Local">https://metacpan.org/pod/Time::Local</a><br><br>
+
+Julia:<br>
+<a href="https://docs.julialang.org/en/v1/stdlib/Dates/">https://docs.julialang.org/en/v1/stdlib/Dates/</a><br><br>
+
+Java:<br> 
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html">LocalDate (Java Platform SE 8)</a>
+</i></p>
+
+
+<p><i><b>links for CY's full codes:</b> <br>
+Perl<br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-132/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung, Week #132">ch-1.pl</a></tt> #132<br> 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-137/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung, Week #137">ch-1.pl</a></tt> #137<br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-138/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung, Week #137">ch-1.pl</a></tt> #138<br><br>
+
+Julia<br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-132/cheok-yin-fung/julia/ch-1.jl" title="ch-1.jl from Cheok-Yin Fung, Week #132">ch-1.jl</a></tt> #132<br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-137/cheok-yin-fung/julia/ch-1.jl" title="ch-1.jl from Cheok-Yin Fung, Week #137">ch-1.jl</a></tt> #137<br> 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-138/cheok-yin-fung/julia/ch-1.jl" title="ch-1.jl from Cheok-Yin Fung, Week #137">ch-1.jl</a></tt> #138<br><br>
+
+Java<br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-132/cheok-yin-fung/java/MirrorDates.java" title="ch-1.jl from Cheok-Yin Fung, Week #132">MirrorDates.java</a></tt> // 132<br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-137/cheok-yin-fung/java/LongYear.java" title="ch-1.jl from Cheok-Yin Fung, Week #137">LongYear.java</a></tt> // 137 <br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-138/cheok-yin-fung/java/WorkDays.java" title="ch-1.jl from Cheok-Yin Fung, Week #137">WorkDays.java</a></tt> // 138
+
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: ddd November, 2021.</p>
+
+</body>
+
+</html>
