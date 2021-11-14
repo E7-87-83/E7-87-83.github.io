@@ -316,8 +316,8 @@ Put a full stop to my silly and limited opinion (as a record of what discussions
 This is the end of the introduction. We are going to see how CY's takes for the three tasks now.
 </p>
 <hr>
-<h4>TWC #132 Task: Mirror Dates (Short Description)</h4>
-<p>Input: a date (yyyy/mm/dd). Output: "backward mirror date" and "forward mirror date".</p>
+<h4>TWC #132 Task: Mirror Dates</h4>
+<p><u>Short Description</u><br>Input: a date (yyyy/mm/dd). Output: "backward mirror date" and "forward mirror date".</p>
 
 <p>
 The main point is found out the number of days inbetween <i>"today"</i> and the date who someone was born.
@@ -327,17 +327,82 @@ The main point is found out the number of days inbetween <i>"today"</i> and the 
 <p>
 I use the <tt>to<a href="http://www.catb.org/jargon/html/E/epoch.html" title="Jargon File: Epoch">Epoch</a>Day</tt> method to calculate the difference. 
 </p>
+<div class="code_vim_hl">
+<pre><font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">void</font> mirror_dates (<font color="#87FFAF">int</font> birth_year,<font color="#87FFAF">int</font> birth_month, <font color="#87FFAF">int</font> birth_day) {
+    LocalDate my_today = LocalDate.of(<font color="#AD7FA8">2021</font>,<font color="#AD7FA8">9</font>,<font color="#AD7FA8">22</font>);
+    LocalDate birthday = LocalDate.of(birth_year, birth_month, birth_day);
+    <font color="#87FFAF">long</font> y1 = my_today.toEpochDay() - birthday.toEpochDay();
+    LocalDate d_senior = birthday.minusDays(y1);
+    LocalDate d_junior = my_today.plusDays(y1);
+    System.out.println(d_senior);
+    System.out.println(d_junior);
+}   
+</pre>
+</div>
+
 <h5>Julia on Mirror Dates</h5>
 <p>
 It is quite straightforward, but one has to look up the functions of <tt>Dates</tt>. <tt> Dates.values(my_today - my_date_of_birth)</tt> leads to what we want.
 </p>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">function</font> <font color="#34E2E2"><b>mirror_dates</b></font>(my_date_of_birth)
+   my_today <font color="#FCE94F">=</font> <font color="#87FFAF">Date</font>(<font color="#AD7FA8">2021</font>,<font color="#AD7FA8">09</font>,<font color="#AD7FA8">22</font>)
+   y1 <font color="#FCE94F">=</font> Dates.values(my_today <font color="#FCE94F">-</font> my_date_of_birth)
+   d_senior <font color="#FCE94F">=</font> my_date_of_birth <font color="#FCE94F">-</font> Dates.Day(y1)
+   d_junior <font color="#FCE94F">=</font> my_today <font color="#FCE94F">+</font> Dates.Day(y1)
+   println(d_senior)
+   println(d_junior)
+<font color="#FCE94F">end</font>
+</pre>
+
+</div>
+
+
 <h5>Perl on Mirror Dates</h5>
 <p>
 <tt>timelocal_nocheck</tt> or <tt>timegm_nocheck</tt> gives the <a href="http://www.catb.org/jargon/html/E/epoch.html" title="Jargon File: Epoch">epoch</a> seconds. Then we can count the difference and then divide it by 86400 (== 24*60*60).
 </p>
 
-<h4>TWC #137 Task: Long Year (Short Description)</h4>
-<p>Input: N/A. Output: number of long years between 1900 and 2100.</p>
+<div class="code_vim_hl">
+
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>mirror </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arr_today</b></font> = (<font color="#AD7FA8">22</font>, <font color="#AD7FA8">8</font>, <font color="#AD7FA8">2021</font>); <font color="#34E2E2"># Wed Sep 22 2021</font>
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$_today</b></font> = timegm_nocheck(<font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#34E2E2"><b>@arr_today</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arr_birth</b></font> = (<font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>-<font color="#AD7FA8">1</font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$_birth</b></font> = timegm_nocheck(<font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#34E2E2"><b>@arr_birth</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$y1</b></font> = <font color="#FCE94F">int</font> ((<font color="#34E2E2"><b>$_today</b></font> - <font color="#34E2E2"><b>$_birth</b></font>)/<font color="#AD7FA8">86400</font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$d_senior</b></font> = <font color="#FCE94F">gmtime</font> timegm_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>,
+                        <font color="#34E2E2"><b>$arr_birth[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>-<font color="#34E2E2"><b>$y1</b></font>, <font color="#34E2E2"><b>$arr_birth[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$arr_birth[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$d_junior</b></font> = <font color="#FCE94F">gmtime</font> timegm_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>,
+                        <font color="#34E2E2"><b>$arr_today[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>+<font color="#34E2E2"><b>$y1</b></font>, <font color="#34E2E2"><b>$arr_today[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$arr_today[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">return</font> [ <font color="#34E2E2"><b>$d_senior</b></font>, <font color="#34E2E2"><b>$d_junior</b></font> ];
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>mirror_str </b></font>{
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$byear</b></font>, <font color="#34E2E2"><b>$bmonth</b></font>, <font color="#34E2E2"><b>$bday</b></font>) = <font color="#FCE94F">split</font> <font color="#FCE94F">/</font><font color="#FFD7D7">\/</font><font color="#FCE94F">/</font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#34E2E2"><b>$bmonth</b></font> =~ <font color="#FCE94F">s/</font><font color="#AD7FA8">^0</font><font color="#FCE94F">//</font>;  <font color="#34E2E2"># remove leading zeros</font>
+    <font color="#34E2E2"><b>$bday</b></font> =~ <font color="#FCE94F">s/</font><font color="#AD7FA8">^0</font><font color="#FCE94F">//</font>;    <font color="#34E2E2"># remove leading zeros</font>
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$d_s</b></font>, <font color="#34E2E2"><b>$d_j</b></font>) = mirror(<font color="#34E2E2"><b>$byear</b></font>, <font color="#34E2E2"><b>$bmonth</b></font>, <font color="#34E2E2"><b>$bday</b></font>)-&gt;@*;
+
+    <font color="#FCE94F">return</font>
+         (<font color="#34E2E2"><b>$d_s-&gt;year</b></font>()+<font color="#AD7FA8">1900</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+        .(<font color="#34E2E2"><b>$d_s-&gt;mon</b></font>()&lt;=<font color="#AD7FA8">8</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_s-&gt;mon</b></font>()+<font color="#AD7FA8">1</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+        .(<font color="#34E2E2"><b>$d_s-&gt;mday</b></font>()&lt;<font color="#AD7FA8">10</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_s-&gt;mday</b></font>())
+        .<font color="#AD7FA8">&quot;, &quot;</font>
+        .(<font color="#34E2E2"><b>$d_j-&gt;year</b></font>()+<font color="#AD7FA8">1900</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+        .(<font color="#34E2E2"><b>$d_j-&gt;mon</b></font>()&lt;=<font color="#AD7FA8">8</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_j-&gt;mon</b></font>()+<font color="#AD7FA8">1</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+        .(<font color="#34E2E2"><b>$d_j-&gt;mday</b></font>()&lt;<font color="#AD7FA8">10</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_j-&gt;mday</b></font>());
+}
+
+<pre>ok mirror_str(<font color="#AD7FA8">&quot;2021/09/18&quot;</font>) <font color="#FCE94F">eq</font> <font color="#AD7FA8">&quot;2021/09/14, 2021/09/26&quot;</font>, <font color="#AD7FA8">&quot;Example 1&quot;</font>;
+
+# maybe I should further refactor the code by adding one more subroutine supporting <tt>&amp;mirror_str</tt>
+</pre>
+</div>
+
+
+<h4>TWC #137 Task: Long Year</h4>
+<p><u>Short Description</u><br>Input: N/A. Output: number of long years between 1900 and 2100.</p>
 <p>According to <a href="https://en.wikipedia.org/wiki/ISO_8601">Wikipedia: ISO 8601</a>, </p>
 
 <blockquote>
@@ -407,8 +472,8 @@ e(y) <font color="#FCE94F">=</font> <font color="#87FFAF">Date</font>(y, <font c
 </pre>
 </div>
 
-<h4>TWC #138 Task: Work Days (Short Description)</h4>
-<p>Input: a positive integer indicated the year. Output: number of work days in that year.</p>
+<h4>TWC #138 Task: Work Days</h4>
+<p><u>Short Description</u><br>Input: a positive integer indicated the year. Output: number of work days in that year.</p>
 
 <p>After calculation, we discover that there are only three possible values of number of work days of a year: 260, 261 and 262. One may play some tricks on this piece of info, but CY's laziness causes her have no time for this trick.</p>
 
@@ -530,7 +595,7 @@ e(y) <font color="#FCE94F">=</font> <font color="#87FFAF">Date</font>(y, <font c
 Departing words: <font color="red">CPAN is a part of Perl culture. If you pull out Perl alone from the vast amount of CPAN modules, it is unwise!</font>
 </p>
 
-<!--<p>Stay alert and healthy! □</p>-->
+<p>Stay alert and healthy! □</p>
 
 <hr>
 
