@@ -93,6 +93,9 @@ In terms of data structures or algorithms, these three tasks are quite simple. O
 </p>
 
 <h4>Overview for the Languages</h4>
+
+<p>I choose to code both in Java, Julia and Perl for the tasks.</p>
+
 <h5>Java</h5>
 <p>
 Though not being a <i>purely</i> object-oriented programming language, one must know the rules of Java's typing and Java's Object-Oriented system in order to use it effectively. For the tasks mentioned, <tt>java.time.LocalDate</tt> has been my friend. (Besides <tt>java.time.LocalDate</tt>, there are <tt>java.time.LocalDateTime</tt>, <tt>java.time.Year</tt>, <tt>java.time.YearMonth</tt> and <tt>java.time.ZonedDateTime</tt> to handle the date and/or time operation.)
@@ -420,7 +423,7 @@ There are several mutually equivalent and compatible descriptions of week 01:
 Since <tt>365/7 = 52...1</tt> and <tt>366/7 = 52...2</tt>, for a Long Year (== a year having 53 weeks), it should have the 01st Jan included in its Week 01 and 31st Dec included in its Week 53.
 </p>
 
-<p>From Wikipedia, we get four appoaches to tackle the task! CY's way to tackle it is checking on 04th Jan and 31st Dec: if <tt>04th Jan, YYYY</tt> is on Thursday and <tt>31st Dec, YYYY</tt> is on or after Thursday (taken Sunday as the 7th day of the week), then we get a long year.</p>
+<p>From Wikipedia, we get four appoaches to tackle the task! CY's way to tackle it is checking on 04th Jan and 31st Dec: if <tt>04th Jan, YYYY</tt> is on or after Thursday and <tt>31st Dec, YYYY</tt> is on or after Thursday (taken Sunday as the 7th day of the week), then we get a long year.</p>
 
 <h5>Java on Long Year</h5>
 <div class="code_vim_hl">
@@ -432,7 +435,25 @@ Since <tt>365/7 = 52...1</tt> and <tt>366/7 = 52...2</tt>, for a Long Year (== a
     {   
         System.out.println(y);
         c++;
-    }   
+    } 
+
+
+
+<font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">int</font> gdow(String a)
+{
+    <font color="#FCE94F">switch</font>(a)
+    {
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;MONDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">1</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;TUESDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">2</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;WEDNESDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">3</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;THURSDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">4</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;FRIDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">5</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;SATURDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">6</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;SUNDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">7</font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font>;
+}
+  
 </pre>
 </div>
 
@@ -506,6 +527,25 @@ e(y) <font color="#FCE94F">=</font> <font color="#87FFAF">Date</font>(y, <font c
     ans += gb &lt;= <font color="#AD7FA8">5</font> ? <font color="#AD7FA8">1</font> : <font color="#AD7FA8">0</font>;
     <font color="#FCE94F">return</font> ans;
 }
+
+
+
+<font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">int</font> gd(LocalDate date)
+{
+    <font color="#FCE94F">var</font> a = date.getDayOfWeek();
+    <font color="#FCE94F">switch</font>(a)
+    {
+        <font color="#FCE94F">case</font> MONDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">1</font>;
+        <font color="#FCE94F">case</font> TUESDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">2</font>;
+        <font color="#FCE94F">case</font> WEDNESDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">3</font>;
+        <font color="#FCE94F">case</font> THURSDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">4</font>;
+        <font color="#FCE94F">case</font> FRIDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">5</font>;
+        <font color="#FCE94F">case</font> SATURDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">6</font>;
+        <font color="#FCE94F">case</font> SUNDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">7</font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font>;
+}
+
 </pre>
 </div>
 
@@ -597,9 +637,9 @@ Departing words: <font color="red">CPAN is a part of Perl culture. If you pull o
 
 <p>Stay alert and healthy! □</p>
 
-<p><font color="#333333">About the image: I used to amusing my tutorial students by giving them the dodecahedron calenders in order to move them by the beauty of mathematics.</font></p>
-
 <hr>
+
+<p><font color="#333333">About the image: I used to amusing my tutorial students by giving them the dodecahedron calenders in order to move them by the beauty of mathematics.</font></p>
 
 <p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
 
