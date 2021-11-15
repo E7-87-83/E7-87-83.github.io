@@ -1,0 +1,4 @@
+- Perl Debugged, by Peter Scott
+- Higher Order Perl, by Mark Jason Dominus
+- Modern Perl, by chromatic
+
