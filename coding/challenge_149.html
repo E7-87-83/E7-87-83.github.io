@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #149">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+
+  <title>CY's Take on The Weekly Challenge #149 </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #149 Task 2</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-149/" title="The Weekly Challenge #149">challenges
+in Week #149</a> !</i></b></p>
+
+<hr>
+
+<h4>Task 2: Largest Square</h4>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<image alt="" src="../docs/assets/clock13_twc149.png" width="200px" style="float:right" />
+<p><a href="#right_of_use">image info</a></p></div>
+
+
+<p>Firstly I wrote a prototype of code; I quite like the idea of <tt>divmod</tt> in Ruby, and I was surprised to find that <tt><a href="https://perldoc.perl.org/Math::BigInt#Arithmetic-methods">bdiv</a></tt> in <tt><a href="https://perldoc.perl.org/Math::BigInt">Math::BigInt</a></tt> has similar features IN LIST CONTEXT!</p>
+
+<div class="code_vim_hl">
+<pre><font color="#34E2E2"># ch-2-prototype.pl</font>
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>divmod </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$dividend</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$divisor</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$q</b></font> = <font color="#FCE94F">int</font>(<font color="#34E2E2"><b>$dividend</b></font> / <font color="#34E2E2"><b>$divisor</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$r</b></font> = <font color="#34E2E2"><b>$dividend</b></font> % <font color="#34E2E2"><b>$divisor</b></font>;
+    <font color="#FCE94F">return</font> [ <font color="#34E2E2"><b>$q</b></font> , <font color="#34E2E2"><b>$r</b></font> ];
+}
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$N</b></font> = <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> || <font color="#AD7FA8">3</font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$upper_sqrt</b></font>;
+<font color="#34E2E2"><b>$upper_sqrt</b></font> = <font color="#34E2E2"><b>$N</b></font>**(<font color="#34E2E2"><b>$N</b></font>/<font color="#AD7FA8">2</font>) <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$N</b></font> % <font color="#AD7FA8">2</font> == <font color="#AD7FA8">0</font>;
+<font color="#34E2E2"><b>$upper_sqrt</b></font> = <font color="#34E2E2"><b>$N</b></font>**((<font color="#34E2E2"><b>$N</b></font>+<font color="#AD7FA8">1</font>)/<font color="#AD7FA8">2</font>) <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$N</b></font> % <font color="#AD7FA8">2</font> == <font color="#AD7FA8">1</font>;
+
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$bool</b></font> = <font color="#FCE94F">undef</font>;
+<font color="#FCE94F">do</font> {
+    <font color="#34E2E2"><b>$upper_sqrt</b></font>--;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sq</b></font> = <font color="#34E2E2"><b>$upper_sqrt</b></font>**<font color="#AD7FA8">2</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@digit</b></font> = (<font color="#AD7FA8">0</font>) x <font color="#34E2E2"><b>$N</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$c</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$c</b></font> = divmod(<font color="#34E2E2"><b>$sq</b></font>, <font color="#34E2E2"><b>$N</b></font>);
+        <font color="#34E2E2"><b>$sq</b></font> = <font color="#34E2E2"><b>$c-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+        <font color="#34E2E2"><b>$digit[$c-&gt;[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]]</b></font>++;
+        <font color="#34E2E2"><b>$bool</b></font> = <font color="#34E2E2"><b>$digit[$c-&gt;[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]]</b></font> &lt; <font color="#AD7FA8">2</font>;
+    } <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$bool</b></font> &amp;&amp; (<font color="#34E2E2"><b>$sq</b></font> &gt; <font color="#AD7FA8">0</font>));
+} <font color="#FCE94F">while</font> (!<font color="#34E2E2"><b>$bool</b></font>);
+
+<font color="#FCE94F">say</font> <font color="#34E2E2"><b>$upper_sqrt</b></font>**<font color="#AD7FA8">2</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$bool</b></font>;
+</pre>
+</div>
+
+Then it came the first version of "benchmarked" code:
+
+<div class="code_vim_hl"><pre>
+<font color="#34E2E2"># ch-2.pl</font>
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$bool</b></font> = <font color="#FCE94F">undef</font> ;
+
+<font color="#FCE94F">do</font> {
+    <font color="#34E2E2"><b>$upper_sqrt-&gt;bdec</b></font>();
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sq</b></font> = Math::BigInt-&gt;new(<font color="#34E2E2"><b>$upper_sqrt</b></font>)-&gt;bpow(<font color="#AD7FA8">2</font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>%digit</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$bool</b></font> = ++<font color="#34E2E2"><b>$digit{</b></font>(<font color="#34E2E2"><b>$sq-&gt;bdiv</b></font>(<font color="#34E2E2"><b>$N</b></font>))[<font color="#AD7FA8">1</font>]<font color="#34E2E2"><b>}</b></font> &lt; <font color="#AD7FA8">2</font>;
+    } <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$bool</b></font> &amp;&amp; <font color="#34E2E2"><b>$sq-&gt;is_pos</b></font>());
+} <font color="#FCE94F">while</font> (!<font color="#34E2E2"><b>$bool</b></font>);
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sq</b></font> = Math::BigInt-&gt;new(<font color="#34E2E2"><b>$upper_sqrt</b></font>)-&gt;bpow(<font color="#AD7FA8">2</font>);
+<font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;in decimal base: &quot;</font>, <font color="#34E2E2"><b>$sq</b></font>;
+
+<font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;in base-</font><font color="#34E2E2"><b>$N</b></font><font color="#AD7FA8">: &quot;</font>, <font color="#34E2E2"><b>$sq-&gt;to_base</b></font>(<font color="#34E2E2"><b>$N</b></font>) <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$N</b></font> &lt;= <font color="#AD7FA8">94</font>;
+</pre>
+
+</div>
+
+<p>I found that it is quite slow on <tt>$N = 13</tt>. So I tried some methods to improve the code.</p>
+<div class="code_vim_hl">
+<pre>
+<font color="#34E2E2"># ch-2-new.pl</font>
+
+<font color="#FCE94F">do</font> {
+    <font color="#34E2E2"><b>$upper_sqrt-&gt;bdec</b></font>();
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sq</b></font> = Math::BigInt-&gt;new(<font color="#34E2E2"><b>$upper_sqrt</b></font>)-&gt;bpow(<font color="#AD7FA8">2</font>);    <font color="#34E2E2">###</font>
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sq_baseN</b></font> = <font color="#34E2E2"><b>$sq-&gt;to_base</b></font>(<font color="#34E2E2"><b>$N</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arr</b></font> = <font color="#FCE94F">split</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>$sq_baseN</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$uniq_num</b></font> = uniq <font color="#34E2E2"><b>@arr</b></font>;
+    <font color="#34E2E2"><b>$bool</b></font> = <font color="#AD7FA8">1</font> <font color="#FCE94F">if</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@arr</b></font> == <font color="#34E2E2"><b>$uniq_num</b></font>;
+} <font color="#FCE94F">while</font> (!<font color="#34E2E2"><b>$bool</b></font>);
+</pre>
+</div>
+
+<p>The below runs a bit faster, and it has been my final attempt:</p>
+
+<div class="code_vim_hl">
+<pre><font color="#34E2E2"># ch-2-newest.pl</font>
+
+<font color="#FCE94F">do</font> {
+    <font color="#34E2E2"><b>$upper_sqrt-&gt;bdec</b></font>();
+    <font color="#34E2E2"><b>$sq-&gt;bsub</b></font>(<font color="#34E2E2"><b>$upper_sqrt</b></font>)-&gt;<font color="#34E2E2"><b>bsub</b></font>(<font color="#34E2E2"><b>$upper_sqrt</b></font>)-&gt;<font color="#34E2E2"><b>bdec</b></font>(); <font color="#34E2E2">###</font>
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sq_baseN</b></font> = <font color="#34E2E2"><b>$sq-&gt;to_base</b></font>(<font color="#34E2E2"><b>$N</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arr</b></font> = <font color="#FCE94F">split</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>$sq_baseN</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$uniq_num</b></font> = uniq <font color="#34E2E2"><b>@arr</b></font>;
+    <font color="#34E2E2"><b>$bool</b></font> = <font color="#AD7FA8">1</font> <font color="#FCE94F">if</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@arr</b></font> == <font color="#34E2E2"><b>$uniq_num</b></font>;
+} <font color="#FCE94F">while</font> (!<font color="#34E2E2"><b>$bool</b></font>);
+</pre>
+</div>
+
+Here are the test data:
+<div class="code_vim_hl"><pre>
+$ time perl ch-2.pl 12
+in decimal base: 8706730814089
+in base-12: B8750A649321
+
+real	0m7.422s
+user	0m7.402s
+sys	0m0.016s
+
+$ time perl ch-2-prototype.pl 12
+8706730814089
+
+real	0m0.167s
+user	0m0.163s
+sys	0m0.004s
+
+$ time perl ch-2-new.pl 12
+in decimal base: 8706730814089
+in base-N: B8750A649321
+
+real	0m7.968s
+user	0m7.948s
+sys	0m0.016s
+
+$ time perl ch-2-newest.pl 12
+in decimal base: 8706730814089
+in base-N: B8750A649321
+
+real	0m6.615s
+user	0m6.608s
+sys	0m0.004s
+
+
+
+$ time perl ch-2-new.pl 14
+in decimal base: 11027486960232964
+in base-N: DC71B30685A924
+
+real	1m30.475s
+user	1m30.353s
+sys	0m0.004s
+
+
+$ time perl ch-2-newest.pl 14
+in decimal base: 11027486960232964
+in base-N: DC71B30685A924
+
+real	1m15.650s
+user	1m15.525s
+sys	0m0.012s
+
+
+
+$ time perl ch-2-newest.pl 13
+in decimal base: 23132511879129
+in base-N: CBA504216873
+
+real	<b>162m20.686s</b>
+user	<b>161m54.913s</b>
+sys	0m2.674s
+</pre></div>
+
+<p>My patience was tested again.</p>
+<p>Look for explanations or quicker ways to obtain the case for $N=13.</p>
+
+<p>Stay alert and healthy! □</p>
+
+<hr>
+
+<p><a name="right_of_use"></a>The image is self-made by the package <tt><a href="http://juliagraphics.github.io/Luxor.jl/stable">Luxor.jl</a></tt> in Julia.</p> 
+
+<div><pre>using Luxor
+
+@png begin
+    circle(Point(0,0), 200, :stroke)
+    circle(Point(0,0), 2, :fill)
+    fontsize(30)
+    line(Point(0,0), Point(150*sin(13*π/6),-150*cos(13*π/6)), :stroke)
+    for i = 2:13
+        text(string(i), 
+             Point(170*sin(i*π/6),170*cos(i*π/6)), 
+             halign = :center
+        )
+    end
+end</pre></div>
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-149/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>
+</i>
+</p>
+
+
+<!--<p>I thought I will explore big integer functionalities in Java and Julia. But it seems that time is too tight.</p>
+
+ref for Julia: # https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Arbitrary-Precision-Arithmetic
+
+
+# ref: Java Cookbook
+
+
+jshell> Integer.valueOf(63, 64);
+|  Error:
+|  incompatible types: int cannot be converted to java.lang.String
+|  Integer.valueOf(63, 64);
+|                  ^^
+
+jshell> Integer.valueOf("63", 64);
+|  Exception java.lang.NumberFormatException: radix 64 greater than Character.MAX_RADIX
+|        at Integer.parseInt (Integer.java:623)
+|        at Integer.valueOf (Integer.java:957)
+|        at (#1:1)
+
+jshell> Character.MAX_RADIX
+$2 ==> 36
+
+jshell> Integer.valueOf("A9", 35);
+$3 ==> 359
+
+-->
+
+
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: 26th January, 2022.</p>
+
+</body>
+
+</html>
