@@ -241,22 +241,23 @@ by <a href="https://oeis.org/wiki/User:John_L._Drost">John L. Drost</a>, May 22 
 It is quite concise. Allow me write a lengthened explanation here.
 </p>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;
-<i>a</i><sub><i>n</i></sub> = [sum_from <i>k</i> = 0 to <i>n</i>-1] <i>c</i><sub><i>k</i></sub> x <i>b</i><sup><i>k</i></sup> .
+<p>Let <i>A</i> be a positive integer having <i>n</i> different digits in base-<i>n</i>.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<i>A</i> = [sum_from <i>k</i> = 0 to <i>n</i>-1] <i>c</i><sub><i>k</i></sub> × <i>b</i><sup><i>k</i></sup>, where {<i>c</i><sub><i>0</i></sub>, ... , <i>c</i><sub><i>n-1</i></sub>} is a permutation of {0, ..., <i>n-1</i>}.
 </p>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;<i>a</i><sub><i>n</i></sub> ≡ [sum_from <i>k</i> = 0 to <i>n</i>-1] <i>c</i><sub><i>k</i></sub> x <i>1</i><sup><i>k</i></sup>&nbsp;&nbsp;&nbsp;&nbsp; (mod <i>n</i>-1) .</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<i>A</i> ≡ [sum_from <i>k</i> = 0 to <i>n</i>-1] <i>c</i><sub><i>k</i></sub> × <i>1</i><sup><i>k</i></sup>&nbsp;&nbsp;&nbsp;&nbsp; (mod <i>n</i>-1) .</p>
 
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;<i>a</i><sub><i>n</i></sub> ≡ [sum_from <i>k</i> = 0 to <i>n</i>-1] <i>c</i><sub><i>k</i></sub> ≡ (<i>n</i>-1)(<i>n</i>)/2&nbsp;&nbsp;&nbsp;&nbsp; (mod <i>n</i>-1) .</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<i>A</i> ≡ [sum_from <i>k</i> = 0 to <i>n</i>-1] <i>c</i><sub><i>k</i></sub> ≡ (<i>n</i>-1)(<i>n</i>)/2&nbsp;&nbsp;&nbsp;&nbsp; (mod <i>n</i>-1) .</p>
 
 <p>Since for every <i>n</i> ≡ 5 (mod 8), <i>n</i> is odd; let <i>n</i> = 8<i>m</i>+5, we have</p>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;<i>a</i><sub><i>n</i></sub> ≡ (8<i>m</i>+5)(4<i>m</i>+2)&nbsp;&nbsp;&nbsp;&nbsp; (mod 8<i>m</i>+4) .</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<i>A</i> ≡ (8<i>m</i>+5)(4<i>m</i>+2)&nbsp;&nbsp;&nbsp;&nbsp; (mod 8<i>m</i>+4) .</p>
 
 <p>8<i>m</i>+4 is obviously a multiple of 4. Hence,</p>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;<i>a</i><sub><i>n</i></sub> ≡ (8<i>m</i>+5)(4<i>m</i>+2) ≡ 10 ≡ 2&nbsp;&nbsp;&nbsp;&nbsp; (mod 4) .</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<i>A</i> ≡ (8<i>m</i>+5)(4<i>m</i>+2) ≡ 10 ≡ 2&nbsp;&nbsp;&nbsp;&nbsp; (mod 4) .</p>
 
 Every odd square is congruent to 1 modulo 4, and every even square is congruent to 0 modulo 4. Therefore, we come up to a conclusion that <i>a</i><sub><i>n</i></sub> cannot have <i>n</i> digits in base-<i>n</i> when <i>n</i> is congruent to 5 modulo 8. □</p>
 
