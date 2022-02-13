@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 use v5.22.0;
 use warnings;
 use Time::Piece;
