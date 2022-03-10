@@ -49,6 +49,8 @@ code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
 <p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-155/" title="The Weekly Challenge #155">challenges
 in Week #155</a> !</i></b></p>
 
+<p>Two number theory tasks.</p>
+
 <hr>
 
 
@@ -61,7 +63,7 @@ Fortune's conjecture: Are any Fortunate numbers composite?</blockquote>
 <p>
 I have never thought that things like primorial can go with such an interesting and natural conjecture.</p>
 
-<p>Looking at the wikipedia page linked from the task statement, we know that there
+<p>Back to our task. Looking at the wikipedia page linked from the task statement, we know that there
 are TWO sequences of Fortunate numbers:</p> 
 
 <p>The first one is <code>a<sub>1</sub></code>(<i>n</i>)
@@ -163,7 +165,7 @@ or
 </pre>
 </div>
 
-<p>Since the first part and the second part look so similar, I combine them by an short-circuit or, here is the code:</p>
+<p>Since the first part and the second part look so similar, I combine them by a <a href="https://www.perlmonks.com/?node_id=301355">short-circuit or</a>; here is the code:</p>
 
 <div class="code_vim_hl">
 <pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$N</b></font> = <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> || <font color="#AD7FA8">8</font>;
@@ -195,7 +197,7 @@ or
 
 </div>
 
-<p>While the supporting subroutines &amp;iter_prime and &amp;iter_primorial are</p>
+<p>While the supporting subroutines <code>&amp;iter_prime</code> and <code>&amp;iter_primorial</code> are</p>
 
 <div class="code_vim_hl">
 <pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>iter_prime </b></font>{
@@ -310,15 +312,111 @@ ch-2.pl $N 6   1 -1 -1 0 1 1   1 1 2 3 4 5             #<a href="https://oeis.or
 
 </pre></div>
 
-<p><big><big>TO BE WRITTEN</big></big></p>
+<p>So, how does the script work?</p>
 
-<!--<p>Stay alert and healthy! □</p>-->
+<div class="code_vim_hl">
+
+<pre><font color="#FCE94F">  1 sub </font><font color="#34E2E2"><b>pisano_period </b></font>{
+<font color="#FCE94F">  2 </font>    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$N</b></font>, <font color="#34E2E2"><b>$t</b></font>, <font color="#34E2E2"><b>$rec</b></font>, <font color="#34E2E2"><b>$seq</b></font>) = <font color="#34E2E2"><b>@_</b></font>;
+<font color="#FCE94F">  3 </font>    <font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;(Some of) Parameters are too large.</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>
+<font color="#FCE94F">  4 </font>        <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$N</b></font>**<font color="#34E2E2"><b>$t</b></font> + <font color="#34E2E2"><b>$t</b></font> - <font color="#AD7FA8">1</font> &gt; <font color="#AD7FA8">8_000_000</font>;
+<font color="#FCE94F">  5 </font>
+<font color="#FCE94F">  6 </font>    <font color="#34E2E2"><b>@$seq</b></font> = <font color="#FCE94F">map</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$_</b></font> % <font color="#34E2E2"><b>$N</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@$seq</b></font>;
+<font color="#FCE94F">  7 </font>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ori_seqstate</b></font> = [<font color="#34E2E2"><b>@$seq</b></font>];
+<font color="#FCE94F">  8 </font>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$new_seqstate</b></font> = [<font color="#34E2E2"><b>@$ori_seqstate</b></font>];
+<font color="#FCE94F">  9 </font>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$count</b></font> = <font color="#AD7FA8">0</font>;
+<font color="#FCE94F"> 10 </font>    <font color="#FCE94F">do</font> {
+<font color="#FCE94F"> 11 </font>        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$new_val</b></font> = sum <font color="#FCE94F">map</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$rec-&gt;[$_]</b></font>*<font color="#34E2E2"><b>$new_seqstate-&gt;[$_]</b></font><font color="#FCE94F">}</font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$t</b></font>-<font color="#AD7FA8">1</font>);
+<font color="#FCE94F"> 12 </font>        <font color="#34E2E2"><b>$new_val</b></font> = <font color="#34E2E2"><b>$new_val</b></font> % <font color="#34E2E2"><b>$N</b></font>;
+<font color="#FCE94F"> 13 </font>        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@{$seq}</b></font>, <font color="#34E2E2"><b>$new_val</b></font>;
+<font color="#FCE94F"> 14 </font>        <font color="#FCE94F">shift</font> <font color="#34E2E2"><b>@{$new_seqstate}</b></font>;
+<font color="#FCE94F"> 15 </font>        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@{$new_seqstate}</b></font>, <font color="#34E2E2"><b>$new_val</b></font>;
+<font color="#FCE94F"> 16 </font>        <font color="#34E2E2"><b>$count</b></font>++;
+<font color="#FCE94F"> 17 </font>        <font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;Patterns not found</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$count</b></font> &gt; <font color="#34E2E2"><b>$N</b></font>**<font color="#34E2E2"><b>$t</b></font> + <font color="#34E2E2"><b>$t</b></font>;
+<font color="#FCE94F"> 18 </font>    } <font color="#FCE94F">while</font> (!cmp_num_arr(<font color="#34E2E2"><b>$new_seqstate</b></font>, <font color="#34E2E2"><b>$ori_seqstate</b></font>));
+<font color="#FCE94F"> 19 </font>
+<font color="#FCE94F"> 20 </font>    <font color="#FCE94F">return</font> [<font color="#34E2E2"><b>@$seq[</b></font><font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$count</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>];
+<font color="#FCE94F"> 21 </font>}
+</pre>
+
+</div>
+
+
+<p><u>line 02</u>: Let's explain it using examples.</p><p>
+The input <code>ch-2.pl 7 3 &nbsp; 1 0 1 &nbsp; 1 1 1</code>, the desired output is the info of the periodic behavior of the Narayana's cows sequence modulo 7. 
+</p><p><code>$rec</code> will be <code>[1,0,1]</code> (the sequence is defined by a(<i>n</i>-3)+a(<i>n</i>-1) for <i>n</i> &ge; 3) and
+<code>$ori_seqstate</code> will be <code>[1,1,1]</code> (a(0)=a(1)=a(2)=1).
+</p><p>
+The input <code>ch-2.pl 17 2  &nbsp; 1 2 &nbsp; 0 1</code>, the desired output is the info of the periodic behavior of the Pell numbers modulo 17.
+</p><p> 
+<code>$rec</code> will be <code>[1,2]</code> (the sequence is defined by 2 &times; a(<i>n</i>-1)+a(<i>n</i>-2) for <i>n</i> &ge; 2) and
+<code>$ori_seqstate</code> will be <code>[0,1]</code> (a(0)=0, a(1)=1).
+</p>
+
+<p><u>line 03-04, line 17</u>:
+<code>$N**$t + $t - 1</code> is a lazy upper bound. 
+By the pigeonhole principle in discrete math, 
+there are <code>$N**$t</code> possible length-<code>$t</code>-sequence
+ (while the possible values of members of the length-<code>$t</code>-sequence
+are <code>0</code> to <code>$N-1</code>). </p>
+
+<p><u>line 11</u>: I am curious if there is a more compact way to write it. 
+Note that <code>$rec-&gt;@*</code> and <code>$new_seqstate-&gt;@*</code> have same number of elements. </p>
+
+<p><u>line 14-15</u>: They can be replaced by <code>$new_seqstate = [ @$new_seqstate[1..$t-1] , $new_val ];</code> .</p>
+
+<p><u>line 18</u>: <code>&amp;cmp_num_arr</code> is a rough supportive subroutine checking whether two lists are the same.</p>
+
+<p><u><b>line 17</b></u>: I have to admit that I have given up. Depending on the initial condition, <code>$ori_seqstate</code> may appear once; for instance, for a recurrence sequence specified by a(0)=a(1)=1 and a(<i>n</i>) = 4 a(<i>n</i>-1) + 4 a(<i>n</i>-2), then the code here will return a "Patterns not found" message for many <code>$N</code>.
+I have not done the details math of the necessary and sufficient condition for a linear recurrence sequence which surely generates a Pisano-like period. 
+</p>
+
+<p>Anyway, have fun exploring the periodic behavior of linear recurrence sequences.</p>
+
+<table border="1" style="text-align:center">
+<tr>  <th><code>$N</code></th>
+      <th>Sequence</th>
+      <th>Period Length</th>  </tr>
+<tr>  <td>2</td>  <td>Fibonacci</td> <td>3</td> </tr>
+<tr>  <td>3</td>  <td>Fibonacci</td> <td>8</td> </tr>
+<tr>  <td>7</td>  <td>Fibonacci</td> <td>16</td> </tr>
+<tr>  <td>101</td>  <td>Fibonacci</td> <td>50</td> </tr>
+<tr>  <td>191</td>  <td>Fibonacci</td> <td>190</td> </tr>
+<tr>  <td>3</td>  <td>Padovan</td> <td>13</td> </tr>
+<tr>  <td>7</td>  <td>Padovan</td> <td>48</td> </tr>
+<tr>  <td>2</td>  <td>Tribonacci</td> <td>4</td> </tr>
+<tr>  <td>3</td>  <td>Tribonacci</td> <td>13</td> </tr>
+<tr>  <td>43</td>  <td>Tribonacci</td> <td>308</td> </tr>
+<tr>  <td>101</td>  <td>Tribonacci</td> <td>680</td> </tr>
+<tr>  <td>2</td>  <td>Narayana's cow</td> <td>7</td> </tr>
+<tr>  <td>3</td>  <td>Narayana's cow</td> <td>8</td> </tr>
+<tr>  <td>53</td>  <td>Narayana's cow</td> <td>468</td> </tr>
+<tr>  <td>101</td>  <td>Narayana's cow</td> <td>10303</td> </tr>
+<tr>  <td>191</td>  <td>Narayana's cow</td> <td>36673</td> </tr>
+<tr>  <td>11</td>  <td>OEIS:A001224</td> <td>20</td> </tr>
+<tr>  <td>13</td>  <td>OEIS:A001224</td> <td>56</td> </tr>
+<tr>  <td>2</td>  <td>OEIS:A001399</td> <td>12</td> </tr>
+<tr>  <td>3</td>  <td>OEIS:A001399</td> <td>18</td> </tr>
+<tr>  <td>4</td>  <td>OEIS:A001399</td> <td>24</td> </tr>
+<tr>  <td>5</td>  <td>OEIS:A001399</td> <td>30</td> </tr>
+<tr>  <td>7</td>  <td>OEIS:A001399</td> <td>42</td> </tr>
+<tr>  <td>11</td>  <td>OEIS:A001399</td> <td>66</td> </tr>
+<tr>  <td>13</td>  <td>OEIS:A001399</td> <td>78</td> </tr>
+</table>
+
+<p>Well, there are many fun discussions on the properties of Fibonacci sequences on <i><a href="https://math.stackexchange.com/questions/tagged/fibonacci-numbers">Mathematics Stack Exchange</a></i>,
+some related to the Pisano Period.</p>
+
+<p>Unfortunately, I have been infected by COVID-19 Omicron this week &dash; tested with rapid tests. Three shots of vaccine were injected before.)
+And three exams in April. I better speak less and take more rest. Everyone take care.</p>
+
+<p>Stay alert and healthy everyone! Hope for peace and justice on East Europe! □</p>
 
 <hr>
 
 <p>Remarks:</p>
 
-<p>1: <a name="remark1"></a>From my testing upto the highest member of the sequence is 1103, the performance between the different order of occurring of the two array operations seems to be very close).</p>
+<p>1: <a name="remark1"></a>From my testing up to the highest member of the sequence is 1103, the performance between the different order of occurring of the two array operations seems to be very close.</p>
 
 <p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
 
