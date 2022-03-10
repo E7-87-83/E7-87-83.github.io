@@ -147,7 +147,7 @@ of primes. Then I changed it into <code>@ch_primes</code>.</p>
 
 <div class="code_vim_hl">
 
-<pre><font color="#FCE94F">while</font> ( <font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &gt; <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)</pre>
+<pre><font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &gt; <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)</pre>
 
 </div>
 
@@ -209,11 +209,9 @@ or
 }
 
 <font color="#FCE94F">sub </font><font color="#34E2E2"><b>iter_primorial </b></font>{
-    <font color="#FCE94F">while</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@ch_primes</b></font> &lt;= <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font>) {
-        iter_prime();
-    }
+        iter_prime() <font color="#FCE94F">while</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@ch_primes</b></font> &lt;= <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font>; 
     <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@primorials</b></font>,
-        <font color="#34E2E2"><b>$primorials[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$ch_primes[</b></font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font> <font color="#34E2E2"><b>]</b></font>;
+      <font color="#34E2E2"><b>$primorials[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$ch_primes[</b></font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font> <font color="#34E2E2"><b>]</b></font>;
 }
 </pre>
 </div>
