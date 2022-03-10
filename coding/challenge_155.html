@@ -176,10 +176,9 @@ or
 <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@fort_sorted</b></font> = ();
 
 
-
-<font color="#FCE94F">while</font> ( (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_sorted</b></font> &lt; <font color="#34E2E2"><b>$N</b></font>)
+<font color="#FCE94F">while</font> ( !<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)
                ||
-        (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>) &amp;&amp; <font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &gt; <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)
+        <font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &gt; <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>
 ) {
     <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$k</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
     <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$tmp_int</b></font> = <font color="#34E2E2"><b>$ch_primes[$k]</b></font>;
@@ -216,6 +215,8 @@ or
 </pre>
 </div>
 
+<p> --- </p>
+
 <p>Is the heuristic <code>while (scalar @fort_sorted &lt; 2*$N )</code>
 good? Let add a line <code>say scalar @fort_unsort;</code> and see:
 </p>
@@ -232,7 +233,7 @@ good? Let add a line <code>say scalar @fort_unsort;</code> and see:
 
 <p> --- </p>
 
-<p>I have found an alternative version of the  code
+<p>I have drawn an alternative version of the  code
 after reading <code>polettix</code>'s blogpost on
 the task. We need not store the values of many primorials;
 we can just store one and proceed.</p>
@@ -245,9 +246,10 @@ we can just store one and proceed.</p>
 <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@fort_unsort</b></font> = ();
 <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@fort_sorted</b></font> = ();
 
-<font color="#FCE94F">while</font> ( (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_sorted</b></font> &lt; <font color="#34E2E2"><b>$N</b></font>)
+
+<font color="#FCE94F">while</font> ( !<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)
                ||
-        (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>) &amp;&amp; <font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &gt; <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)
+        <font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &gt; <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>
 ) {
     <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$k</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
     <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$tmp_int</b></font> = <font color="#34E2E2"><b>$ch_primes[$k]</b></font>;
@@ -402,7 +404,7 @@ I have not done the details math of the necessary and sufficient condition for a
 <p>Well, there are many fun discussions on the properties of Fibonacci sequences on <i><a href="https://math.stackexchange.com/questions/tagged/fibonacci-numbers">Mathematics Stack Exchange</a></i>,
 some related to the Pisano Period.</p>
 
-<p>Unfortunately, I have been infected by COVID-19 Omicron this week &dash; tested with rapid tests. Three shots of vaccine were injected before.)
+<p>Unfortunately, I have been infected by COVID-19 Omicron this week &dash; tested with rapid tests. Three shots of vaccine were injected before.
 And three exams in April. I better speak less and take more rest. Everyone take care.</p>
 
 <p>Stay alert and healthy everyone! Hope for peace and justice on East Europe! □</p>
