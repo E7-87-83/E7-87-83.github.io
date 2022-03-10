@@ -273,9 +273,7 @@ we can just store one and proceed.</p>
 }
 
 <font color="#FCE94F">sub </font><font color="#34E2E2"><b>iter_primorial </b></font>{
-    <font color="#FCE94F">while</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@ch_primes</b></font> &lt;= <font color="#34E2E2"><b>$ind_primorial</b></font>) {
-        iter_prime();
-    }
+    iter_prime() <font color="#FCE94F">while</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@ch_primes</b></font> &lt;= <font color="#34E2E2"><b>$ind_primorial</b></font>; 
     <font color="#34E2E2"><b>$my_primorial</b></font> *= <font color="#34E2E2"><b>$ch_primes[</b></font> <font color="#34E2E2"><b>$ind_primorial</b></font> <font color="#34E2E2"><b>]</b></font>;
     <font color="#34E2E2"><b>$ind_primorial</b></font>++;
 }
