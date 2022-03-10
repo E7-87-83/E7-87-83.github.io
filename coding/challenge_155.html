@@ -215,6 +215,14 @@ or
 </pre>
 </div>
 
+<p>Sample run:</p>
+
+<div class="console_output"><pre>
+$ perl ch-1.pl 10
+Answer: 
+3, 5, 7, 13, 17, 19, 23, 37, 47, 59
+</pre>
+</div>
 <p> --- </p>
 
 <p>Is the heuristic <code>while (scalar @fort_sorted &lt; 2*$N )</code>
@@ -341,7 +349,7 @@ ch-2.pl $N 6   1 -1 -1 0 1 1   1 1 2 3 4 5             #<a href="https://oeis.or
 
 <p><u>line 02</u>: Let's explain it using examples.</p><p>
 The input <code>ch-2.pl 7 3 &nbsp; 1 0 1 &nbsp; 1 1 1</code>, the desired output is the info of the periodic behavior of the Narayana's cows sequence modulo 7. 
-</p><p><code>$rec</code> will be <code>[1,0,1]</code> (the sequence is defined by a(<i>n</i>-3)+a(<i>n</i>-1) for <i>n</i> &ge; 3) and
+</p><p><code>$rec</code> will be <code>[1,0,1]</code> (the sequence is defined by a(<i>n</i>-1)+a(<i>n</i>-3) for <i>n</i> &ge; 3) and
 <code>$ori_seqstate</code> will be <code>[1,1,1]</code> (a(0)=a(1)=a(2)=1).
 </p><p>
 The input <code>ch-2.pl 17 2  &nbsp; 1 2 &nbsp; 0 1</code>, the desired output is the info of the periodic behavior of the Pell numbers modulo 17.
@@ -368,6 +376,21 @@ Note that <code>$rec-&gt;@*</code> and <code>$new_seqstate-&gt;@*</code> have sa
 I have not done the details math of the necessary and sufficient condition for a linear recurrence sequence which surely generates a Pisano-like period. 
 </p>
 
+<p>Sample run:</p>
+
+<div class="console_output"><pre>
+$ perl ch-2.pl 16 2  1 1  0 1 # Fibonacci numbers 
+1..4
+length: 24
+terms: 0, 1, 1, 2, 3, 5, 8, 13, 5, 2, 7, 9, 0, 9, 9, 2, 11, 13, 8, 5, 13, 2, 15, 1
+ok 1 - Required Case (Period of Fibonacci numbers mod 3)
+ok 2 - Pisano period for mod 2
+ok 3 - Pisano-like period for Padovan numbers mod 3
+ok 4 - Pisano-like period for Padovan numbers mod 7
+</pre>
+</div>
+
+
 <p>Anyway, have fun exploring the periodic behavior of linear recurrence sequences.</p>
 
 <table border="1" style="text-align:center">
@@ -379,17 +402,25 @@ I have not done the details math of the necessary and sufficient condition for a
 <tr>  <td>7</td>  <td>Fibonacci</td> <td>16</td> </tr>
 <tr>  <td>101</td>  <td>Fibonacci</td> <td>50</td> </tr>
 <tr>  <td>191</td>  <td>Fibonacci</td> <td>190</td> </tr>
+<tr>  <td>2</td>  <td>Padovan</td> <td>7</td> </tr>
 <tr>  <td>3</td>  <td>Padovan</td> <td>13</td> </tr>
 <tr>  <td>7</td>  <td>Padovan</td> <td>48</td> </tr>
+<tr>  <td>101</td>  <td>Padovan</td> <td>100</td> </tr>
+<tr>  <td>191</td>  <td>Padovan</td> <td>7296</td> </tr>
 <tr>  <td>2</td>  <td>Tribonacci</td> <td>4</td> </tr>
 <tr>  <td>3</td>  <td>Tribonacci</td> <td>13</td> </tr>
+<tr>  <td>7</td>  <td>Tribonacci</td> <td>48</td> </tr>
 <tr>  <td>43</td>  <td>Tribonacci</td> <td>308</td> </tr>
 <tr>  <td>101</td>  <td>Tribonacci</td> <td>680</td> </tr>
 <tr>  <td>2</td>  <td>Narayana's cow</td> <td>7</td> </tr>
 <tr>  <td>3</td>  <td>Narayana's cow</td> <td>8</td> </tr>
+<tr>  <td>7</td>  <td>Narayana's cow</td> <td>57</td> </tr>
 <tr>  <td>53</td>  <td>Narayana's cow</td> <td>468</td> </tr>
 <tr>  <td>101</td>  <td>Narayana's cow</td> <td>10303</td> </tr>
 <tr>  <td>191</td>  <td>Narayana's cow</td> <td>36673</td> </tr>
+<tr>  <td>2</td>  <td>OEIS:A001224</td> <td>12</td> </tr>
+<tr>  <td>3</td>  <td>OEIS:A001224</td> <td>16</td> </tr>
+<tr>  <td>7</td>  <td>OEIS:A001224</td> <td>32</td> </tr>
 <tr>  <td>11</td>  <td>OEIS:A001224</td> <td>20</td> </tr>
 <tr>  <td>13</td>  <td>OEIS:A001224</td> <td>56</td> </tr>
 <tr>  <td>2</td>  <td>OEIS:A001399</td> <td>12</td> </tr>

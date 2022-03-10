@@ -31,7 +31,11 @@ div.code_vim_hl {
     padding-left: 5px;
 }
 
-
+div.console_output {
+    color:white; 
+    background-color:#4B0082;
+    padding-left: 5px;
+}
 
 .bar li {
     list-style-type:none;
