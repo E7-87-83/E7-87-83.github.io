@@ -49,23 +49,7 @@ ch-2.pl $N 6 -6 1 -5 -1 -4 -1 -3 0 -2 1 -1 1   1 1 2 3 4 5    #A001399
 
 
 
-improvement for command-line input:
-
-ch-2.pl $N 2   1 1       0 1   # Fibonacci numbers
-
-ch-2.pl $N 2   1 1       2 1   # Lucas numbers    #OEIS:A000032
-
-ch-2.pl $N 2   1 2       0 1   # Pell numbers     #OEIS:A000032
-
-ch-2.pl $N 3   1 1 0  1 1 1 # Padovan numbers     #OEIS:A000931
-
-ch-2.pl $N 3   1 1 1  0 0 1 # Tribonacci numbers  #OEIS:A000073
-
-ch-2.pl $N 3   1 0 1  1 1 1 # Narayana's cows sequence #A000930
-
-ch-2.pl $N 6  -1 -1 0 -1 2 1   1 2 2 4 5 9             #A001224
-
-ch-2.pl $N 6   1 -1 -1 0 1 1   1 1 2 3 4 5             #A001399
+improvement 
 
 
 
@@ -85,3 +69,8 @@ $ perl -E '@ar = (1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12, 16, 21, 28, 37, 49, 65, 86, 
 $ perl -E 'say length "111223450252002022244613043400404441152601610010"'
 48
 
+
+
+perl ch-2.pl 191 3   1 0 1  1 1 1 
+1..4
+length: 36673

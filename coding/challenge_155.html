@@ -69,7 +69,7 @@ is the smallest integer <i>m</i> so that <i>m</i> + primorial(<i>n</i>) is prime
 
 <p>The second one is <code>sort {$a&lt;=&gt;$b}
 <a href="https://metacpan.org/pod/List::Util#uniqint">uniqint</a> a<sub>1</sub></code>
-(or equivalently, <code>uniqint sort {$a&lt;=&gt;$b} a<sub>1</sub></code> <sup><a href="note1">[1]</a></sup>). </p> 
+(or equivalently, <code>uniqint sort {$a&lt;=&gt;$b} a<sub>1</sub></code> <sup><a href="#remark1">[1]</a></sup>). </p> 
 
 <p>The task requires us to generate the second sequence.</p>
 
@@ -121,6 +121,7 @@ not yet included in <code>@fort_unsort</code>:</p>
 
 <pre>
 # second part
+
 {
     # ... 
     <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$k</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font> - <font color="#AD7FA8">1</font>;
@@ -155,7 +156,7 @@ or
 , and s/he could even skip the second part ... IF LUCKY ENOUGH?
 </p>
 
-<p>To be a careful programmer, I use</p>
+<p>To go on a steady pace, I use</p>
 
 <div class="code_vim_hl">
 <pre><font color="#FCE94F">while</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_sorted</b></font> &lt; <font color="#34E2E2"><b>$N</b></font>) {
@@ -194,6 +195,27 @@ or
 
 </div>
 
+<p>While the supporting subroutines &amp;iter_prime and &amp;iter_primorial are</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>iter_prime </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$new_int</b></font> = <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$new_int</b></font>++;
+    } <font color="#FCE94F">while</font> (!is_prime(<font color="#34E2E2"><b>$new_int</b></font>));
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@ch_primes</b></font>, <font color="#34E2E2"><b>$new_int</b></font>;
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>iter_primorial </b></font>{
+    <font color="#FCE94F">while</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@ch_primes</b></font> &lt;= <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font>) {
+        iter_prime();
+    }
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@primorials</b></font>,
+        <font color="#34E2E2"><b>$primorials[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$ch_primes[</b></font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font> <font color="#34E2E2"><b>]</b></font>;
+}
+</pre>
+</div>
+
 <p>Is the heuristic <code>while (scalar @fort_sorted &lt; 2*$N )</code>
 good? Let add a line <code>say scalar @fort_unsort;</code> and see:
 </p>
@@ -208,6 +230,59 @@ good? Let add a line <code>say scalar @fort_unsort;</code> and see:
 <tr>  <td>150</td>  <td>272</td>  </tr>
 </table>
 
+<p> --- </p>
+
+<p>I have found an alternative version of the  code
+after reading <code>polettix</code>'s blogpost on
+the task. We need not store the values of many primorials;
+we can just store one and proceed.</p>
+
+<div class="code_vim_hl">
+
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>@ch_primes</b></font> = (<font color="#AD7FA8">2</font>);
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$my_primorial</b></font> = Math::BigInt-&gt;new(<font color="#AD7FA8">2</font>);
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ind_primorial</b></font> = <font color="#AD7FA8">1</font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@fort_unsort</b></font> = ();
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@fort_sorted</b></font> = ();
+
+<font color="#FCE94F">while</font> ( (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_sorted</b></font> &lt; <font color="#34E2E2"><b>$N</b></font>)
+               ||
+        (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>) &amp;&amp; <font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &gt; <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)
+) {
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$k</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$tmp_int</b></font> = <font color="#34E2E2"><b>$ch_primes[$k]</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$tmp_int</b></font>++;
+    } <font color="#FCE94F">while</font> (!is_prime( <font color="#34E2E2"><b>$my_primorial</b></font> + <font color="#34E2E2"><b>$tmp_int</b></font> ));
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@fort_unsort</b></font>, <font color="#34E2E2"><b>$tmp_int</b></font>;
+    iter_primorial() <font color="#FCE94F">while</font> <font color="#34E2E2"><b>$ind_primorial</b></font> &lt;= <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+    iter_prime() <font color="#FCE94F">while</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@ch_primes</b></font> &lt;= <font color="#34E2E2"><b>$ind_primorial</b></font>;
+    <font color="#34E2E2"><b>@fort_sorted</b></font> = uniqint <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+}
+
+<font color="#FCE94F">say</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+<font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;Answer: </font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>, <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;, &quot;</font>, <font color="#34E2E2"><b>@fort_sorted[</b></font><font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>iter_prime </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$new_int</b></font> = <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$new_int</b></font>++;
+    } <font color="#FCE94F">while</font> (!is_prime(<font color="#34E2E2"><b>$new_int</b></font>));
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@ch_primes</b></font>, <font color="#34E2E2"><b>$new_int</b></font>;
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>iter_primorial </b></font>{
+    <font color="#FCE94F">while</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@ch_primes</b></font> &lt;= <font color="#34E2E2"><b>$ind_primorial</b></font>) {
+        iter_prime();
+    }
+    <font color="#34E2E2"><b>$my_primorial</b></font> *= <font color="#34E2E2"><b>$ch_primes[</b></font> <font color="#34E2E2"><b>$ind_primorial</b></font> <font color="#34E2E2"><b>]</b></font>;
+    <font color="#34E2E2"><b>$ind_primorial</b></font>++;
+}
+</pre>
+
+</div>
+
 <p>An anecdote: we never assume the Fortunate conjecture true all along the code process, though, 
 it's quite cool.</p>
 
@@ -219,19 +294,19 @@ it's quite cool.</p>
 
 ch-2.pl $N 2   1 1       0 1   # Fibonacci numbers
 
-ch-2.pl $N 2   1 1       2 1   # Lucas numbers    #OEIS:A000032
+ch-2.pl $N 2   1 1       2 1   # Lucas numbers    #OEIS:<a href="https://oeis.org/A000032">A000032</a>
 
-ch-2.pl $N 2   1 2       0 1   # Pell numbers     #OEIS:A000032
+ch-2.pl $N 2   1 2       0 1   # Pell numbers     #OEIS:<a href="https://oeis.org/A000129">A000129</a>
 
-ch-2.pl $N 3   1 1 0  1 1 1 # Padovan numbers     #OEIS:A000931
+ch-2.pl $N 3   1 1 0  1 1 1 # Padovan numbers     #OEIS:<a href="https://oeis.org/A000931">A000931</a>
 
-ch-2.pl $N 3   1 1 1  0 0 1 # Tribonacci numbers  #OEIS:A000073
+ch-2.pl $N 3   1 1 1  0 0 1 # Tribonacci numbers  #OEIS:<a href="https://oeis.org/A000073">A000073</a>
 
-ch-2.pl $N 3   1 0 1  1 1 1 # Narayana's cows sequence #A000930
+ch-2.pl $N 3   1 0 1  1 1 1 # Narayana's cows sequence #<a href="https://oeis.org/A000930">A000930</a>
 
-ch-2.pl $N 6  -1 -1 0 -1 2 1   1 2 2 4 5 9             #A001224
+ch-2.pl $N 6  -1 -1 0 -1 2 1   1 2 2 4 5 9             #<a href="https://oeis.org/A001224">A001224</a>
 
-ch-2.pl $N 6   1 -1 -1 0 1 1   1 1 2 3 4 5             #A001399
+ch-2.pl $N 6   1 -1 -1 0 1 1   1 1 2 3 4 5             #<a href="https://oeis.org/A001399">A001399</a>
 
 </pre></div>
 
@@ -241,9 +316,9 @@ ch-2.pl $N 6   1 -1 -1 0 1 1   1 1 2 3 4 5             #A001399
 
 <hr>
 
-<p>Notes:</p>
+<p>Remarks:</p>
 
-<p>1: <a name="note1"></a>From my testing upto the highest member of the sequence is 1103, the performance between the different order of occurring of the two array operations seems to be very close).</p>
+<p>1: <a name="remark1"></a>From my testing upto the highest member of the sequence is 1103, the performance between the different order of occurring of the two array operations seems to be very close).</p>
 
 <p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
 
