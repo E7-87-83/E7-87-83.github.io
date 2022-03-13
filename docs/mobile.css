@@ -19,6 +19,13 @@ div.code_vim_hl {
 }
 
 
+div.console_output {
+    color:white;
+    background-color:#4B0082;
+    padding-left: 5px;
+}
+
+
 
 /* https://www.w3docs.com/snippets/css/
     how-to-wrap-text-in-a-pre-tag-with-css.html */
