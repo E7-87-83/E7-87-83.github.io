@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #156">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+  <style>
+    body {background-color:#1E90FF}
+    div.bar li {background-color:yellow}
+  </style>
+  <title>CY's Take on The Weekly Challenge #156 </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #156</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-156/" title="The Weekly Challenge #156">challenges
+in Week #156</a> !</i></b></p>
+
+<hr>
+
+<p>
+Two number theory tasks again.
+</p>
+
+<h4>Task 1: _____________</h4>
+
+<p>[TO BE CODED AND BLOGGED]</p>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<img alt="" src="../docs/wiki_img/sun_flower.jpg" style="float:right; width:300px" />
+<p><a href="#right_of_use">image info</a></p></div>
+
+
+<h4>Task 2: Weird Number</h4>
+
+<p>
+Last week we have a task 2 which can be categorized into <i>algebraic</i> number theory, and this week we get a task 2 related to <i>analytic</i> number theory.
+</p>
+
+<p>
+But after coding, I found that we need not apply any advanced number theory results on this task.
+Anyway, I think the concept of multiplicative (arithemetic) function is very interesting.
+You may take a look on this <a href="https://abstractnonsensedotcom.files.wordpress.com/2015/12/analyticnt.pdf">link (pdf)</a>
+if you are also often amazed by mathematics.
+</p>
+
+<p>
+Back to the task. The task can be divided into two parts:<br>
+1. find all proper divisors of the input number;<br>
+2. check whether there is a subset of the set of the proper divisors having sum which is equal to the input number.
+</p>
+
+<p>Express this in code:</p>
+
+<div class="code_vim_hl">
+<pre>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@proper_divisors</b></font> = proper_divisors(<font color="#34E2E2"><b>$num</b></font>);
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">if</font> (sum <font color="#34E2E2"><b>@proper_divisors</b></font>) &lt; <font color="#34E2E2"><b>$num</b></font>;
+    <font color="#FCE94F">return</font> !subset_sum(<font color="#34E2E2"><b>$num</b></font>, [<font color="#34E2E2"><b>@proper_divisors</b></font>]);
+</pre>
+</div>
+
+<p>For the first part, I choose to use the trivial integer factorization with help from <tt><a href="https://metacpan.org/pod/Math::Prime::Util">Math::Prime::Util</a></tt>. (Originally I 
+wanted to try something cool and new to me,
+and I eyed on <a href="https://primes.utm.edu/glossary/page.php?sort=WheelFactorization">wheel factorization</a>,
+but I found the wheel factorization is primarily useful for checking whether an integer is prime or getting a non-trivial factor of an integer.)</p> 
+
+<p>
+For the second part, I have used the dynamic programming technique. (...I need more practice on dynamic programming and make it as one of my natural skills.)
+There is an <a href="https://www.geeksforgeeks.org/subset-sum-problem-dp-25/">established algorithm to do it</a>.
+</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>subset_sum </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sum</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@A</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;@*</b></font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$DP</b></font>;
+    <font color="#34E2E2"><b>$DP-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>][$_]</b></font> = <font color="#AD7FA8">1</font> <font color="#FCE94F">for</font> (<font color="#AD7FA8">0.</font>.<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@A</b></font>);
+    <font color="#34E2E2"><b>$DP-&gt;[$_][</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> = <font color="#FCE94F">undef</font> <font color="#FCE94F">for</font> (<font color="#AD7FA8">1.</font>.<font color="#34E2E2"><b>$sum</b></font>);
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$s</b></font> (<font color="#AD7FA8">1.</font>.<font color="#34E2E2"><b>$sum</b></font>) {
+        <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$k</b></font> (<font color="#AD7FA8">1.</font>.<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@A</b></font>) {
+            <font color="#34E2E2"><b>$DP-&gt;[$s][$k]</b></font> = <font color="#34E2E2"><b>$DP-&gt;[$s][$k</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+            <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$s</b></font> &gt;= <font color="#34E2E2"><b>$A[$k</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>) {
+                <font color="#34E2E2"><b>$DP-&gt;[$s][$k]</b></font> = <font color="#34E2E2"><b>$DP-&gt;[$s][$k]</b></font>
+                                    ||
+                              <font color="#34E2E2"><b>$DP-&gt;[$s</b></font>-<font color="#34E2E2"><b>$A[$k</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]][$k</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+            }
+        }
+    }
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$DP-&gt;[$sum][</b></font><font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@A]</b></font>;
+}
+</pre>
+</div>
+
+<p>Sample Run:</p>
+<div class="console_output">
+<pre>$ perl ch-2.pl 30
+1..6
+30 is not weird.
+ok 1 - n=12 (Example 1)
+ok 2 - n=70 (Example 2)
+ok 3 - n=100
+ok 4 - n=4030 (term from wikipedia)
+ok 5 - n=6000
+ok 6 - n=9272 (term from wikipedia)
+</pre>
+</div>
+
+<div class="tiz">
+I wanted to try the <tt>signature</tt> feature, but after a second thought
+I would like to improve my coding ability (style or algorithms) step-by-step.
+</div>
+
+<div class="tiz">
+And, I continue the colouring of the blogpost for political expressions. I have listed the "Humanitarian Law Education" course from the local Red Cross on my online resume since that page has been published. If I ignore the current crisis, I betray my education. 
+<br>I wish I do not need to do the colouring soon.
+</div>
+
+<!--<p>Stay alert and healthy! □</p>-->
+
+<hr>
+
+<p><a name="right_of_use"></a>The image of the sunflower field is from Wikimedia Commons. 
+<a href="https://commons.wikimedia.org/wiki/File:Sunflowers_helianthus_annuus.jpg">Image details</a>.
+</p> 
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: <!--<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-156/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>,--> 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-156/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: 17th March, 2022 (for Task 2).</p>
+
+</body>
+
+</html>
