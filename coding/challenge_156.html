@@ -86,9 +86,12 @@ Back to the task. The task can be divided into two parts:<br>
 <p>Express this in code:</p>
 
 <div class="code_vim_hl">
-<pre>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@proper_divisors</b></font> = proper_divisors(<font color="#34E2E2"><b>$num</b></font>);
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>weird </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$num</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@proper_divisors</b></font> = proper_divisors(<font color="#34E2E2"><b>$num</b></font>);
     <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">if</font> (sum <font color="#34E2E2"><b>@proper_divisors</b></font>) &lt; <font color="#34E2E2"><b>$num</b></font>;
     <font color="#FCE94F">return</font> !subset_sum(<font color="#34E2E2"><b>$num</b></font>, [<font color="#34E2E2"><b>@proper_divisors</b></font>]);
+}
 </pre>
 </div>
 
@@ -96,6 +99,25 @@ Back to the task. The task can be divided into two parts:<br>
 wanted to try something cool and new to me,
 and I eyed on <a href="https://primes.utm.edu/glossary/page.php?sort=WheelFactorization">wheel factorization</a>,
 but I found the wheel factorization is primarily useful for checking whether an integer is prime or getting a non-trivial factor of an integer.)</p> 
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>factorization </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$num</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@prime_factors</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$prime</b></font> = <font color="#AD7FA8">2</font>;
+    <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$num</b></font> != <font color="#AD7FA8">1</font>) {
+        <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$num</b></font> % <font color="#34E2E2"><b>$prime</b></font> == <font color="#AD7FA8">0</font>) {
+            <font color="#34E2E2"><b>$num</b></font> /= <font color="#34E2E2"><b>$prime</b></font>;
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@prime_factors</b></font>, <font color="#34E2E2"><b>$prime</b></font>;
+        }
+        <font color="#FCE94F">else</font> {
+            <font color="#34E2E2"><b>$prime</b></font> = next_prime(<font color="#34E2E2"><b>$prime</b></font>);
+        }
+    }
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>@prime_factors</b></font>;
+}
+</pre>
+</div>
 
 <p>
 For the second part, I have used the dynamic programming technique. (...I need more practice on dynamic programming and make it as one of my natural skills.)
@@ -146,7 +168,7 @@ I would like to improve my coding ability (style or algorithms) step-by-step.
 
 <div class="tiz">
 And, I continue the colouring of the blogpost for political expressions. I have listed the "Humanitarian Law Education" course from the local Red Cross on my online resume since that page has been published. If I ignore the current crisis, I betray my education. 
-<br>I wish I do not need to do the colouring soon.
+<br><br>I wish I do not need to do the colouring soon.
 </div>
 
 <!--<p>Stay alert and healthy! □</p>-->
