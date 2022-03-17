@@ -117,6 +117,22 @@ but I found the wheel factorization is primarily useful for checking whether an 
     <font color="#FCE94F">return</font> <font color="#34E2E2"><b>@prime_factors</b></font>;
 }
 </pre>
+
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>proper_divisors </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@prime_factors</b></font> = factorization(<font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@pf</b></font> = (<font color="#AD7FA8">1</font>);
+    <font color="#FCE94F">while</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@prime_factors</b></font> &gt; <font color="#AD7FA8">0</font>) {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n</b></font> = <font color="#FCE94F">shift</font> <font color="#34E2E2"><b>@prime_factors</b></font>;
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@temp_pf</b></font> = <font color="#34E2E2"><b>@pf</b></font>;
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@pf</b></font>, <font color="#34E2E2"><b>$n</b></font>*<font color="#34E2E2"><b>$_</b></font> <font color="#FCE94F">for</font> <font color="#34E2E2"><b>@temp_pf</b></font>;
+    }
+    <font color="#34E2E2"><b>@pf</b></font> = <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> uniqint <font color="#34E2E2"><b>@pf</b></font>;
+    <font color="#FCE94F">pop</font> <font color="#34E2E2"><b>@pf</b></font>;    <font color="#34E2E2"># remove the largest factor -&gt; the number itself</font>
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>@pf</b></font>;
+}
+</pre>
+
+
 </div>
 
 <p>
