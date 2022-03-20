@@ -130,15 +130,15 @@ I had thought that we could use combinations to complete the task. For the <tt>$
 <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$k</b></font> (<font color="#AD7FA8">2.</font>.<font color="#34E2E2"><b>$ub</b></font>) {
     <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$prime</b></font> = <font color="#AD7FA8">2</font>;
     <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$prime</b></font> &lt;= <font color="#34E2E2"><b>$k</b></font>) {
-        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@<a href="https://duckduckgo.com/?t=ffab&q=binary+weight">weight_k</a>_pern_num</b></font> = ();
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@length_k_<a href="https://duckduckgo.com/?t=ffab&q=binary+weight">weight_p</a>_num</b></font> = ();
         <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$iter</b></font> = combinations([<font color="#AD7FA8">1.</font>.<font color="#34E2E2"><b>$k</b></font>-<font color="#AD7FA8">1</font>], <font color="#34E2E2"><b>$prime</b></font>-<font color="#AD7FA8">1</font>);
         <font color="#FCE94F">while</font> (<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$c</b></font> = <font color="#34E2E2"><b>$iter-&gt;next</b></font>) {
             <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@ch</b></font> = ((<font color="#AD7FA8">1</font>), (<font color="#AD7FA8">0</font>) x (<font color="#34E2E2"><b>$k</b></font>-<font color="#AD7FA8">1</font>));
             <font color="#34E2E2"><b>$ch[$_]</b></font> = <font color="#AD7FA8">1</font> <font color="#FCE94F">for</font> <font color="#34E2E2"><b>@{$c}</b></font>;
             <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$new_pern_num</b></font> = <font color="#FCE94F">oct</font>(<font color="#AD7FA8">&quot;0b&quot;</font>.(<font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>@ch</b></font>));
-            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@weight_k_pern_num</b></font>, <font color="#34E2E2"><b>$new_pern_num</b></font>;
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@length_k_weight_p_num</b></font>, <font color="#34E2E2"><b>$new_pern_num</b></font>;
         }
-        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@pern_num</b></font>, <font color="#34E2E2"><b>@weight_k_pern_num</b></font>;
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@pern_num</b></font>, <font color="#34E2E2"><b>@length_k_weight_p_num</b></font>;
         <font color="#34E2E2"><b>$prime</b></font> = next_prime(<font color="#34E2E2"><b>$prime</b></font>);
     }
     <font color="#FCE94F">last</font> <font color="#FCE94F">if</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@pern_num</b></font> &gt;= <font color="#34E2E2"><b>$N</b></font>;
@@ -173,7 +173,7 @@ sys	0m0.056s
 </div>
 
 <p>
-Therefore I submit the later version.
+Therefore I have submitted the later version.
 </p>
 
 <p>Sample Run:</p>
@@ -325,7 +325,7 @@ And, I continue the colouring of the blogpost for political expressions. I have 
 <p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
 <p>Email: fungcheokyin at gmail.com</p>
 <p>Created Date: 17th March, 2022.</p>
-<p>Latest Modified Date: 19th March, 2022.</p>
+<p>Latest Modified Date: 20th March, 2022.</p>
 
 </body>
 
