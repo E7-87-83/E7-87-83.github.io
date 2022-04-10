@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #159">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+  <style>
+    body {background-color:#1E90FF}
+    div.bar li {background-color:yellow}
+  </style>
+
+  <title>CY's Take on The Weekly Challenge #159 </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #159</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-159/" title="The Weekly Challenge #159">challenges
+in Week #159</a> !</i></b></p>
+
+<hr>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;"><a href="../docs/assets/2008reportcard.jpg">
+<img alt="" src="../docs/assets/2008reportcard.jpg" width="500px" />
+</a>
+<p>Section B of "Use of English" is "Writing".<br>
+The complete syllabus of "Use of English" can be found <a href="https://www.hkeaa.edu.hk/DocLibrary/HKALE/Subject_and_Syllabuses/2013/2013as-e-ue.pdf">here</a>(pdf, from HKEAA). <br>Note that the year I was supposed to take the second public exam is 2009.</p>
+<p><a href="#right_of_use">image info</a></p></div>
+
+<hr>
+
+<p>First of all, what happens...! Why a secondary school (high school) report card long time ago is shown as an accompanying photo on a blogpost related to programming? There's no subjects on the card directly related to programming.</p>
+
+<p>
+OK, I admit, that is my school report card in 2008. Mid-year exam. I was the first of my class in "Chinese Language and Culture" and the fourth of my class in "Use of English" (though, it was a science stream class). See, I am the first of English writing in that exam. I did not cheat. And the marker is a native speaker in English. He is called Mr North, by the way. OK... If I love to show off, 
+why don't I spend time to write the TWC challenge tasks in more guest languages?
+</p>
+
+<p>I often mention my passion towards mathematics. Is it because both tasks this week on related to mathematics? I was the first of "Pure Mathematics" that year &dash; overtake competitors from the other class as well.</p>
+
+<p>
+In the research field of natural language acquisition, people often mention "use it or lose it". I admit that I hadn't written any serious English writing while not seeking help from the Internet search engines, until I started blogging for learning Perl.
+</p>
+
+<p>Am I making a random reference because Larry Wall, who created Perl, is from a linguistics background?</p>
+
+<p>
+Since I started blogging or using Twitter (mostly people from a programming background interact with me on Twitter in the current stage), I found myself making lots of grammarical and spelling mistakes. The kind community of programmers does not langh at my English or the embarrassment caused.
+</p>
+
+<p>
+I leave the readers to guess my intention. (Reality: I am tired now.) Can we can go back to my usual blogpost style?
+</p>
+
+<p>
+I still could not change my coloring of blogposts.
+</p>
+
+<p>
+Two friends have instilled "positive energy" for me this week. The first one is Eric Cheung, who become the Champion of TWC this month. I get happiness from positive development of friends easily. Another friend, a classmate of math coursesin my university, who held a PhD in Math, has been offered a software engineering position in Taiwan. She also did competitive math in secondary school. I have been happy for her and we had a chat via Facebook messenger.
+</p>
+
+<p>
+[translated]<br>
+CY: We have been in the "community" for years... Some [scientific] research has addressed that, on average, males can better spatial skills. But I still don't feel [on average / in general] the ability of males are better than the ability of females in STEM.<br>
+Friend: ... I don't feel so as well. :P
+</p>
+
+<p>
+Well, should we go to study programming tasks this week now?
+</p>
+
+<h4>Task 1: Farey Sequence</h4>
+
+<p>
+Look like an interesting mathematical entity to be studied but I decided not to doodle with math this week. I ran into the <a href="https://en.wikipedia.org/wiki/Farey_sequence#Next_term">algorithmic section on its Wikipedia entry</a> directly.
+</p>
+
+<p>
+I did not look on the Python code which is in functional programming style provided on Wikipedia.
+And I did not study functional programming, therefore my code does not look consice:
+</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">use </font><font color="#AD7FA8">v5.22.0</font>;
+<font color="#FCE94F">use warnings</font>;
+<font color="#FCE94F">use </font>POSIX;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$N</b></font> = <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> <font color="#FCE94F">if</font> <font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>);
+
+<font color="#FCE94F">say</font> farey(<font color="#34E2E2"><b>$N</b></font>) <font color="#FCE94F">if</font> <font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>);
+
+
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>farey </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;The parameter should be a positive integer.&quot;</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$n</b></font>==<font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$g</b></font>, <font color="#34E2E2"><b>$h</b></font>) = ([<font color="#AD7FA8">0</font>,<font color="#AD7FA8">1</font>], [<font color="#AD7FA8">1</font>, <font color="#34E2E2"><b>$n</b></font>]);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@terms</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@terms</b></font>, <font color="#AD7FA8">&quot;&quot;</font>.<font color="#FCE94F">join</font>(<font color="#AD7FA8">&quot;/&quot;</font>, <font color="#34E2E2"><b>$g-&gt;@*</b></font>);
+        <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$a</b></font>, <font color="#34E2E2"><b>$b</b></font>) = <font color="#34E2E2"><b>$g-&gt;@*</b></font>;
+        <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$c</b></font>, <font color="#34E2E2"><b>$d</b></font>) = <font color="#34E2E2"><b>$h-&gt;@*</b></font>;
+        <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$p</b></font>, <font color="#34E2E2"><b>$q</b></font>) = (
+            <font color="#34E2E2"><b>$c</b></font>*floor ((<font color="#34E2E2"><b>$n</b></font>+<font color="#34E2E2"><b>$b</b></font>)/<font color="#34E2E2"><b>$d</b></font>) - <font color="#34E2E2"><b>$a</b></font>,
+            <font color="#34E2E2"><b>$d</b></font>*floor((<font color="#34E2E2"><b>$n</b></font>+<font color="#34E2E2"><b>$b</b></font>)/<font color="#34E2E2"><b>$d</b></font>) - <font color="#34E2E2"><b>$b</b></font>
+        );
+        (<font color="#34E2E2"><b>$g</b></font>, <font color="#34E2E2"><b>$h</b></font>) = (<font color="#34E2E2"><b>$h</b></font>, [<font color="#34E2E2"><b>$p</b></font>, <font color="#34E2E2"><b>$q</b></font>]);
+    } <font color="#FCE94F">while</font> (!(<font color="#34E2E2"><b>$h-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">1</font> &amp;&amp; <font color="#34E2E2"><b>$h-&gt;[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">1</font>));
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@terms</b></font>, <font color="#FCE94F">join</font>(<font color="#AD7FA8">&quot;/&quot;</font>, <font color="#34E2E2"><b>$g-&gt;@*</b></font>), <font color="#FCE94F">join</font>(<font color="#AD7FA8">&quot;/&quot;</font>, <font color="#34E2E2"><b>$h-&gt;@*</b></font>);
+    <font color="#FCE94F">return</font> <font color="#FCE94F">join</font>(<font color="#AD7FA8">&quot;, &quot;</font>,<font color="#34E2E2"><b>@terms</b></font>) . <font color="#AD7FA8">&quot;.&quot;</font>;
+}
+</pre>
+</div>
+
+<h4>Task 2: Moebius Number</h4>
+
+<p>I determined to spend most of my programming time on this task. I was a fan of number theory during secondary school. Like the Task 2 in <a href="challenge_156.html">Week 156</a>, M&#246;bius function is closely related to <i>analytic</i> number theory.</p>
+
+<p>
+Since The Weekly Challenge already got many tasks related to primes recently, I decide to start from the definition: "M&#246;bius function <i>&mu;</i>(<i>n</i>) is the sum of the primitive <i>n</i>th roots of unity." An obvious obstacle, for programmers, is the floating point issue.
+</p>
+
+<p>
+So here is my Perl code:
+</p>
+
+<div class="code_vim_hl">
+
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>irn </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">return</font> Math::Complex-&gt;make(
+        <font color="#FCE94F">cos</font> <font color="#AD7FA8">2</font>*PI*<font color="#34E2E2"><b>$i</b></font>/<font color="#34E2E2"><b>$n</b></font>, <font color="#FCE94F">sin</font> <font color="#AD7FA8">2</font>*PI*<font color="#34E2E2"><b>$i</b></font>/<font color="#34E2E2"><b>$n</b></font>
+    );
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>mo </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">1</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$n</b></font> == <font color="#AD7FA8">1</font>;
+    <font color="#FCE94F">return</font> -<font color="#AD7FA8">1</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$n</b></font> == <font color="#AD7FA8">2</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sum</b></font> = irn(<font color="#AD7FA8">1</font>, <font color="#34E2E2"><b>$n</b></font>);
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">2.</font>.<font color="#34E2E2"><b>$n</b></font>-<font color="#AD7FA8">1</font>) {
+        <font color="#FCE94F">next</font> <font color="#FCE94F">if</font> any { (<font color="#34E2E2"><b>$i</b></font>*<font color="#34E2E2"><b>$_</b></font>) % <font color="#34E2E2"><b>$n</b></font> == <font color="#AD7FA8">0</font>} (<font color="#AD7FA8">2.</font>.<font color="#34E2E2"><b>$n</b></font>-<font color="#AD7FA8">1</font>);
+        <font color="#34E2E2"><b>$sum</b></font> += irn(<font color="#34E2E2"><b>$i</b></font>, <font color="#34E2E2"><b>$n</b></font>);
+    }
+    <font color="#34E2E2"># say &quot;# intermediate sum: &quot;, Re($sum), &quot;\n\n&quot;;</font>
+    <font color="#FCE94F">return</font> floor(Re(<font color="#34E2E2"><b>$sum</b></font>)+<font color="#AD7FA8">0.5</font>);
+}
+</pre>
+
+</div>
+
+<p>
+Then I coded in Julia. During my search for reference, I find people stating that Julia is a functional programming language. I have been wanted to learn a functional programming language. And as <a href="eco_julia.html">stated previously</a>, the community of Julia looks friendly. 
+</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">function</font> <font color="#34E2E2"><b>irn</b></font>(i,n)
+    <font color="#FCE94F">return</font> cos(<font color="#AD7FA8">2</font>π<font color="#FCE94F">*</font>i<font color="#FCE94F">/</font>n)<font color="#FCE94F">+</font>sin(<font color="#AD7FA8">2</font>π<font color="#FCE94F">*</font>i<font color="#FCE94F">/</font>n)<font color="#AD7FA8">im</font>
+<font color="#FCE94F">end</font>
+
+<font color="#FCE94F">function</font> <font color="#34E2E2"><b>möbius</b></font>(n)
+    <font color="#FCE94F">if</font> n<font color="#FCE94F">==</font><font color="#AD7FA8">1</font>
+        <font color="#FCE94F">return</font> <font color="#AD7FA8">1</font>
+    <font color="#FCE94F">end</font>
+    <font color="#FCE94F">if</font> n<font color="#FCE94F">==</font><font color="#AD7FA8">2</font>
+        <font color="#FCE94F">return</font> <font color="#FCE94F">-</font><font color="#AD7FA8">1</font>
+    <font color="#FCE94F">end</font>
+    primitive_roots<font color="#FCE94F">=</font><font color="#87FFAF">Any</font>[]
+    push!(primitive_roots, irn(<font color="#AD7FA8">1</font>, n))
+    <font color="#FCE94F">for</font> i <font color="#FCE94F">in</font> <font color="#AD7FA8">2</font><font color="#FCE94F">:</font>n<font color="#FCE94F">-</font><font color="#AD7FA8">1</font>
+        <font color="#FCE94F">for</font> s <font color="#FCE94F">in</font> <font color="#AD7FA8">2</font><font color="#FCE94F">:</font>n<font color="#FCE94F">-</font><font color="#AD7FA8">1</font>
+            <font color="#FCE94F">if</font> (i<font color="#FCE94F">*</font>s)<font color="#FCE94F">%</font>n<font color="#FCE94F">==</font><font color="#AD7FA8">0</font>
+                <font color="#5FD7FF">@goto</font> label1
+            <font color="#FCE94F">end</font>
+        <font color="#FCE94F">end</font>
+        push!(primitive_roots, irn(i,n))
+        <font color="#5FD7FF">@label</font> label1
+    <font color="#FCE94F">end</font>
+    <font color="#FCE94F">return</font> round(<font color="#87FFAF">Int</font>,real(sum(primitive_roots)))
+<font color="#FCE94F">end</font>
+</pre>
+
+</div>
+
+<p>I have decided to learn Julia properly this year.</p>
+
+<p>
+Final present: Java. It is easy to contruct a "complex number" class in Java. But for simplicity,
+I have decided to use the matrix representation of complex numbers to code.
+</p>
+
+<div class="code_vim_hl">
+<pre><font color="#87FFAF">public</font> <font color="#87FFAF">class</font> Moebius
+{
+    <font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">void</font> main(String[] args)
+    {
+        <font color="#87FFAF">int</font> N = <font color="#AD7FA8">1</font>;
+        <font color="#FCE94F">try</font> {
+            N = Integer.parseInt(args[<font color="#AD7FA8">0</font>]);
+        } <font color="#FCE94F">catch</font> (Exception e) {
+            System.err.print(<font color="#AD7FA8">&quot;Please use a positive integer &quot;</font>);
+            System.err.println(<font color="#AD7FA8">&quot;as your parameter.&quot;</font>);
+            System.exit(<font color="#AD7FA8">0</font>);
+        }
+        <font color="#87FFAF">double</font>[][] complex1 = <font color="#FCE94F">new</font> <font color="#87FFAF">double</font>[][] { {<font color="#AD7FA8">1</font>, <font color="#AD7FA8">0</font>} , {<font color="#AD7FA8">0</font>, <font color="#AD7FA8">1</font>} };
+        <font color="#87FFAF">double</font>[][] complex2 = <font color="#FCE94F">new</font> <font color="#87FFAF">double</font>[][] { {<font color="#AD7FA8">0</font>, <font color="#AD7FA8">1</font>} , {-<font color="#AD7FA8">1</font>, <font color="#AD7FA8">0</font>} };
+        System.out.println(Math.round(mu(N)));
+    }
+
+
+    <font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">double</font> mu(<font color="#87FFAF">int</font> n)
+    {
+        <font color="#87FFAF">double</font>[][] sum = ithRootOfUnityModuloN(<font color="#AD7FA8">1</font>, n);
+<font color="#FCE94F">        LOOP</font>: <font color="#FCE94F">for</font> (<font color="#87FFAF">int</font> i=<font color="#AD7FA8">2</font>; i&lt;n; i++)
+        {
+            <font color="#FCE94F">for</font> (<font color="#87FFAF">int</font> s=<font color="#AD7FA8">2</font>; s&lt;n; s++)
+            {
+                <font color="#FCE94F">if</font> ( (i*s) % n == <font color="#AD7FA8">0</font> )
+                    <font color="#FCE94F">continue</font> <font color="#FCE94F">LOOP</font>;
+            }
+            sum = complexAddition(sum, ithRootOfUnityModuloN(i,n));
+        }
+        <font color="#FCE94F">return</font> sum[<font color="#AD7FA8">0</font>][<font color="#AD7FA8">0</font>];
+    }
+
+
+    <font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">double</font>[][] complexAddition(<font color="#87FFAF">double</font>[][] c1, <font color="#87FFAF">double</font>[][] c2)
+    {
+        <font color="#87FFAF">double</font> a = c1[<font color="#AD7FA8">0</font>][<font color="#AD7FA8">0</font>];
+        <font color="#87FFAF">double</font> b = c1[<font color="#AD7FA8">0</font>][<font color="#AD7FA8">1</font>];
+        <font color="#87FFAF">double</font> c = c1[<font color="#AD7FA8">1</font>][<font color="#AD7FA8">0</font>];
+        <font color="#87FFAF">double</font> d = c1[<font color="#AD7FA8">1</font>][<font color="#AD7FA8">1</font>];
+        <font color="#87FFAF">double</font> e = c2[<font color="#AD7FA8">0</font>][<font color="#AD7FA8">0</font>];
+        <font color="#87FFAF">double</font> f = c2[<font color="#AD7FA8">0</font>][<font color="#AD7FA8">1</font>];
+        <font color="#87FFAF">double</font> g = c2[<font color="#AD7FA8">1</font>][<font color="#AD7FA8">0</font>];
+        <font color="#87FFAF">double</font> h = c2[<font color="#AD7FA8">1</font>][<font color="#AD7FA8">1</font>];
+        <font color="#FCE94F">return</font> <font color="#FCE94F">new</font> <font color="#87FFAF">double</font>[][] {{ a+e, b+f }, { c+g, d+h }};
+    }
+
+
+
+    <font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">double</font>[][] complexMultiplication(<font color="#87FFAF">double</font>[][] c1, <font color="#87FFAF">double</font>[][] c2)
+    {
+        <font color="#87FFAF">double</font> a = c1[<font color="#AD7FA8">0</font>][<font color="#AD7FA8">0</font>];
+        <font color="#87FFAF">double</font> b = c1[<font color="#AD7FA8">0</font>][<font color="#AD7FA8">1</font>];
+        <font color="#87FFAF">double</font> c = c1[<font color="#AD7FA8">1</font>][<font color="#AD7FA8">0</font>];
+        <font color="#87FFAF">double</font> d = c1[<font color="#AD7FA8">1</font>][<font color="#AD7FA8">1</font>];
+        <font color="#87FFAF">double</font> e = c2[<font color="#AD7FA8">0</font>][<font color="#AD7FA8">0</font>];
+        <font color="#87FFAF">double</font> f = c2[<font color="#AD7FA8">0</font>][<font color="#AD7FA8">1</font>];
+        <font color="#87FFAF">double</font> g = c2[<font color="#AD7FA8">1</font>][<font color="#AD7FA8">0</font>];
+        <font color="#87FFAF">double</font> h = c2[<font color="#AD7FA8">1</font>][<font color="#AD7FA8">1</font>];
+        <font color="#FCE94F">return</font> <font color="#FCE94F">new</font> <font color="#87FFAF">double</font>[][] {{a*e+b*g, a*f+b*h}, {c*e+d*g, c*f+d*h}};
+    }
+
+
+
+    <font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">double</font>[][] ithRootOfUnityModuloN(<font color="#87FFAF">int</font> i , <font color="#87FFAF">int</font> n)
+    {
+        <font color="#87FFAF">double</font> realPart = Math.cos(<font color="#AD7FA8">2</font>*Math.PI*i/n);
+        <font color="#87FFAF">double</font> imaginaryPart = Math.sin(<font color="#AD7FA8">2</font>*Math.PI*i/n);
+        <font color="#87FFAF">double</font>[][] result = <font color="#FCE94F">new</font> <font color="#87FFAF">double</font>[][] {
+                              {realPart, imaginaryPart},
+                              {-imaginaryPart, realPart}
+                            };
+        <font color="#FCE94F">return</font> result;
+    }
+}
+</div>
+
+</pre>
+
+<p>
+At first I want to code the task in Dart too. However... Errrrr... "It is better to study four subjects thoroughly than six superficially."[<a href="https://web.archive.org/web/20190301211822/http://www.physics.csbsju.edu/105/HowToStudyPhysics.htm" title="How To Study Physics, by Seville Chapman">ref</a>, <small>Why bother my university major!?</small>]
+</p>
+
+<p>Well, I hope the Hong Kong Public Library can retain its service soon so that I can look on <i>Introduction to Analytic Number Theory</i> which I read many years ago... Also to borrow books on programming. Althrough I have digital versions of some books, including <i>Perl Best Practices</i>, I still prefer paperback version usually. □</p>
+
+<div class="tiz">
+I think I would try to mostly stick to UK English for some vocabulary in writing from now on ("high school" =&gt; "secondary school"; "college" =&gt; "university").
+Why? Haha, I am not planning for an immigration. Just because I have been an old-fashion freak, and US English has too many slangs to be learnt.
+</div>
+
+<hr>
+
+<p><a name="right_of_use"></a>The photo on this page should not be copied or published on other places, online or offline.</p> 
+
+<p><small>The text content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-159/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>, 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-159/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>,
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-159/cheok-yin-fung/julia/ch-2.jl" title="Task 2 Julia Solution from Cheok-Yin Fung">ch-2.jl</a></tt>,
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-159/cheok-yin-fung/java/Moebius.java" title="Task 2 Java Solution from Cheok-Yin Fung">Moebius.java</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: 11th April, 2022 (Hong Kong Time).</p>
+
+</body>
+
+</html>
