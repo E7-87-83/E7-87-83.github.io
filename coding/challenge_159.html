@@ -231,7 +231,7 @@ I have decided to use the matrix representation of complex numbers to code.
         <font color="#87FFAF">int</font> N = <font color="#AD7FA8">1</font>;
         <font color="#FCE94F">try</font> {
             N = Integer.parseInt(args[<font color="#AD7FA8">0</font>]);
-            <font color="#FCE94F">if</font> (N==<font color="#AD7FA8">0</font>)
+            <font color="#FCE94F">if</font> (N&lt;=<font color="#AD7FA8">0</font>)
                 <font color="#FCE94F">throw</font> <font color="#FCE94F">new</font> ArithmeticException();
         } <font color="#FCE94F">catch</font> (Exception e) {
             System.err.print(<font color="#AD7FA8">&quot;Please use a positive integer &quot;</font>);
