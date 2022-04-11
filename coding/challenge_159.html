@@ -177,7 +177,7 @@ So here is my Perl code:
         <font color="#34E2E2"><b>$sum</b></font> += irn(<font color="#34E2E2"><b>$i</b></font>, <font color="#34E2E2"><b>$n</b></font>);
     }
     <font color="#34E2E2"># say &quot;# intermediate sum: &quot;, Re($sum), &quot;\n\n&quot;;</font>
-    <font color="#FCE94F">return</font> floor(Re(<font color="#34E2E2"><b>$sum</b></font>)+<font color="#AD7FA8">0.5</font>);
+    <font color="#FCE94F">return</font> <b>floor(Re(<font color="#34E2E2"><b>$sum</b></font>)+<font color="#AD7FA8">0.5</font>)</b>;
 }
 </pre>
 
@@ -210,7 +210,7 @@ Then I coded in Julia. During my search for reference, I find people stating tha
         push!(primitive_roots, irn(i,n))
         <font color="#5FD7FF">@label</font> label1
     <font color="#FCE94F">end</font>
-    <font color="#FCE94F">return</font> round(<font color="#87FFAF">Int</font>,real(sum(primitive_roots)))
+    <font color="#FCE94F">return</font> <b>round(<font color="#87FFAF">Int</font>,real(sum(primitive_roots)))</b>
 <font color="#FCE94F">end</font>
 </pre>
 
@@ -238,7 +238,7 @@ I have decided to use the matrix representation of complex numbers to code.
         }
         <font color="#87FFAF">double</font>[][] complex1 = <font color="#FCE94F">new</font> <font color="#87FFAF">double</font>[][] { {<font color="#AD7FA8">1</font>, <font color="#AD7FA8">0</font>} , {<font color="#AD7FA8">0</font>, <font color="#AD7FA8">1</font>} };
         <font color="#87FFAF">double</font>[][] complex2 = <font color="#FCE94F">new</font> <font color="#87FFAF">double</font>[][] { {<font color="#AD7FA8">0</font>, <font color="#AD7FA8">1</font>} , {-<font color="#AD7FA8">1</font>, <font color="#AD7FA8">0</font>} };
-        System.out.println(Math.round(mu(N)));
+        System.out.println(<b>Math.round(mu(N))</b>);
     }
 
 
@@ -331,8 +331,8 @@ Why? Haha, I am not planning for an immigration by my aged passport. Just becaus
 <p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
 <p>Email: fungcheokyin at gmail.com</p>
 <p>Created Date-Time: 11th April, 2022. 05:30 HKT.</p>
-<p>Latest Update: 11th April, 2022. 06:24 HKT.</p>
-
+<p>Latest Update Before the Official Deadline: 11th April, 2022. 06:24 HKT.</p>
+<p>Latest Update: 11th April, 2022. 10:09 HKT.</p>
 </body>
 
 </html>
