@@ -109,3 +109,7 @@ h2 {
 
 h3 {
 }
+
+disappearForMobile {
+    display:none;
+}
