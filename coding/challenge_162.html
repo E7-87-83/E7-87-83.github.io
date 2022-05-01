@@ -52,28 +52,308 @@ in Week #162</a> !</i></b></p>
 
 <hr>
 
+<p>April 2022 was an uneasy month for me. Now, May has come. But this does not mean that life in May 2022 is not going to be tougher.</p>
 
-<h4>Task 1: ISBN-13</h4>
+<p>Anyway... I have enjoyed this week's tasks and have worked them in Julia as well as in Perl. I wrote the Perl codes first, then, mostly following the logic of the Perl codes, finished the Julia codes. I borrowed the book <i>Think Julia</i> from the re-opened public library, and have been reading it seriously to have a comprehensive elementary understanding for the Julia language.</p>
 
-<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<div style="float:right; border: 1px dotted black; font-size:x-small;padding: 5px">
 <img alt="" src="../docs/screenshot/isItCipher.png" style="float:right" />
 <p>EVERYONE will be VERY AMAZED if you can "decrypt" these characters.</p></div>
 
-<h5>Perl Solution</h5>
+<p>I mentioned <a href="challenge_159.html">before</a> "[some] people stating that Julia is a functional programming language", then this week I found <a href="https://discourse.julialang.org/t/functional-programming-in-julia/55548">this post</a> on functional programming style of Julia in <a href="https://discourse.julialang.org">JuliaLang Discourse</a>. In short, Julia is not a functional programming language, but it's very handy to implement a functional programming style in Julia using certain packages. So I will still dive(<font color="#E78783"><i>fall?</i></font>) deeply in JuliaLang.</p>
 
+<h4>Task 1: ISBN-13</h4>
+
+<p>Refer to the English Wikipedia: <a href="https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-13_check_digit_calculation">ISBN-13</a>.</p>
+
+<p>The task statement is ambiguous. I decided to implement two functions, one for checking whether a 13-digit ISBN has the reasonable check digit (<i><tt>valid</tt></i>), one for, given a 12-digit string, giving the user the check digit (<i><tt>lookup</tt></i>).</p>
+
+<p>The fun part for me is using the subroutine <tt>valid</tt> to complete the subroutine <tt>lookup</tt>.</p>
+
+<h5>Perl Solution</h5>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>lookup </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$partial_code</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">return</font> first {valid(<font color="#34E2E2"><b>$partial_code</b></font>.<font color="#34E2E2"><b>$_</b></font>)} (<font color="#AD7FA8">0..9</font>);
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>valid </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$code</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@d</b></font> = <font color="#FCE94F">grep</font> <font color="#FCE94F">{</font> <font color="#FCE94F">/</font><font color="#FFD7D7">\d</font><font color="#FCE94F">/</font> <font color="#FCE94F">}</font> <font color="#FCE94F">split</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>$code</b></font>;
+    <font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;Invalid ISBN-13 code!</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">if</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@d</b></font> != <font color="#AD7FA8">13</font>;
+    <font color="#FCE94F">return</font> !( (<font color="#34E2E2"><b>$d[</b></font><font color="#AD7FA8">12</font><font color="#34E2E2"><b>]</b></font> + sum pairmap {<font color="#34E2E2"><b>$a</b></font> + <font color="#AD7FA8">3</font>*<font color="#34E2E2"><b>$b</b></font>} <font color="#34E2E2"><b>@d[</b></font><font color="#AD7FA8">0..11</font><font color="#34E2E2"><b>]</b></font>) % <font color="#AD7FA8">10</font>);
+}
+</pre>
+</div>
 
 <h5>Julia Solution</h5>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">using</font> IterTools
+
+<font color="#FCE94F">function</font> <font color="#34E2E2"><b>p_int</b></font>(s)
+    <font color="#FCE94F">return</font> parse(<font color="#87FFAF">Int64</font>, s)
+<font color="#FCE94F">end</font>
 
 
+<font color="#FCE94F">function</font> <font color="#34E2E2"><b>lookup</b></font>(partialisbn)
+    <font color="#FCE94F">return</font> only(filter( d <font color="#FCE94F">-&gt;</font> valid(partialisbn <font color="#FCE94F">*</font> string(d)), <font color="#AD7FA8">0</font><font color="#FCE94F">:</font><font color="#AD7FA8">9</font>) )
+<font color="#FCE94F">end</font>
+
+
+<font color="#FCE94F">function</font> <font color="#34E2E2"><b>valid</b></font>(isbn)
+    weight <font color="#FCE94F">=</font> push!(repeat( [<font color="#AD7FA8">1</font>,<font color="#AD7FA8">3</font>], <font color="#AD7FA8">6</font>), <font color="#AD7FA8">1</font>)
+    arr <font color="#FCE94F">=</font> p_int.(collect(
+                   takestrict(
+                     (filter(d<font color="#FCE94F">-&gt;</font> (tryparse(<font color="#87FFAF">Int64</font>,d) <font color="#FCE94F">isa</font> <font color="#87FFAF">Number</font>),
+                       split(isbn, <font color="#AD7FA8">&quot;&quot;</font>))),
+                     <font color="#AD7FA8">13</font>)))
+     <font color="#FCE94F">return</font> sum(Base.splat(<font color="#FCE94F">*</font>),zip(weight,arr)) <font color="#FCE94F">%</font> <font color="#AD7FA8">10</font> <font color="#FCE94F">==</font> <font color="#AD7FA8">0</font>
+<font color="#FCE94F">end</font>
+</pre>
+</div>
+
+<h5>... Task 1</h5>
+<p>One thing that my code should be improved is that both scripts do not strictly check whether the string input (usually <tt>xxx-xxx-xx...-x</tt>) is made of nothing besides hypen and the correct total number of digits.</p>
 
 <h4>Task 2: Wheatstone-Playfair cipher</h4>
 
-<h5>Perl Solution</h5>
+<p>Refer to the English Wikipedia: <a href="https://en.wikipedia.org/wiki/Playfair_cipher">Playfair cipher</a>.</p>
+
+<p>This is a complicated task, but not algorithmically difficult. And the encryption method itself is quite funny.</p>
 
 
-<h5>Julia Solution</h5>
+<p>The procedure to encrypt a message with a given key is:</p>
+<ol>
+<li>Build the encryption 5&times;5-board, which depends on the key string.</li>
+<li>Do some minor preprocessing on the message, then pair up the alphabets.</li>
+<li>Transform the alphabet pairs into a completely different alphabet pairs, based on the encryption board.</li>
+<li>Join the new alphabet pairs and the resultant is the cryptic text.</li>
+</ol>
 
-<p>Thanks for reading! □</p>
+<p>For the Perl script, tools from <tt>List::Util</tt> are used extensively. For the Julia script, some interesting type considerations are applied in the Julia codes. Julia has a very rich amount of types (probably for its mathematical modelling applications to attract the scientists and engineers), such as Tuple, Array(==Vector), Vector{Vector{<i>type</i>}}, <i><tt>n</tt></i>×<i><tt>m</tt></i> Matrix...</p>
+
+<p>Note that the design of Julia have been influnced by Perl. But I found it is a bit funny to see that, for the <tt>join</tt> or <tt>split</tt>, the order of parameters used in these two languages is exactly opposite. </p>
+
+<h5>(1) in Perl</h5>
+<div class="code_vim_hl"><pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>playfair_board </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$key</b></font> = (<font color="#FCE94F">uc</font> <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>) . (<font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;&quot;</font>, (<font color="#AD7FA8">&quot;A&quot;</font>..<font color="#AD7FA8">&quot;Z&quot;</font>));
+    <font color="#34E2E2"><b>$key</b></font> =~ <font color="#FCE94F">tr/</font><font color="#AD7FA8">J</font><font color="#FCE94F">/</font><font color="#AD7FA8">I</font><font color="#FCE94F">/</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@let</b></font> = uniqstr <font color="#FCE94F">grep</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$_</b></font> <font color="#FCE94F">ne</font> <font color="#AD7FA8">&quot; &quot;</font><font color="#FCE94F">}</font> <font color="#FCE94F">split</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>$key</b></font>;
+    <font color="#34E2E2"><b>@let</b></font> = (
+            [<font color="#34E2E2"><b>@let[</b></font><font color="#AD7FA8">0..4</font><font color="#34E2E2"><b>]</b></font>  ],
+            [<font color="#34E2E2"><b>@let[</b></font><font color="#AD7FA8">5..9</font><font color="#34E2E2"><b>]</b></font>  ],
+            [<font color="#34E2E2"><b>@let[</b></font><font color="#AD7FA8">10..14</font><font color="#34E2E2"><b>]</b></font>],
+            [<font color="#34E2E2"><b>@let[</b></font><font color="#AD7FA8">15..19</font><font color="#34E2E2"><b>]</b></font>],
+            [<font color="#34E2E2"><b>@let[</b></font><font color="#AD7FA8">20..24</font><font color="#34E2E2"><b>]</b></font>],
+           ) ;
+    <font color="#FCE94F">return</font> [<font color="#34E2E2"><b>@let</b></font>];
+}
+</pre></div>
+
+<h5>(1) in Julia</h5>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">function</font> <font color="#34E2E2"><b>playfair_board</b></font>(key)
+    letters <font color="#FCE94F">=</font> unique(Base.vcat(
+        filter( c <font color="#FCE94F">-&gt;</font> c <font color="#FCE94F">!=</font> <font color="#AD7FA8">&apos; &apos;</font> ,
+                only_special.(split(uppercase(key), <font color="#AD7FA8">&quot;&quot;</font>))
+        ),
+        <font color="#87FFAF">Char</font>.(vcat(codepoint(<font color="#AD7FA8">&apos;A&apos;</font>)<font color="#FCE94F">:</font>codepoint(<font color="#AD7FA8">&apos;I&apos;</font>),
+                   codepoint(<font color="#AD7FA8">&apos;K&apos;</font>)<font color="#FCE94F">:</font>codepoint(<font color="#AD7FA8">&apos;Z&apos;</font>))
+        )
+    ))
+
+    board_vv <font color="#FCE94F">=</font> [ letters[ <font color="#AD7FA8">1</font><font color="#FCE94F">:</font><font color="#AD7FA8">5</font>],
+                 letters[ <font color="#AD7FA8">6</font><font color="#FCE94F">:</font><font color="#AD7FA8">10</font>],
+                 letters[<font color="#AD7FA8">11</font><font color="#FCE94F">:</font><font color="#AD7FA8">15</font>],
+                 letters[<font color="#AD7FA8">16</font><font color="#FCE94F">:</font><font color="#AD7FA8">20</font>],
+                 letters[<font color="#AD7FA8">21</font><font color="#FCE94F">:</font><font color="#AD7FA8">25</font>] ]
+    <font color="#FCE94F">return</font> <font color="#87FFAF">Char</font>.(transpose(codepoint.(reduce(hcat,board_vv))))
+                    <font color="#34E2E2"># transpose(reduce(hcat,board_vv))  does not work!</font>
+<font color="#FCE94F">end</font>
+</pre>
+
+</div>
+
+<h5>Review of (1)</h5>
+<p>Slicing is a good stuff!</p>
+
+
+<h5>(2) in Perl</h5>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>preprocess </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$word</b></font> = <font color="#FCE94F">uc</font> <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#34E2E2"><b>$word</b></font> =~ <font color="#FCE94F">s/</font><font color="#FFD7D7">\W</font><font color="#FCE94F">//g</font>;
+    <font color="#34E2E2"><b>$word</b></font> =~ <font color="#FCE94F">tr/</font><font color="#AD7FA8">J</font><font color="#FCE94F">/</font><font color="#AD7FA8">I</font><font color="#FCE94F">/</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$pword</b></font>;  <font color="#34E2E2"># BEGIN: insert X for repeating char</font>
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$pword</b></font> = <font color="#34E2E2"><b>$word</b></font>;
+        <font color="#34E2E2"><b>$word</b></font> =~ <font color="#FCE94F">s/</font><font color="#FFD7D7">([A-Z])\1</font><font color="#FCE94F">/</font><font color="#34E2E2"><b>${</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>}</b></font><font color="#AD7FA8">X</font><font color="#34E2E2"><b>${</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>}</b></font><font color="#FCE94F">/</font>;
+    } <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$pword</b></font> <font color="#FCE94F">ne</font> <font color="#34E2E2"><b>$word</b></font>);  <font color="#34E2E2"># END of insertion</font>
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$word</b></font>;
+}
+
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>pairup </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$word</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#34E2E2"><b>$word</b></font> = <font color="#34E2E2"><b>$word</b></font>.<font color="#AD7FA8">&quot;X&quot;</font> <font color="#FCE94F">if</font> (<font color="#FCE94F">length</font> <font color="#34E2E2"><b>$word</b></font>) % <font color="#AD7FA8">2</font> == <font color="#AD7FA8">1</font>;
+    <font color="#FCE94F">return</font> [pairmap {<font color="#34E2E2"><b>$a</b></font>.<font color="#34E2E2"><b>$b</b></font>} <font color="#FCE94F">split</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>$word</b></font>];
+}
+</pre>
+</div>
+
+<h5>(2) in Julia</h5>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">function</font> <font color="#34E2E2"><b>preprocess</b></font>(word)
+    word <font color="#FCE94F">=</font> replace(uppercase(word), <font color="#AD7FA8">&quot; &quot;</font> <font color="#FCE94F">=&gt;</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#AD7FA8">&quot;J&quot;</font> <font color="#FCE94F">=&gt;</font> <font color="#AD7FA8">&quot;I&quot;</font>)
+    word_a <font color="#FCE94F">=</font> split(word, <font color="#AD7FA8">&quot;&quot;</font>)
+    new_word_a <font color="#FCE94F">=</font> []
+    <font color="#FCE94F">for</font> i <font color="#FCE94F">in</font> <font color="#AD7FA8">1</font><font color="#FCE94F">:</font>(length(word_a)<font color="#FCE94F">-</font><font color="#AD7FA8">1</font>)
+        push!(new_word_a, word_a[i])
+        <font color="#FCE94F">if</font> word_a[i] <font color="#FCE94F">==</font> word_a[i<font color="#FCE94F">+</font><font color="#AD7FA8">1</font>]
+            push!(new_word_a, <font color="#AD7FA8">&quot;X&quot;</font>)
+        <font color="#FCE94F">end</font>
+    <font color="#FCE94F">end</font>
+    new_word <font color="#FCE94F">=</font> join(new_word_a,<font color="#AD7FA8">&quot;&quot;</font>)<font color="#FCE94F">*</font>word_a[<font color="#AD7FA8">end</font>]
+    <font color="#FCE94F">return</font> new_word
+<font color="#FCE94F">end</font>
+
+
+<font color="#FCE94F">function</font> <font color="#34E2E2"><b>pairup</b></font>(word)
+    <font color="#FCE94F">if</font> length(word) <font color="#FCE94F">%</font> <font color="#AD7FA8">2</font> <font color="#FCE94F">==</font> <font color="#AD7FA8">1</font>
+        word <font color="#FCE94F">*=</font> <font color="#AD7FA8">&quot;X&quot;</font>
+    <font color="#FCE94F">end</font>
+    word_h <font color="#FCE94F">=</font> []
+    word_t <font color="#FCE94F">=</font> []
+    flip <font color="#FCE94F">=</font> <font color="#AD7FA8">true</font>
+    <font color="#FCE94F">for</font> c <font color="#FCE94F">in</font> word
+        <font color="#FCE94F">if</font> flip
+            push!(word_h, c)
+        <font color="#FCE94F">else</font>
+            push!(word_t, c)
+        <font color="#FCE94F">end</font>
+        flip <font color="#FCE94F">=</font> <font color="#FCE94F">!</font>flip
+    <font color="#FCE94F">end</font>
+    <font color="#FCE94F">return</font> zip(word_h, word_t)
+<font color="#FCE94F">end</font>
+</pre>
+
+</div>
+
+<h5>Review of (2)</h5>
+<p>I am sad that I hasn't been good at regular expression. Loop contructs (do-while loop in Perl, for-loop in Julia) are used to insert the seperator "<tt>X</tt>".</p>
+
+
+
+
+<h5>(3)-(4) in Perl</h5>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>codify </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$board</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@wordpairs</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;@*</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@en_wordpairs</b></font>;
+    <font color="#FCE94F">for</font> (<font color="#34E2E2"><b>@wordpairs</b></font>) {
+        <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$e</b></font>, <font color="#34E2E2"><b>$f</b></font>) = <font color="#FCE94F">split</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>$_</b></font>;
+        <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$x1</b></font>,<font color="#34E2E2"><b>$y1</b></font>) = seek_xy(<font color="#34E2E2"><b>$board</b></font>, <font color="#34E2E2"><b>$e</b></font>);
+        <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$x2</b></font>,<font color="#34E2E2"><b>$y2</b></font>) = seek_xy(<font color="#34E2E2"><b>$board</b></font>, <font color="#34E2E2"><b>$f</b></font>);
+        <font color="#34E2E2"># case: lay on same column</font>
+        <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$x1</b></font> == <font color="#34E2E2"><b>$x2</b></font>) {
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@en_wordpairs</b></font>,
+                <font color="#34E2E2"><b>$board-&gt;[$x1][</b></font>(<font color="#34E2E2"><b>$y1</b></font>+<font color="#AD7FA8">1</font>)%<font color="#AD7FA8">5</font><font color="#34E2E2"><b>]</b></font>.<font color="#34E2E2"><b>$board-&gt;[$x1][</b></font>(<font color="#34E2E2"><b>$y2</b></font>+<font color="#AD7FA8">1</font>)%<font color="#AD7FA8">5</font><font color="#34E2E2"><b>]</b></font>;
+            <font color="#FCE94F">next</font>;
+        }
+        <font color="#34E2E2"># case: lay on same row</font>
+        <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$y1</b></font> == <font color="#34E2E2"><b>$y2</b></font>) {
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@en_wordpairs</b></font>,
+                <font color="#34E2E2"><b>$board-&gt;[</b></font>(<font color="#34E2E2"><b>$x1</b></font>+<font color="#AD7FA8">1</font>)%<font color="#AD7FA8">5</font><font color="#34E2E2"><b>][$y1]</b></font>.<font color="#34E2E2"><b>$board-&gt;[</b></font>(<font color="#34E2E2"><b>$x2</b></font>+<font color="#AD7FA8">1</font>)%<font color="#AD7FA8">5</font><font color="#34E2E2"><b>][$y2]</b></font>;
+            <font color="#FCE94F">next</font>;
+        }
+        <font color="#34E2E2"># case: form a rectangle</font>
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@en_wordpairs</b></font>, <font color="#34E2E2"><b>$board-&gt;[$x1][$y2]</b></font>.<font color="#34E2E2"><b>$board-&gt;[$x2][$y1]</b></font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>@en_wordpairs</b></font>;
+</pre>
+
+</div>
+
+
+<h5>(3)-(4) in Julia</h5>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">function</font> <font color="#34E2E2"><b>codify</b></font>(key, word)
+    board <font color="#FCE94F">=</font> playfair_board(key)
+    zipped_words <font color="#FCE94F">=</font> pairup(preprocess(word))
+    encrypted_v <font color="#FCE94F">=</font> []
+    <font color="#FCE94F">for</font> p <font color="#FCE94F">in</font> collect(zipped_words)
+        (x1, y1) <font color="#FCE94F">=</font> <font color="#87FFAF">Tuple</font>(findfirst(c<font color="#FCE94F">-&gt;</font>c<font color="#FCE94F">==</font>first(p), board))
+        (x2, y2) <font color="#FCE94F">=</font> <font color="#87FFAF">Tuple</font>(findfirst(c<font color="#FCE94F">-&gt;</font>c<font color="#FCE94F">==</font> last(p), board))
+        <font color="#FCE94F">if</font> x1 <font color="#FCE94F">==</font> x2
+            push!(encrypted_v, board[x1, <font color="#AD7FA8">1</font><font color="#FCE94F">+</font>y1<font color="#FCE94F">%</font><font color="#AD7FA8">5</font>] <font color="#FCE94F">*</font> board[x2, <font color="#AD7FA8">1</font><font color="#FCE94F">+</font>y2<font color="#FCE94F">%</font><font color="#AD7FA8">5</font>])
+            <font color="#FCE94F">continue</font>
+        <font color="#FCE94F">end</font>
+        <font color="#FCE94F">if</font> y1 <font color="#FCE94F">==</font> y2
+            push!(encrypted_v, board[<font color="#AD7FA8">1</font><font color="#FCE94F">+</font>x1<font color="#FCE94F">%</font><font color="#AD7FA8">5</font>, y1] <font color="#FCE94F">*</font> board[<font color="#AD7FA8">1</font><font color="#FCE94F">+</font>x2<font color="#FCE94F">%</font><font color="#AD7FA8">5</font>, y2])
+            <font color="#FCE94F">continue</font>
+        <font color="#FCE94F">end</font>
+        push!(encrypted_v, board[x1,y2] <font color="#FCE94F">*</font> board[x2,y1])
+    <font color="#FCE94F">end</font>
+
+    <font color="#FCE94F">return</font> join(encrypted_v, <font color="#AD7FA8">&quot;&quot;</font>)
+<font color="#FCE94F">end</font>
+</pre>
+
+</div>
+
+<h5>... Task 2</h5>
+<p>I have done the decryption in Perl but not in Julia, because of the lack of time (personal issues next week). Probably I'm going to code it later this week or next week. And, perhaps I should refactor more on the script as the later part of the subroutine <tt>decode</tt> is so similar to the subroutine <tt>codify</tt>.</p>
+
+<h5>decryption in Perl</h5>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>decrypt </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$key</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$encoded</b></font> = <font color="#FCE94F">uc</font> <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#34E2E2"><b>$encoded</b></font> =~ <font color="#FCE94F">s/</font><font color="#FFD7D7">\W</font><font color="#FCE94F">//g</font>;
+    <font color="#34E2E2"><b>$encoded</b></font> =~ <font color="#FCE94F">s/</font><font color="#AD7FA8">J</font><font color="#FCE94F">/</font><font color="#AD7FA8">I</font><font color="#FCE94F">/g</font>;
+    <font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;Bad cryptotext (non-alphabet characters).</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>
+        <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$encoded</b></font> !~ <font color="#FCE94F">/</font><font color="#AD7FA8">^</font><font color="#FFD7D7">[A-Z]+</font><font color="#AD7FA8">$</font><font color="#FCE94F">/</font>;
+    <font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;Bad cryptotext (odd number of characters). </font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>
+        <font color="#FCE94F">if</font> (<font color="#FCE94F">length</font> <font color="#34E2E2"><b>$encoded</b></font>) % <font color="#AD7FA8">2</font> != <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$board</b></font> = playfair_board(<font color="#34E2E2"><b>$key</b></font>);
+    <font color="#FCE94F">return</font> decode(<font color="#34E2E2"><b>$board</b></font>, <font color="#34E2E2"><b>$encoded</b></font>);
+}
+</pre>
+<br>
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>decode </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$board</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$encoded</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@wordpairs</b></font> = pairmap {<font color="#34E2E2"><b>$a</b></font>.<font color="#34E2E2"><b>$b</b></font>} <font color="#FCE94F">split</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>$encoded</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@de_wordpairs</b></font>;
+    <font color="#FCE94F">for</font> (<font color="#34E2E2"><b>@wordpairs</b></font>) {
+        <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$e</b></font>, <font color="#34E2E2"><b>$f</b></font>) = <font color="#FCE94F">split</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>$_</b></font>;
+        <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$x1</b></font>,<font color="#34E2E2"><b>$y1</b></font>) = seek_xy(<font color="#34E2E2"><b>$board</b></font>, <font color="#34E2E2"><b>$e</b></font>);
+        <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$x2</b></font>,<font color="#34E2E2"><b>$y2</b></font>) = seek_xy(<font color="#34E2E2"><b>$board</b></font>, <font color="#34E2E2"><b>$f</b></font>);
+        <font color="#34E2E2"># case: lay on same column</font>
+        <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$x1</b></font> == <font color="#34E2E2"><b>$x2</b></font>) {
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@de_wordpairs</b></font>,
+                <font color="#34E2E2"><b>$board-&gt;[$x1][</b></font>(<font color="#34E2E2"><b>$y1</b></font>+<font color="#AD7FA8">4</font>)%<font color="#AD7FA8">5</font><font color="#34E2E2"><b>]</b></font>.<font color="#34E2E2"><b>$board-&gt;[$x1][</b></font>(<font color="#34E2E2"><b>$y2</b></font>+<font color="#AD7FA8">4</font>)%<font color="#AD7FA8">5</font><font color="#34E2E2"><b>]</b></font>;
+            <font color="#FCE94F">next</font>;
+        }
+        <font color="#34E2E2"># case: lay on same row</font>
+        <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$y1</b></font> == <font color="#34E2E2"><b>$y2</b></font>) {
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@de_wordpairs</b></font>,
+                <font color="#34E2E2"><b>$board-&gt;[</b></font>(<font color="#34E2E2"><b>$x1</b></font>+<font color="#AD7FA8">4</font>)%<font color="#AD7FA8">5</font><font color="#34E2E2"><b>][$y1]</b></font>.<font color="#34E2E2"><b>$board-&gt;[</b></font>(<font color="#34E2E2"><b>$x2</b></font>+<font color="#AD7FA8">4</font>)%<font color="#AD7FA8">5</font><font color="#34E2E2"><b>][$y2]</b></font>;
+            <font color="#FCE94F">next</font>;
+        }
+        <font color="#34E2E2"># case: form a rectangle</font>
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@de_wordpairs</b></font>, <font color="#34E2E2"><b>$board-&gt;[$x1][$y2]</b></font>.<font color="#34E2E2"><b>$board-&gt;[$x2][$y1]</b></font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>@de_wordpairs</b></font>;
+}
+</pre>
+</div>
+
+
+<hr>
+
+<p>Thanks for reading. </p><p>Believe me or not, sometimes colouring is enough for expressions. □</p>
 
 <hr>
 
@@ -89,6 +369,7 @@ in Week #162</a> !</i></b></p>
 <p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
 <p>Email: fungcheokyin at gmail.com</p>
 <p>Created Date: 1st May, 2022.</p>
+<p>Last Edited: 1st May, 2022. 16:25 HKT.</p>
 
 </div>
 
