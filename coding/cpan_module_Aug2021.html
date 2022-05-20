@@ -125,6 +125,24 @@ And I converted the format of (3) into POD format, and checked the content. A he
 
 <p>Also edit the <tt>Makefile.PL</tt>,<tt>MANIFEST</tt> and <tt>README</tt>.</p>
 
+<h4 style="color:red">Dependencies</h4>
+
+In <tt>Makefile.PL</tt>...
+
+<h4 style="color:green">GitHub Repository</h4>
+
+In <tt>Makefile.PL</tt>...
+
+<h4 style="color:red">Versions</h4>
+
+<pre>
+$ perl -E 'use CPAN::Version; say CPAN::Version-&gt;vcmp("0.4.1" , "0.4");'
+-1
+$ perl -E 'use CPAN::Version; say CPAN::Version-&gt;vcmp("0.4.1" , "0.4.01");'
+0
+</pre>
+
+
 <h4> Packaging </h4>
 
 <div style="color:white; background-color:black; padding-left: 5px; font-family:monospace">
