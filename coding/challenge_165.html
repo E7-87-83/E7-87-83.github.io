@@ -55,15 +55,20 @@ in Week #165</a> !</i></b></p>
 
 <hr>
 
-<p>Three things related to computing impact my recent life. (1) I get an IT internship position in a small-size company; I learnt to use Python and Selenium for web scraping &dash; a task I think it is really fun; I also need to update the company website, which is made in PHP... !? Alternatively, I could say it is made in WordPress because I discovered the plugins and themes in WordPress is so huge so that WordPress has its own "ecosystem", and some of plugins are even commercialized (and popped as ads while I am watching YouTube)! One more thing: my position requires familiarity to NoCode platforms. It is interesting to investigate on this.</p>
+<div class="">
+    <p>Three things related to computing has impacted my recent life. (1) I have got an IT internship position in a small-size company; I have learnt to use Python and Selenium for web scraping &dash; a task I think it is really fun; I also need to update the company website, which is "made in PHP"... !? Alternatively, I could say it is "made in WordPress" because I discovered the plugins and themes in WordPress is so huge so that WordPress has its own "ecosystem", and some of plugins are even commercialized (and popped as ads while I was watching YouTubevideos)! One more thing: my position requires familiarity to <a title="Wikipedia: NoCode" href="https://en.wikipedia.org/wiki/No-code_development_platform">NoCode</a> platforms. It is interesting to investigate on this.</p>
 
-<p>(2) New school term starts. This term we don't have programming-focused class, so I lost my relatively edge, ooops. The classes are: Business Intelligence (BI), eCommerce and computer network (very elementary, the instructor said it is not over 1/4 of CCNA). All three classes have widened my horizon. I found there are not many open-source BI tools, and PowerBI (from Microsoft) and Tableau (owned by Salesforce) are really powerful. Perhaps it will change how people do presentations or have internal business meetings. For the open-source stuff, I have briefly tried <a href="Metabase.com/">Metabase</a>. Lacking an import system from CSV or spreedsheet format, it has a room for catching up.</p>
+<p>(2) New school term starts. This term we don't have programming-focused class, so I have lost my relatively edge, ooops. The classes are: Business Intelligence (BI), eCommerce and computer network (very elementary, the instructor said it is not over 1/4 of CCNA). All three classes have widened my horizon. I found there are not many open-source BI tools, and PowerBI (from Microsoft) and Tableau (owned by Salesforce) are really powerful. Perhaps it will change how people do presentations or have internal business meetings.
+For the open-source counterparts, I have briefly tried <a href="https://www.metabase.com/">Metabase</a> (coded in Clojure and JavaScript, according to its GitHub site). Lacking an import system from CSV or spreedsheet format, it has a room for catching up.</p>
 
-<p>(3) After the <a href="https://hongkongfp.com/2022/05/04/in-pictures-hong-kongs-east-rail-line-cross-harbour-mtr-link-to-open-may-15-with-new-exhibition-centre-station/">Exhibition Centre Station</a> opens, I finally took the courage to upload the <a href="https://metacpan.org/pod/Map::Tube::Hongkong">Map::Tube::Hongkong</a>. Actually the main task I have done was just put the local MTR map into the XML format. I have just edited the CPAN module and released 0.04.1 this morning. There are many details in uploading a CPAN module. </p>
+<p>(3) After the <a href="https://hongkongfp.com/2022/05/04/in-pictures-hong-kongs-east-rail-line-cross-harbour-mtr-link-to-open-may-15-with-new-exhibition-centre-station/" title="News Article from Hong Kong Free Press">Exhibition Centre Station</a> opens, I finally took the courage to upload the <a href="https://metacpan.org/release/CYFUNG/Map-Tube-Hongkong-0.04.1/view/lib/Map/Tube/Hongkong.pm">Map::Tube::Hongkong</a>. Actually the main task I have done was just put the local MTR map into the XML format. I have just edited the CPAN module and released 0.04.1 this morning. There are many details in uploading a CPAN module.
+(One of those things I am surprised by / handled incorrectly is that <i>version</i><tt>0.4.1</tt> is "smaller" than <i>version</i><tt>0.3</tt> or <i>version</i><tt>0.2</tt> on the CPAN display. See also <a href="https://metacpan.org/pod/CPAN::Version">CPAN::Version</a>.) </p>
 
-<p>I have a lot want to say. Like... after <a href="https://theweeklychallenge.org/blog/meet-the-champion-2022-03">Eric was announced as the Champion</a> in April, I recalled that I brutely expressed interests in <a href="https://github.com/E7-87-83/Games-Cards-Bridge">writing CPAN modules for Contact Bridge</a>, in the "Meet The (Monthly) Champion" section of TWC. But , sometimes promises*, like the contracts during Bridge play, cannot be made [on-time].</p>
+<p>I have a lot want to say. Like... after <a title="Meet the Champion Interview" href="https://theweeklychallenge.org/blog/meet-the-champion-2022-03">Eric was announced as the Champion</a> in April, I recalled that I brutely expressed interests in <a title="my unfinished GitHub project site on Bridge CPAN module" href="https://github.com/E7-87-83/Games-Cards-Bridge">writing CPAN modules for Contact Bridge</a>, in the "Meet The (Monthly) Champion" section of TWC. But , sometimes promises*, like the contracts during Bridge play, cannot be made [on-time].</p>
 
 <p><small>* Maybe this word is too serious.</small></p>
+
+</div>
 
 <h4>Task 1: Scalable Vector Graphics (SVG)</h4>
 
@@ -88,6 +93,13 @@ new_point(<font color="#34E2E2"><b>$_-&gt;@*</b></font>) <font color="#FCE94F">f
 </div>
 
 <p>This week I also made use of the CPAN module <a href="https://metacpan.org/pod/ARGV::OrDATA">ARGV::OrDATA</a> by teammate Mr Choroba, so the testing can be shown more easily.</p>
+
+<center>
+<div style="float:none; border: 1px dotted black; font-size:x-small; width:40%">
+<img alt="" src="../docs/assets/wk165_task_one.png" width="100%"/>
+<p><small>a random plot</small></p>
+</div>
+</center>
 
 <h4>Task 2: Line of Best Fit</h4>
 
@@ -136,9 +148,9 @@ new_point(<font color="#34E2E2"><b>$_-&gt;@*</b></font>) <font color="#FCE94F">f
 </div>
 
 
-<p>After finishing the tasks I recalled Julia. Julia is famous for scientific application and least square fit is a basic tool in statistics. After some search I encountered this blogpost: 
-<a href="https://jahoo.github.io/2021/01/11/simplest_linear_regression_example.html">"Simplest least-squares in Julia"</a>, by Jacob Louis Hoover (11 Jan 2021).
-I have followed it step-by-step except the operator <tt>\</tt> does not work magically in the current version of Julia. Anyway we can touch more mathematics looking at the task via the lens of matrix operations.
+<p>After finishing the tasks I recalled Julia. Julia is famous for scientific applications and the least square fit is a basic tool in statistics. After some search I encountered this blogpost: 
+<a href="https://jahoo.github.io/2021/01/11/simplest_linear_regression_example.html">"Simplest least-squares in Julia"</a>, by Jacob Louis Hoover (11th Jan 2021).
+I have followed it step-by-step except the operator "<tt>\</tt>" does not work magically in the current version of Julia. Anyway we can touch more mathematics looking at the task via <a href="https://en.wikipedia.org/wiki/Ordinary_least_squares#Matrix/vector_formulation" title="Wikipedia: Ordinary Least Squares">the lens of matrix operations</a> (See also <a title="Wikipedia: Moore-Penrose pseudoinverse"  href="https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse">Moore-Penrose pseudoinverse</a>.)
 </p>
 
 <center>
@@ -147,19 +159,21 @@ I have followed it step-by-step except the operator <tt>\</tt> does not work mag
 </div>
 </center>
 
-<p>The image by Julia is different from that by SVG module! Calm down and look patiently, the Plots in Julia counts the y-coordinates from bottom to top, while the SVG module interpreted them from top to bottom. It would be more obvious if we emphasize to the Julia interpreter to plot the graph with x-y ratio equal to 1:</p>
+<p>The image by Julia is different from that by the Task 2 Perl code and SVG module!
+Calm down and look patiently: the <tt>Plots</tt> in Julia counts the y-coordinates from bottom to top, while the SVG module interpreted them from top to bottom. It would be more obvious if we emphasize to the Julia interpreter to plot the graph with x-y ratio equal to 1:</p>
 
 <div class="code_vim_hl">
 <pre>plot!(
     x <font color="#FCE94F">-&gt;</font> slope<font color="#FCE94F">*</font>x <font color="#FCE94F">+</font> intercept,
     legend <font color="#FCE94F">=</font> <font color="#34E2E2"><b>:none</b></font>,
-    ratio = 1,  #optional
+    ratio = 1,               <font color="#34E2E2">#optional</font>
 )
 </pre>
 </div>
 
 <div style="float:right; border: 1px dotted black; font-size:x-small; width:25%">
-<img alt="" src="../docs/assets/wk165_new_julia_ratio_eq_1.png" width="100%"/>
+<img alt="" src="../docs/assets/wk165_new.png" width="100%" /><br>
+<img alt="" src="../docs/assets/wk165_new_julia_ratio_eq_1.png" width="100%" />
 </div>
 
 <p>Stay alert and healthy! □</p>
