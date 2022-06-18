@@ -120,7 +120,7 @@ in Week #169</a> !</i></b></p>
 </pre>
 </div>
 
-<p>However, we may miss out a few "brilliant products" made up of very small two-digit primes and larger two-digit primes. My original choice of <font color="red">$pt</font> is <span style="background-color:#FF3333"><tt>ceil( ( sqrt(8*$req-79) +7 )/2 ) - 1</tt></span>, coming from <span style="background-color:#FF3333"><tt>10 + ($pt-4)*($pt-5)/2+$pt-4 >= $req</tt></span>. Though I did 13 testings on <tt>$req = 20, 40, 60, ..., 240</tt> and <tt>$req = 241</tt>, I could not convince myself rigorously, and the approach did not seem to be extensible to cases three(or more)-digit primes. Hence I submitted the following solution:</p>
+<p>However, we may miss out a few "brilliant products" made up of very small two-digit primes and larger two-digit primes. My original choice of <font color="red">$pt</font> is <span style="background-color:#FF3333"><tt>ceil( ( sqrt(8*$req-79) +7 )/2 ) - 1</tt></span>, coming from <span style="background-color:#FF3333"><tt>10 + ($pt-4)*($pt-5)/2+$pt-4 &gt;= $req</tt></span>. Though I did 13 testings on <tt>$req = 20, 40, 60, ..., 240</tt> and <tt>$req = 241</tt>, I could not convince myself rigorously, and the approach did not seem to be extensible to cases three(or more)-digit primes. Hence I submitted the following solution:</p>
 
 
 <div class="code_vim_hl">
@@ -145,7 +145,7 @@ in Week #169</a> !</i></b></p>
         <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$product</b></font> = <font color="#34E2E2"><b>$prime[$i]</b></font>*<font color="#34E2E2"><b>$prime[$j]</b></font>;
         <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@temp</b></font>, <font color="#34E2E2"><b>$product</b></font>;
         <font color="white"># It would be great if I could find something like
-        # last if $product > a_constant + $a_numeric_reference;</font>
+        # last if $product &gt; a_constant + $a_numeric_reference;</font>
     }
 }
 
@@ -169,7 +169,7 @@ in Week #169</a> !</i></b></p>
 
 <p>I did not investigate deeply and have just followed the mathemational definition to check out the required number of Achilles numbers.</p>
 
-<p><tt>-1+72*($prime[-1]+2</tt> on the first line of the outermost for-loop is a bold stroke; originally I set the upper bound to <tt>100_000</tt> and set the terminate condition as <tt>$req > 21</tt>.</p>
+<p><tt>-1+72*($prime[-1]+2</tt> on the first line of the outermost for-loop is a bold stroke; originally I set the upper bound to <tt>100_000</tt> and set the terminate condition as <tt>$req &gt; 21</tt>.</p>
 
 <h5>A short note:</h5>
 
@@ -180,7 +180,7 @@ in Week #169</a> !</i></b></p>
 <p> Preload a reasonable size of list of prime numbers from 2. The script checks the positive integers one by one. 
 Firstly it checks whether the integer is "powerful" (from the task statement: "...for every prime factor p of n, p^2 is also a divisor."),
 then it collects the indices of the prime factors in the prime factorization formula of the integer.
-Finally it checks whether the integer is "imperfect", i.e. the indices have a common factor larger than 1. 
+Finally it checks whether the integer is "imperfect", i.e. the indices do NOT have a common factor larger than 1. 
 </p>
 
 <p>"Short-circuits" to a next number, when a hint that the current integer is not an Achilles number, disperse throughout the code lines.</p>
