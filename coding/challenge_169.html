@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #169">
+  <meta name="keywords" content="Perl, recreational number theory">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+  <style>
+    body {background-color:#1E90FF}
+    div.bar li {background-color:yellow}  
+  </style>
+
+  <title>CY's Take on The Weekly Challenge #169 </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+
+
+  <div style="float:right; border: 1px dotted black; font-size:x-small;"> 
+  <img alt="" src="../docs/wiki_img/Hex_cross_section.png" style="float:right;" width="100px" />
+  </div>
+
+
+  <h2>CY's Take on The Weekly Challenge #169 &dash; Number Theoretic Quiz</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-169/" title="The Weekly Challenge #169">challenges
+in Week #169</a> !</i></b></p>
+
+<p>Both tasks of this week ask for the first 20 terms of a certain integer sequence; I ran an extra mile to make it suitable for some larger values. However my running performance has been so-so.</p>
+
+<hr>
+
+
+<h4>Task 1: Brilliant Numbers</h4>
+
+<p>Originally I wanted to seek a prime <i>p</i> so that the number of the "brilliant products" of all two-digits primes smaller than or equal to <i>p</i> are larger than the required number. </p>
+
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$req</b></font> = <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> || <font color="#AD7FA8">20</font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@prime</b></font> = (<font color="#AD7FA8">2</font>, <font color="#AD7FA8">3</font>, <font color="#AD7FA8">5</font>, <font color="#AD7FA8">7</font>, <font color="#AD7FA8">11</font>, <font color="#AD7FA8">13</font>, <font color="#AD7FA8">17</font>, <font color="#AD7FA8">19</font>, <font color="#AD7FA8">23</font>, <font color="#AD7FA8">29</font>, <font color="#AD7FA8">31</font>, <font color="#AD7FA8">37</font>,
+             <font color="#AD7FA8">41</font>, <font color="#AD7FA8">43</font>, <font color="#AD7FA8">47</font>, <font color="#AD7FA8">53</font>, <font color="#AD7FA8">59</font>, <font color="#AD7FA8">61</font>, <font color="#AD7FA8">67</font>, <font color="#AD7FA8">71</font>, <font color="#AD7FA8">73</font>, <font color="#AD7FA8">79</font>, <font color="#AD7FA8">83</font>, <font color="#AD7FA8">89</font>, <font color="#AD7FA8">97</font>);
+
+<font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;At least 20</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$req</b></font> &lt; <font color="#AD7FA8">20</font>;
+<font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;You&apos;re asking too many, or I am too little!</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>
+    <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$req</b></font> &gt; <font color="#AD7FA8">21</font>*<font color="#AD7FA8">10</font>+<font color="#AD7FA8">21</font>+<font color="#AD7FA8">2</font>*<font color="#AD7FA8">3</font>+<font color="#AD7FA8">4</font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$pt</b></font> = <span style="background-color:red"><font color="white">WHAT IT SHOULD BE</font></span> ;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@brilliant</b></font> = (-<font color="#AD7FA8">1</font>, <font color="#AD7FA8">4</font>, <font color="#AD7FA8">6</font>, <font color="#AD7FA8">9</font>, <font color="#AD7FA8">10</font>, <font color="#AD7FA8">14</font>, <font color="#AD7FA8">15</font>, <font color="#AD7FA8">21</font>, <font color="#AD7FA8">25</font>, <font color="#AD7FA8">35</font>, <font color="#AD7FA8">49</font>);
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@temp</b></font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$reference</b></font> = <font color="#34E2E2"><b>$prime[$pt]</b></font>*<font color="#34E2E2"><b>$prime[$pt]</b></font>;
+
+<font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">4.</font>.<font color="#34E2E2"><b>$pt</b></font>) {
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$j</b></font> (<font color="#34E2E2"><b>$i</b></font>.<font color="#AD7FA8">.24</font>) {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$product</b></font> = <font color="#34E2E2"><b>$prime[$i]</b></font>*<font color="#34E2E2"><b>$prime[$j]</b></font>;
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@temp</b></font>, <font color="#34E2E2"><b>$product</b></font>;
+        <span style="background-color:red"><font color="#FCE94F">last</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$product</b></font> &gt; <font color="white">2000</font>+<font color="#34E2E2"><b>$reference</b></font>;</span>
+        <span style="background-color:red"><font color="#34E2E2"># Should the above conditional changes to something else?</font></span>
+    }
+}
+
+<font color="#FCE94F">push</font> <font color="#34E2E2"><b>@brilliant</b></font>, <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@temp</b></font>;
+
+<font color="#FCE94F">say</font> <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;, &quot;</font>, <font color="#34E2E2"><b>@brilliant[</b></font><font color="#AD7FA8">1.</font>.<font color="#34E2E2"><b>$req]</b></font>;
+
+<font color="#FCE94F">eval</font> {
+    <font color="#FCE94F">use </font>Test::More <font color="#AD7FA8">tests</font>=&gt; <font color="#AD7FA8">13</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">20</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">299</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">40</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">583</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">60</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">841</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">80</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">1079</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">100</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">1369</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">120</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">1763</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">140</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">2231</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">160</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">2809</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">180</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">3481</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">200</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">4331</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">220</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">5609</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">240</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">8633</font>;
+    ok <font color="#34E2E2"><b>$brilliant[</b></font><font color="#AD7FA8">241</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">9409</font>;
+
+    # data from <a href="https://oeis.org/A078972">OEIS:A078972</a>
+}
+
+</pre>
+</div>
+
+<p>However, we may miss out a few "brilliant products" made up of very small two-digit primes and larger two-digit primes. My original choice of <font color="red">$pt</font> is <span style="background-color:#FF3333"><tt>ceil( ( sqrt(8*$req-79) +7 )/2 ) - 1</tt></span>, coming from <span style="background-color:#FF3333"><tt>10 + ($pt-4)*($pt-5)/2+$pt-4 >= $req</tt></span>. Though I did 13 testings on <tt>$req = 20, 40, 60, ..., 240</tt> and <tt>$req = 241</tt>, I could not convince myself rigorously, and the approach did not seem to be extensible to cases three(or more)-digit primes. Hence I submitted the following solution:</p>
+
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$req</b></font> = <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> || <font color="#AD7FA8">20</font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@prime</b></font> = (<font color="#AD7FA8">2</font>, <font color="#AD7FA8">3</font>, <font color="#AD7FA8">5</font>, <font color="#AD7FA8">7</font>, <font color="#AD7FA8">11</font>, <font color="#AD7FA8">13</font>, <font color="#AD7FA8">17</font>, <font color="#AD7FA8">19</font>, <font color="#AD7FA8">23</font>, <font color="#AD7FA8">29</font>, <font color="#AD7FA8">31</font>, <font color="#AD7FA8">37</font>,
+             <font color="#AD7FA8">41</font>, <font color="#AD7FA8">43</font>, <font color="#AD7FA8">47</font>, <font color="#AD7FA8">53</font>, <font color="#AD7FA8">59</font>, <font color="#AD7FA8">61</font>, <font color="#AD7FA8">67</font>, <font color="#AD7FA8">71</font>, <font color="#AD7FA8">73</font>, <font color="#AD7FA8">79</font>, <font color="#AD7FA8">83</font>, <font color="#AD7FA8">89</font>, <font color="#AD7FA8">97</font>);
+
+<font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;You&apos;re asking too many, or I am too little!</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>
+    <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$req</b></font> &gt; <font color="#AD7FA8">241</font>;  <font color="#34E2E2"># 21*20/2 +  21 + 4*3/2 + 4</font>
+
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$pt</b></font> = <font color="#AD7FA8">24</font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@brilliant</b></font> = (-<font color="#AD7FA8">1</font>, <font color="#AD7FA8">4</font>, <font color="#AD7FA8">6</font>, <font color="#AD7FA8">9</font>, <font color="#AD7FA8">10</font>, <font color="#AD7FA8">14</font>, <font color="#AD7FA8">15</font>, <font color="#AD7FA8">21</font>, <font color="#AD7FA8">25</font>, <font color="#AD7FA8">35</font>, <font color="#AD7FA8">49</font>);
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@temp</b></font>;
+
+
+<font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">4.</font>.<font color="#34E2E2"><b>$pt</b></font>) {
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$j</b></font> (<font color="#34E2E2"><b>$i</b></font>.<font color="#AD7FA8">.24</font>) {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$product</b></font> = <font color="#34E2E2"><b>$prime[$i]</b></font>*<font color="#34E2E2"><b>$prime[$j]</b></font>;
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@temp</b></font>, <font color="#34E2E2"><b>$product</b></font>;
+        <font color="white"># It would be great if I could find something like
+        # last if $product > a_constant + $a_numeric_reference;</font>
+    }
+}
+
+<font color="#FCE94F">push</font> <font color="#34E2E2"><b>@brilliant</b></font>, <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@temp</b></font>;
+
+<font color="#FCE94F">say</font> <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;, &quot;</font>, <font color="#34E2E2"><b>@brilliant[</b></font><font color="#AD7FA8">1.</font>.<font color="#34E2E2"><b>$req]</b></font>;
+</pre>
+</div>
+
+
+<p>Sample Run:</p>
+<div class="console_output">
+<pre>$ ch-1.pl 30
+4, 6, 9, 10, 14, 15, 21, 25, 35, 49, 121, 143, 169, 187, 209, 221, <br>247, 253, 289, <b>299</b>, 319, 323, 341, 361, 377, 391, 403, 407, 437, 451
+</pre>
+</div>
+
+<p>(The <b>20th term</b> is bold.)</p>
+
+<h4>Task 2: Achilles Numbers</h4>
+
+<p>I did not investigate deeply and have just followed the mathemational definition to check out the required number of Achilles numbers.</p>
+
+<p><tt>-1+72*($prime[-1]+2</tt> on the first line of the outermost for-loop is a bold stroke; originally I set the upper bound to <tt>100_000</tt> and set the terminate condition as <tt>$req > 21</tt>.</p>
+
+<h5>A short note:</h5>
+
+<p>Though using <tt>!($dividend % $divisor)</tt> looks cooler than using <tt>($dividend % $divisor == 0)</tt>, I have chosen the latter for readability and maintainability. </p>
+
+<h5>Code logic:</h5>
+
+<p> Preload a reasonable size of list of prime numbers from 2. The script checks the positive integers one by one. 
+Firstly it checks whether the integer is "powerful" (from the task statement: "...for every prime factor p of n, p^2 is also a divisor."),
+then it collects the indices of the prime factors in the prime factorization formula of the integer.
+Finally it checks whether the integer is "imperfect", i.e. the indices have a common factor larger than 1. 
+</p>
+
+<p>"Short-circuits" to a next number, when a hint that the current integer is not an Achilles number, disperse throughout the code lines.</p>
+
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$req</b></font> = <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> || <font color="#AD7FA8">20</font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@prime</b></font> = (<font color="#AD7FA8">2</font>, <font color="#AD7FA8">3</font>, <font color="#AD7FA8">5</font>, <font color="#AD7FA8">7</font>, <font color="#AD7FA8">11</font>, <font color="#AD7FA8">13</font>, <font color="#AD7FA8">17</font>, <font color="#AD7FA8">19</font>, <font color="#AD7FA8">23</font>, <font color="#AD7FA8">29</font>, <font color="#AD7FA8">31</font>, <font color="#AD7FA8">37</font>,
+             <font color="#AD7FA8">41</font>, <font color="#AD7FA8">43</font>, <font color="#AD7FA8">47</font>, <font color="#AD7FA8">53</font>, <font color="#AD7FA8">59</font>, <font color="#AD7FA8">61</font>, <font color="#AD7FA8">67</font>, <font color="#AD7FA8">71</font>, <font color="#AD7FA8">73</font>, <font color="#AD7FA8">79</font>, <font color="#AD7FA8">83</font>, <font color="#AD7FA8">89</font>, <font color="#AD7FA8">97</font>);
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@achilles</b></font> = (-<font color="#AD7FA8">1</font>);
+
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$found</b></font> = <font color="#AD7FA8">0</font>;
+
+<font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">2.</font>.-<font color="#AD7FA8">1</font>+<font color="#AD7FA8">72</font>*(<font color="#34E2E2"><b>$prime[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>+<font color="#AD7FA8">2</font>)) {
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$powerful</b></font> = <font color="#AD7FA8">1</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$imperfect</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@prime_factors</b></font>;
+    <font color="#FCE94F">for</font> (<font color="#34E2E2"><b>@prime</b></font>) {
+        <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$i</b></font> % <font color="#34E2E2"><b>$_</b></font> == <font color="#AD7FA8">0</font>) {
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@prime_factors</b></font>, <font color="#34E2E2"><b>$_</b></font>;
+            <font color="#34E2E2"><b>$powerful</b></font> = <font color="#AD7FA8">0</font> <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$i</b></font> % (<font color="#34E2E2"><b>$_</b></font>*<font color="#34E2E2"><b>$_</b></font>) != <font color="#AD7FA8">0</font>);
+        }
+        <font color="#FCE94F">last</font> <font color="#FCE94F">if</font> !<font color="#34E2E2"><b>$powerful</b></font>;
+    }
+    <font color="#FCE94F">next</font> <font color="#FCE94F">if</font> !<font color="#34E2E2"><b>$powerful</b></font>;
+    <font color="#FCE94F">next</font> <font color="#FCE94F">if</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@prime_factors</b></font> == <font color="#AD7FA8">0</font>;    # a large prime
+    <font color="#FCE94F">next</font> <font color="#FCE94F">if</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@prime_factors</b></font> == <font color="#AD7FA8">1</font>;<br>    # the above: made up of only one prime in @prime and a large prime
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@ppower</b></font>;
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$pf</b></font> (<font color="#34E2E2"><b>@prime_factors</b></font>) {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ind</b></font> = <font color="#AD7FA8">2</font>;
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$pp</b></font> = <font color="#34E2E2"><b>$pf</b></font>*<font color="#34E2E2"><b>$pf</b></font>*<font color="#34E2E2"><b>$pf</b></font>;
+        <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$i</b></font> % <font color="#34E2E2"><b>$pp</b></font> == <font color="#AD7FA8">0</font>) {
+            <font color="#34E2E2"><b>$ind</b></font>++;
+            <font color="#34E2E2"><b>$pp</b></font> = <font color="#34E2E2"><b>$pp</b></font>*<font color="#34E2E2"><b>$pf</b></font>;
+        }
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@ppower</b></font>, <font color="#34E2E2"><b>$ind</b></font>;
+    }
+    <font color="#34E2E2"><b>$imperfect</b></font> = gcd(<font color="#34E2E2"><b>@ppower</b></font>);
+
+    <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$imperfect</b></font> == <font color="#AD7FA8">1</font>) {
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@achilles</b></font>, <font color="#34E2E2"><b>$i</b></font>;
+        <font color="#34E2E2"><b>$found</b></font>++;
+    }
+    <font color="#FCE94F">last</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$found</b></font> == <font color="#34E2E2"><b>$req</b></font>;
+}
+
+<font color="#FCE94F">say</font> <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;, &quot;</font>, <font color="#34E2E2"><b>@achilles[</b></font><font color="#AD7FA8">1.</font>.<font color="#34E2E2"><b>$found]</b></font>;
+
+<font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;</font><font color="#34E2E2"><b>$found</b></font><font color="#AD7FA8"> terms are shown. You&apos;re asking too many, or I am too little!</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>
+    <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$req</b></font> &gt; <font color="#34E2E2"><b>$found</b></font>;
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>gcd </b></font>{
+    <font color="white"># skip details... Euclidean gcd algorithm</font>
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>gcd_pair </b></font>{
+    <font color="white"># skip details... Euclidean gcd algorithm</font>
+}
+</pre>
+</div>
+
+<p>Sample Run:</p>
+<div class="console_output">
+<pre>$ ch-2.pl 30
+72, 108, 200, 288, 392, 432, 500, 648, 675, 800, 864, 968, 972, 1125,<br>1152, 1323, 1352, 1372, 1568, <b>1800</b>, 1944, 2000, 2312, 2592, 2700, 2888,<br>3087, 3200, 3267, 3456
+
+# checked against <a href="https://oeis.org/A052486">OEIS:A052486</a>
+</pre>
+</div>
+
+<p>Stay alert and healthy! □</p>
+
+<hr>
+
+<p><small>The image of hexagonal cross section cut from a cube is a public domain picture <a href="https://commons.wikimedia.org/wiki/File:Hex_cross_section.png">made by CY 16 years ago</a>.</small></p> 
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-169/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>, 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-169/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: 18th June, 2022.</p>
+
+</div>
+
+</body>
+
+</html>
