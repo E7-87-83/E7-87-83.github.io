@@ -64,7 +64,7 @@ in Week #169</a> !</i></b></p>
 
 <h4>Task 1: Brilliant Numbers</h4>
 
-<p>Originally I wanted to seek a prime <i>p</i> so that the number of the "brilliant products" of all two-digits primes smaller than or equal to <i>p</i> are larger than the required number. </p>
+<p>Originally I wanted to seek a prime <i>p</i>, so that the number of the "brilliant products" of all two-digits primes smaller than or equal to <i>p</i>, are smaller than a function (at that moment, it was "square") of <i>p</i> (<tt>$reference</tt>). </p>
 
 
 <div class="code_vim_hl">
@@ -178,7 +178,7 @@ in Week #169</a> !</i></b></p>
 <h5>Code logic:</h5>
 
 <p> Preload a reasonable size of list of prime numbers from 2. The script checks the positive integers one by one. 
-Firstly it checks whether the integer is "powerful" (from the task statement: "...for every prime factor p of n, p^2 is also a divisor."),
+Firstly it checks whether the integer is "powerful" (from the task statement: "...for every prime factor <i>p</i> of <i>n</i>, <i>p</i><sup>2</sup> is also a divisor."),
 then it collects the indices of the prime factors in the prime factorization formula of the integer.
 Finally it checks whether the integer is "imperfect", i.e. the indices do NOT have a common factor larger than 1. 
 </p>
