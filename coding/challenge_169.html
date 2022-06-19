@@ -246,12 +246,12 @@ ok 14
 
 <h5>Lessons Learnt in Program Design</h5>
 
-<p>The <i>Version 1</i> is <a href="https://github.com/manwar/perlweeklychallenge-club/commit/7d950a3a5951c0b758bda834acad9b5eff565122?diff=unified">here</a>. The difference between v1 and v2 is only the for <tt>my $j ($i..XX)</tt>. 
-When I started to code this task, the tricky point for me is NOT to generate all brilliant products of <i>x</i>-digit primes. Then I divided it into two parts to be tackled: (1) find a prime <i>P</i> so that "(almostly-)enough" brilliant products are generated, and then (2) compute the brilliant products of "small enough" <i>x</i>-digit primes and large <i>x</i>-digit primes; combine the result, sort it, and locate the <tt>$req</tt>-th brilliant number.
+<p>The <i>Version 1</i> is <a href="https://github.com/manwar/perlweeklychallenge-club/commit/7d950a3a5951c0b758bda834acad9b5eff565122?diff=unified">here</a>. The difference between v1 and v2 is essentially only the for <tt>my $i (0..XX)</tt>. In v1, it is a constant 24; in v2, the value of <tt>$pt</tt> is determined by the quadratic formula.
+When I started to code this task, the tricky point for me is how NOT to generate all brilliant products of <i>x</i>-digit primes. Then I divided it into two parts to be tackled: (1) find a prime <i>P</i> so that "(almostly-)enough" brilliant products are generated, and then (2) compute the brilliant products of "small enough" <i>x</i>-digit primes and large <i>x</i>-digit primes in order to include some small brilliant numbers from their products; combine the result, sort it, and locate the <tt>$req</tt>-th brilliant number.
 </p>
 
 <p>
-The red part of the code posted made me headache. Though I haven't got a criterion for <tt>last</tt>, the idea of (2) is still valuable. This is the second version of this blogpost as after I read my own blogpost, I cleaned up my mind and realized I should not abandon to reduce the number of computations just because I could not figure out a good <tt>last</tt> statement.
+The red part of the code posted made me headache. Though I haven't got a criterion for <tt>last</tt>, the idea of (2) is still valuable. This is the second version of this blogpost as after I read my own blogpost, I cleaned up my mind and realized I should not abandon to reduce the number of computations just because I could not figure out a good <tt>last</tt> statement. "Don't throw the baby out with the bathwater."
 </p>
 
 <h5>Lessons Learnt in Perl Syntax</h5>
@@ -260,7 +260,7 @@ The red part of the code posted made me headache. Though I haven't got a criteri
 <ul>
 <li>Perl's <tt>given-when</tt>, which is a bit different from <tt>switch</tt> in many other programming languages;</li>
 
-<li><tt>@prime{$digit_len}[$i..$_j]</tt> is invalid... <tt>$prime{$digit_len}->@[$i..$_j]</tt> is valid; </li>
+<li><tt>@prime{$digit_len}[$i..$_j]</tt> is invalid... <tt>$prime{$digit_len}-&gt;@[$i..$_j]</tt> is valid; </li>
 <li><tt>forprimes</tt> in <tt><a href="https://metacpan.org/pod/Math::Prime::Util#forprimes">Math::Prime::Util</a></tt>; usually only using subroutines in modules, I seldom use this kind of contruct (loop construct) from module.</li>
 </ul>
 
@@ -372,7 +372,7 @@ Finally it checks whether the integer is "imperfect", i.e. the indices do NOT ha
 <p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
 <p>Email: fungcheokyin at gmail.com</p>
 <p>Created Date: 18th June, 2022.</p>
-<p>Last Edited Date: 19th June, 2022.</p>
+<p>Last Edited Date Time: 20th June, 2022 AM06:48:23 HKT</p>
 
 </div>
 
