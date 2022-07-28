@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="">
+  <meta name="keywords" content="Perl, CPAN, Data Structures">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+  <style>
+    h3 {text-decoration:underline;}
+    h4 {text-decoration:underline;}
+    p tt {background-color:#666666;}
+    .task_stat {padding-left: 5ex; border: 1px dashed black;}
+    .sor {color:aqua;}
+  </style>
+  <title> The Inside (DRAFT) </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">Perl Modules</h1>
+</div>
+
+
+<div class="main" style="width:95%">
+
+
+  <h2> The Inside &dash; Basic Use of Data::Dumper &amp; Data::Printer for Nested Data Structures (DRAFT) </h2>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;padding: 5px">
+<img alt="" src="../docs/wiki_img/from_j_bizzie.png" style="float:right" />
+<p><a href="right_of_use">image info</a></p></div>
+
+<h4>See Objects via the lens from Pretty Printing (Data::Dumper, Data::Printer)</h4>
+
+<div class="task_stat">
+<p>TWC Week 094 Task: <b>Binary Tree to Linked List</b></p>
+
+<p>You are given a binary tree.</p>
+
+<p>Write a script to represent the given binary tree as an object and flatten it to a linked list object. Finally print the linked list object.</p>
+
+<h5>Example:</h5>
+<pre>
+    Input:
+
+        1
+       / \
+      2   3
+     / \
+    4   5
+       / \
+      6   7
+
+    Output:
+
+        1 -&gt; 2 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7 -&gt; 3
+</pre>
+
+</div>
+
+
+<p><tt>    p <font color="#34E2E2"><b>$node</b></font>;</tt></p>
+
+<div class="code_vim_hl">
+
+<pre><font color="#8AE234"><b>e78783@fcy-mint</b></font>:<font color="#729FCF"><b>~/ing/inside</b></font>$ perl binary_tree_to_linked_list.pl 
+Example
+1 -&gt; 2 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7 -&gt; 3
+<font color="#C792EA">SLL::Node</font>  <font color="#66D9EF">{</font>
+    public methods (7):
+        <font color="#82AAFF">new</font>, <font color="#82AAFF">nextnode</font>, <font color="#82AAFF">print_linked_list</font>, <font color="#82AAFF">set_nextnode</font>, <font color="#82AAFF">value</font>
+        Data::Printer:
+            <font color="#82AAFF">np</font>, <font color="#82AAFF">p</font>
+    private methods (0)
+    internals: <font color="#66D9EF">{</font>
+        <font color="#7986CB">_nextnode</font><font color="#66D9EF"> =&gt; </font><font color="#FF5370">undef</font><font color="#66D9EF">,</font>
+        <font color="#7986CB">_value</font>   <font color="#66D9EF"> =&gt; </font><font color="#F78C6A">3</font>
+    <font color="#66D9EF">}</font>
+<font color="#66D9EF">}</font>
+
+A Test Case
+1 -&gt; 2 -&gt; 4 -&gt; 8 -&gt; 9 -&gt; 5 -&gt; 10 -&gt; 11 -&gt; 3 -&gt; 6 -&gt; 7
+<font color="#C792EA">SLL::Node</font>  <font color="#66D9EF">{</font>
+    public methods (7):
+        <font color="#82AAFF">new</font>, <font color="#82AAFF">nextnode</font>, <font color="#82AAFF">print_linked_list</font>, <font color="#82AAFF">set_nextnode</font>, <font color="#82AAFF">value</font>
+        Data::Printer:
+            <font color="#82AAFF">np</font>, <font color="#82AAFF">p</font>
+    private methods (0)
+    internals: <font color="#66D9EF">{</font>
+        <font color="#7986CB">_nextnode</font><font color="#66D9EF"> =&gt; </font><font color="#FF5370">undef</font><font color="#66D9EF">,</font>
+        <font color="#7986CB">_value</font>   <font color="#66D9EF"> =&gt; </font><font color="#F78C6A">7</font>
+    <font color="#66D9EF">}</font>
+<font color="#66D9EF">}</font>
+</pre>
+
+</div>
+
+
+<p><tt><font color="#FCE94F">print</font> <font color="#34E2E2"><b>Dumper</b></font> <font color="#34E2E2"><b>$treeroot2</b></font>;</tt></p>
+
+<div class="code_vim_hl">
+<pre><font color="#8AE234"><b>e78783@fcy-mint</b></font>:$ perl binary_tree_to_linked_list.pl 
+Example
+1 -&gt; 2 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7 -&gt; 3
+
+A Test Case
+1 -&gt; 2 -&gt; 4 -&gt; 8 -&gt; 9 -&gt; 5 -&gt; 10 -&gt; 11 -&gt; 3 -&gt; 6 -&gt; 7
+$VAR1 = bless( {
+                 &apos;_leftchild&apos; =&gt; \bless( {
+                                            &apos;_leftchild&apos; =&gt; \bless( {
+                                                                       &apos;_rightchild&apos; =&gt; \bless( {
+                                                                                                   &apos;_leftchild&apos; =&gt; undef,
+                                                                                                   &apos;_value&apos; =&gt; 9,
+                                                                                                   &apos;_rightchild&apos; =&gt; undef
+                                                                                                 }, &apos;BinaryTreeNode&apos; ),
+                                                                       &apos;_value&apos; =&gt; 4,
+                                                                       &apos;_leftchild&apos; =&gt; \bless( {
+                                                                                                  &apos;_rightchild&apos; =&gt; undef,
+                                                                                                  &apos;_value&apos; =&gt; 8,
+                                                                                                  &apos;_leftchild&apos; =&gt; undef
+                                                                                                }, &apos;BinaryTreeNode&apos; )
+                                                                     }, &apos;BinaryTreeNode&apos; ),
+                                            &apos;_value&apos; =&gt; 2,
+                                            &apos;_rightchild&apos; =&gt; \bless( {
+                                                                        &apos;_value&apos; =&gt; 5,
+                                                                        &apos;_rightchild&apos; =&gt; \bless( {
+                                                                                                    &apos;_value&apos; =&gt; 11,
+                                                                                                    &apos;_rightchild&apos; =&gt; undef,
+                                                                                                    &apos;_leftchild&apos; =&gt; undef
+                                                                                                  }, &apos;BinaryTreeNode&apos; ),
+                                                                        &apos;_leftchild&apos; =&gt; \bless( {
+                                                                                                   &apos;_rightchild&apos; =&gt; undef,
+                                                                                                   &apos;_value&apos; =&gt; 10,
+                                                                                                   &apos;_leftchild&apos; =&gt; undef
+                                                                                                 }, &apos;BinaryTreeNode&apos; )
+                                                                      }, &apos;BinaryTreeNode&apos; )
+                                          }, &apos;BinaryTreeNode&apos; ),
+                 &apos;_rightchild&apos; =&gt; \bless( {
+                                             &apos;_value&apos; =&gt; 3,
+                                             &apos;_rightchild&apos; =&gt; \bless( {
+                                                                         &apos;_value&apos; =&gt; 7,
+                                                                         &apos;_rightchild&apos; =&gt; undef,
+                                                                         &apos;_leftchild&apos; =&gt; undef
+                                                                       }, &apos;BinaryTreeNode&apos; ),
+                                             &apos;_leftchild&apos; =&gt; \bless( {
+                                                                        &apos;_rightchild&apos; =&gt; undef,
+                                                                        &apos;_value&apos; =&gt; 6,
+                                                                        &apos;_leftchild&apos; =&gt; undef
+                                                                      }, &apos;BinaryTreeNode&apos; )
+                                           }, &apos;BinaryTreeNode&apos; ),
+                 &apos;_value&apos; =&gt; 1
+               }, &apos;BinaryTreeNode&apos; );
+</pre>
+</div>
+
+</div>
+</body>
+
+</html>
