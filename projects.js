@@ -86,10 +86,8 @@ genRandom([
   'Games::Cards::Bridge', 
   'program for a variant of Chinese chess',
   'Integer number sequence computation for 6x6 Reversi',
-  'Integer number sequence computation for one-dimensional Reversi',
   'Integer number sequence computation for Kagome lattice related stuff',
   'Math::Cryptarithm',
-  'Math::Abacus',
 ]);
 
 bgenRandom([
@@ -97,6 +95,7 @@ bgenRandom([
   'COMMON LISP: A Gentle Introduction to Symbolic Computation {~2020}',
   'An Invitation to Applied Category Theory: Seven Sketches in Compositionality {~2021}',
   'Modern Perl {2022 Jan}',
+  'How Software Works {2022 Jan}',
   'Applied mathematics for Database Professionals {2022 Jan}',
   'Think Julia {2022 May}',
   'Systematic Program Design (not a book but a course) {2022 Jun}',
