@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #176">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+
+  <title>CY's Take on The Weekly Challenge #176 </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #176 &dash; Magic of 142857</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-176/" title="The Weekly Challenge #176">challenges
+in Week #176</a> !</i></b></p>
+
+<hr>
+
+<p>I have started to learn Raku.</p>
+
+<h4>Task 1: Permuted Multiples</h4>
+
+<p>The number <tt>142857</tt> makes me think of Merry-Go-Rounds.</p>
+
+<p>But the criteria of the task is less restricted: any permutations,
+not only rotated permutations, can be considered as a permuted multiple.</p>
+
+<p>To make the program run faster, I use the following mathematical argument: since <tt>6x</tt> and <tt>x</tt> has the same number of digits, and <tt>2&times;6=12 > 10</tt>, the leftmost digit of <tt>x</tt> must be <tt>1</tt> and the leftmost digit of <tt>6x</tt> must be one of <tt>6, 7, 8 or 9</tt> &dash; then one of digits of <tt>x</tt> must be one of <tt>6, 7, 8 or 9</tt>.</p>
+
+<p>Since the task is quite straight-forward, I only post the Raku solution:</p>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<img alt="" src="../docs/wiki_img/merry-go-round.jpg" style="float:right" />
+<p><a href="#right_of_use">image info</a></p></div>
+
+<div class="code_vim_hl">
+<pre><font color="#34E2E2"># The Weekly Challenge 176</font>
+<font color="#34E2E2"># Task 1 Permuted Multiples</font>
+<font color="#5FD7FF">use</font> <font color="#FFD7D7">v6</font><font color="#FCE94F">;</font>
+
+<font color="#FFD7D7">my</font> <font color="#34E2E2"><b>$t</b></font> <font color="#FCE94F">=</font> <font color="#AD7FA8">0</font><font color="#FCE94F">;</font>
+<font color="#FFD7D7">my</font> <font color="#34E2E2"><b>$k</b></font> <font color="#FCE94F">=</font> <font color="#AD7FA8">1</font><font color="#FCE94F">;</font>
+<font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$t</b></font> <font color="#FCE94F">&lt;</font> <font color="#AD7FA8">1</font>) {
+    <font color="#34E2E2"><b>$k</b></font><font color="#FCE94F">++;</font>
+    <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$k</b></font> <font color="#FCE94F">~~</font> <font color="#FFD7D7">/&lt;[</font><font color="#AD7FA8">6789</font><font color="#FFD7D7">]&gt;/</font> {
+        <font color="#FCE94F">if</font> (check_good(<font color="#FFD7D7">&quot;</font><font color="#AD7FA8">1</font><font color="#FFD7D7">&quot;</font><font color="#FCE94F">~</font><font color="#34E2E2"><b>$k</b></font><font color="#FCE94F">,</font> <font color="#87FFAF">Array</font>(<font color="#AD7FA8">2</font><font color="#FCE94F">,</font><font color="#AD7FA8">3</font><font color="#FCE94F">,</font><font color="#AD7FA8">4</font><font color="#FCE94F">,</font><font color="#AD7FA8">5</font><font color="#FCE94F">,</font><font color="#AD7FA8">6</font>))) {
+            <font color="#34E2E2"><b>$t</b></font><font color="#FCE94F">++;</font>
+            say <font color="#FFD7D7">&quot;</font><font color="#AD7FA8">1</font><font color="#FFD7D7">&quot;</font><font color="#FCE94F">~</font><font color="#34E2E2"><b>$k</b></font><font color="#FCE94F">;</font>
+        }
+    }
+}
+
+
+<font color="#FCE94F">sub</font> check_good (<font color="#34E2E2"><b>$i</b></font><font color="#FCE94F">,</font> <font color="#34E2E2"><b>@arr</b></font>) {
+    <font color="#FFD7D7">my</font> <font color="#34E2E2"><b>$count</b></font> <font color="#FCE94F">=</font> <font color="#AD7FA8">0</font><font color="#FCE94F">;</font>
+    <font color="#FFD7D7">my</font> <font color="#34E2E2"><b>$dc</b></font> <font color="#FCE94F">=</font> arrange(<font color="#34E2E2"><b>$i</b></font>)<font color="#FCE94F">;</font>
+    <font color="#FCE94F">for</font> (<font color="#34E2E2"><b>@arr</b></font>) {
+        <font color="#FCE94F">if</font> (arrange(<font color="#34E2E2"><b>$_</b></font><font color="#FCE94F">*</font><font color="#34E2E2"><b>$i</b></font>) <font color="#FCE94F">eq</font> <font color="#34E2E2"><b>$dc</b></font>) {
+            <font color="#34E2E2"><b>$count</b></font><font color="#FCE94F">++;</font>
+        }
+        <font color="#FCE94F">else</font> {
+            <font color="#FFD7D7">last</font><font color="#FCE94F">;</font>
+        }
+    }
+    <font color="#FFD7D7">return</font> <font color="#34E2E2"><b>$count</b></font> <font color="#FCE94F">==</font> <font color="#34E2E2"><b>@arr</b></font><font color="#FCE94F">.</font>elems<font color="#FCE94F">;</font>
+}
+
+<font color="#FCE94F">sub</font> arrange (<font color="#34E2E2"><b>$i</b></font>) {
+    <font color="#FFD7D7">return</font> <font color="#34E2E2"><b>$i</b></font><font color="#FCE94F">.</font>split(<font color="#FFD7D7">&quot;&quot;</font>)<font color="#FCE94F">.</font>sort<font color="#FCE94F">.</font>join(<font color="#FFD7D7">&quot;&quot;</font>)<font color="#FCE94F">;</font>
+}
+
+</pre>
+</div>
+
+
+<p>Time:
+<br><tt>
+real 4.840s<br>
+user 5.036s<br>
+sys 0.020s<br>
+</tt></p>
+
+<p>Since the phenomenon of permuted multiples is so interesting, I did a little more investigation. Can we relax the criterion of our the task statement then <tt>142857</tt> is obtained again? The answer appeared surprisingly earlier than I thought.</p>
+
+<p>First lazily modify a few bytes of the program:</p>
+
+<div class="code_vim_hl">
+
+<pre><font color="#34E2E2"># The Weekly Challenge 176</font>
+<font color="#5FD7FF">use</font> <font color="#FFD7D7">v6</font><font color="#FCE94F">;</font>
+
+<font color="#FFD7D7">my</font> <font color="#34E2E2"><b>$t</b></font> <font color="#FCE94F">=</font> <font color="#AD7FA8">0</font><font color="#FCE94F">;</font>
+<font color="#FFD7D7">my</font> <font color="#34E2E2"><b>$k</b></font> <font color="#FCE94F">=</font> <font color="#AD7FA8">1</font><font color="#FCE94F">;</font>
+<font color="#FFD7D7">my</font> <font color="#34E2E2"><b>$arr</b></font> <font color="#FCE94F">=</font> <font color="#87FFAF">Array</font>( <i><font color="#AD7FA8">some_numbers</font></i> )<font color="#FCE94F">;</font>
+<font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$t</b></font> <font color="#FCE94F">&lt;</font> <font color="#AD7FA8">1</font>) {
+    <font color="#34E2E2"><b>$k</b></font><font color="#FCE94F">++;</font>
+    <font color="#FCE94F">if</font> <font color="#AD7FA8">1</font> {
+        <font color="#FCE94F">if</font> (check_good(<font color="#34E2E2"><b>$k</b></font><font color="#FCE94F">,</font> <font color="#34E2E2"><b>$arr</b></font>)) {
+            <font color="#34E2E2"><b>$t</b></font><font color="#FCE94F">++;</font>
+            say <font color="#34E2E2"><b>$k</b></font><font color="#FCE94F">;</font>
+            say <font color="#34E2E2"><b>$arr</b></font><font color="#FCE94F">;</font>
+        }
+    }
+}
+
+
+<font color="#FCE94F">sub</font> check_good (<font color="#34E2E2"><b>$i</b></font><font color="#FCE94F">,</font> <font color="#34E2E2"><b>@arr</b></font>) {
+    <font color="#FFD7D7">my</font> <font color="#34E2E2"><b>$count</b></font> <font color="#FCE94F">=</font> <font color="#AD7FA8">0</font><font color="#FCE94F">;</font>
+    <font color="#FFD7D7">my</font> <font color="#34E2E2"><b>$dc</b></font> <font color="#FCE94F">=</font> arrange(<font color="#34E2E2"><b>$i</b></font>)<font color="#FCE94F">;</font>
+    <font color="#FCE94F">for</font> (<font color="#34E2E2"><b>@arr</b></font>) {
+        <font color="#FCE94F">if</font> (arrange(<font color="#34E2E2"><b>$_</b></font><font color="#FCE94F">*</font><font color="#34E2E2"><b>$i</b></font>) <font color="#FCE94F">eq</font> <font color="#34E2E2"><b>$dc</b></font>) {
+            <font color="#34E2E2"><b>$count</b></font><font color="#FCE94F">++;</font>
+        }
+        <font color="#FCE94F">else</font> {
+            <font color="#FFD7D7">last</font><font color="#FCE94F">;</font>
+        }
+    }
+    <font color="#FFD7D7">return</font> <font color="#34E2E2"><b>$count</b></font> <font color="#FCE94F">==</font> <font color="#34E2E2"><b>@arr</b></font><font color="#FCE94F">.</font>elems<font color="#FCE94F">;</font>
+}
+
+<font color="#FCE94F">sub</font> arrange (<font color="#34E2E2"><b>$i</b></font>) {
+    <font color="#FFD7D7">return</font> <font color="#34E2E2"><b>$i</b></font><font color="#FCE94F">.</font>split(<font color="#FFD7D7">&quot;&quot;</font>)<font color="#FCE94F">.</font>sort()<font color="#FCE94F">.</font>join(<font color="#FFD7D7">&quot;&quot;</font>)<font color="#FCE94F">;</font>
+}
+
+</pre>
+
+</div>
+
+<table border="1" style="border-collapse: collapse; text-align:center">
+<tr>
+  <th><i><font color="purple">some numbers</font></i></th>
+  <th>Smallest Positive Integer Returned</th>
+  <th>Time</th>
+</tr>
+<tr>
+  <td><b>2,3,4,5,6</b></td><td><b>142857</b></td>
+  <td>
+  <i>N/A</i>
+  </td>
+</tr>
+<tr>
+  <td>2</td><td>125874</td>
+  <td style="text-align:left; font-family:monospace">
+real 13.686s<br>
+user 13.787s<br>
+sys 0.028s<br>
+  </td>
+</tr>
+<tr>
+  <td>3</td><td>1035</td>
+  <td style="text-align:left; font-family:monospace">
+real 0.292s<br>
+user 0.403s<br>
+sys 0.017s<br>
+  </td>
+</tr>
+<tr>
+  <td>4</td><td>1782</td>
+  <td style="text-align:left; font-family:monospace">
+real 0.423s<br>
+user 0.557s<br>
+sys 0.043s<br>
+  </td>
+</tr>
+<tr>
+  <td>5</td><td><b>142857</b></td>
+  <td style="text-align:left; font-family:monospace">
+real 15.646s<br>
+user 15.734s<br>
+sys 0.036s<br>
+  </td>
+</tr>
+<tr>
+  <td>6</td><td>1386</td>
+  <td style="text-align:left; font-family:monospace">
+real 0.317s<br>
+user 0.418s<br>
+sys 0.024s<br>
+  </td>
+</tr>
+</table>
+
+<p>See? <tt>5</tt> alone gives us <tt>142857</tt>. How about combinations of the remaining numbers? All combinations of cardinal 2 give us <tt>142857</tt>, waaa!</p>
+
+<table border="1" style="border-collapse: collapse; text-align:center"">
+<tr>
+  <th><i><font color="purple">some numbers</font></i></th>
+  <th>Smallest Positive Integer Returned</th>
+  <th>Time</th>
+</tr>
+<tr>
+  <td>2,3</td><td>142857</td>
+  <td style="text-align:left; font-family:monospace">
+real 15.960s<br>
+user 16.053s<br>
+sys 0.040s<br>
+  </td>
+</tr>
+<tr>
+  <td>2,4</td><td>142857</td>
+  <td style="text-align:left; font-family:monospace">
+real 16.209s<br>
+user 16.306s<br>
+sys 0.032s<br>
+  </td>
+</tr>
+<tr>
+  <td>2,6</td><td>142857</td>
+  <td style="text-align:left; font-family:monospace">
+real 13.082s<br>
+user 13.166s<br>
+sys 0.053s<br>
+  </td>
+</tr>
+<tr>
+  <td>3,4</td><td>142857</td>
+  <td style="text-align:left; font-family:monospace">
+real 12.989s<br>
+user 13.077s<br>
+sys 0.028s<br>
+
+  </td>
+</tr>
+<tr>
+  <td>3,6</td><td>142857</td>
+  <td style="text-align:left; font-family:monospace">
+real 13.392s<br>
+user 13.473s<br>
+sys 0.024s<br>
+  </td>
+</tr>
+<tr>
+  <td>4,6</td><td>142857</td>
+  <td style="text-align:left; font-family:monospace">
+real 13.278s<br>
+user 13.362s<br>
+sys 0.040s<br>
+  </td>
+</tr>
+</table>
+
+
+<p>Note that before writing this blogpost, I used <tt>arrange($_*$i) == $dc</tt> instead of <tt>arrange($_*$i) eq $dc</tt>, but it produced results give us <tt>18</tt> for multiplier 6 (<tt>18&times;6=108</tt>), which is not we desired.</p>
+
+<p>For fun:</p>
+
+<table border="1" style="border-collapse: collapse; text-align:center"">
+<tr>
+  <th><i><font color="purple">some numbers</font></i></th>
+  <th>Smallest Positive Integer Returned</th>
+</tr>
+<tr>
+  <td>7</td><td>1359</td>
+</tr>
+<tr>
+  <td>8</td><td>113967</td>
+</tr>
+<tr>
+  <td>9</td><td>1089</td>
+</tr>
+</table>
+
+<h4>Task 2: Reversible Numbers</h4>
+
+<p>Raku solution:</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">for</font> (<font color="#AD7FA8">1</font><font color="#FCE94F">..</font><font color="#AD7FA8">99</font>) {
+    push <font color="#34E2E2"><b>@arr</b></font><font color="#FCE94F">,</font> <font color="#34E2E2"><b>$_</b></font> <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$_</b></font> <font color="#FCE94F">+</font> flip <font color="#34E2E2"><b>$_</b></font> ) <font color="#FCE94F">~~</font> <font color="#FFD7D7">/^&lt;[</font><font color="#AD7FA8">13579</font><font color="#FFD7D7">]&gt;+$/</font> <font color="#FCE94F">;</font>
+}
+
+</pre>
+</div>
+
+<p>Perl solution:</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">for</font> (<font color="#AD7FA8">1..99</font>) {
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@arr</b></font>, <font color="#34E2E2"><b>$_</b></font> <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$_</b></font> + (<font color="#FCE94F">scalar</font> <font color="#FCE94F">reverse</font> <font color="#34E2E2"><b>$_</b></font>) ) =~ <font color="#FCE94F">/</font><font color="#AD7FA8">^</font><font color="#FFD7D7">[13579]+</font><font color="#AD7FA8">$</font><font color="#FCE94F">/</font> ;
+}
+
+</pre>
+</div>
+
+<p>The parentheses bounded <tt>scalar reverse $_</tt> in the Perl solution is not a must. I prefer they exist this time maybe because recently while I coded a program, I wrote something like <tt>index(scalar reverse $board, $player, $reversed_position+2 )</tt> &dash; it is a reversi program, &dash; and you can guess <tt>perl</tt> has interpreted the line as <tt>index(scalar (reverse ($board, $player, $reversed_position+2 )))</tt> and will throw a syntax error message "<tt>Not enough arguments for index ...</tt>".</p>
+
+<p>Stay alert and healthy! □</p>
+
+<hr>
+
+<p><a name="right_of_use"></a>The image of the Merry-Go-Round is from <a href="https://commons.wikimedia.org/wiki/File:MOS_Plaza_Merry-go-round.jpg">Wikimedia Commons</a> and the original author is Shinjiman.</p> 
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-176/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>, 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-176/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>, 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-176/cheok-yin-fung/raku/ch-1.raku" title="ch-1.raku from Cheok-Yin Fung">ch-1.raku</a></tt>, 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-176/cheok-yin-fung/raku/ch-2.raku" title="ch-2.raku from Cheok-Yin Fung">ch-2.raku</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: 7th August, 2022.</p>
+
+</div>
+
+</body>
+
+</html>
