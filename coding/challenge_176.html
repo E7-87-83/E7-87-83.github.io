@@ -8,6 +8,10 @@
   <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
   <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
 
+  <style>
+    body {background-color:#1E90FF}
+    div.bar li {background-color:yellow}  
+  </style>
 
   <title>CY's Take on The Weekly Challenge #176 </title>
 </head>
@@ -57,7 +61,7 @@ in Week #176</a> !</i></b></p>
 <p>But the criteria of the task is less restricted: any permutations,
 not only rotated permutations, can be considered as a permuted multiple.</p>
 
-<p>To make the program run faster, I use the following mathematical argument: since <tt>6x</tt> and <tt>x</tt> has the same number of digits, and <tt>2&times;6=12 > 10</tt>, the leftmost digit of <tt>x</tt> must be <tt>1</tt> and the leftmost digit of <tt>6x</tt> must be one of <tt>6, 7, 8 or 9</tt> &dash; then one of digits of <tt>x</tt> must be one of <tt>6, 7, 8 or 9</tt>.</p>
+<p>To make the program run faster, I use the following mathematical argument: since <tt>6x</tt> and <tt>x</tt> has the same number of digits, and <tt>2&times;6=12 &gt; 10</tt>, the leftmost digit of <tt>x</tt> must be <tt>1</tt> and the leftmost digit of <tt>6x</tt> must be one of <tt>6, 7, 8 or 9</tt> &dash; then one of digits of <tt>x</tt> must be one of <tt>6, 7, 8 or 9</tt>.</p>
 
 <p>Since the task is quite straight-forward, I only post the Raku solution:</p>
 
@@ -119,6 +123,7 @@ sys 0.020s<br>
 <div class="code_vim_hl">
 
 <pre><font color="#34E2E2"># The Weekly Challenge 176</font>
+<pre><font color="#34E2E2"># perm.raku</font>
 <font color="#5FD7FF">use</font> <font color="#FFD7D7">v6</font><font color="#FCE94F">;</font>
 
 <font color="#FFD7D7">my</font> <font color="#34E2E2"><b>$t</b></font> <font color="#FCE94F">=</font> <font color="#AD7FA8">0</font><font color="#FCE94F">;</font>
