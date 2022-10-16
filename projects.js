@@ -83,11 +83,13 @@ const bsetDragging = (e) =>{
 
 
 genRandom([
+  'Map::Tube::Hongkong',
   'Games::Cards::Bridge', 
   'program for a variant of Chinese chess',
   'Integer number sequence computation for 6x6 Reversi',
   'Integer number sequence computation for Kagome lattice related stuff',
   'Math::Cryptarithm',
+  'Math::Permutations (ref: Permutations.jl in Julia)',
 ]);
 
 bgenRandom([
