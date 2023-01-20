@@ -13,7 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: E7-87-83's Game Board
+title: Game Board on Planetoid E78783
 description: >- # this means to ignore newlines until "baseurl:"
   collection of posts
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -22,7 +22,7 @@ github_username:  E7-87-83
 
 # Build settings
 markdown: kramdown
-theme: jekyll-theme-cayman
+theme: minima
 plugins:
   - jekyll-feed
 
