@@ -1,0 +1,12 @@
+body {
+    background-color: white;
+    color: #890312;
+    margin: 0;
+    border: 0;
+    font-family: san-serif;
+    padding: 0 7ex 0 7ex;
+}
+
+div#bk-index {
+    color: #e78783;
+}
