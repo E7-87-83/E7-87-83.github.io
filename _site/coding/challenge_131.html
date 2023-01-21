@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #131">
+  <meta name="keywords" content="Perl, Julia">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+
+<title>CY's Take on The Weekly Challenge #131 </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #131</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-131/" title="The Weekly Challenge #131">challenges
+in Week #131</a> !</i></b></p>
+
+<p>And here comes two nice tasks submitted by teammates.</p>
+
+<hr>
+
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<image alt="" src="../docs/assets/math_processing.png" width="300px" style="float:right" />
+<p><a href="#right_of_use">image info</a></p></div>
+
+<h4>Task 1: Consecutive Arrays</h4>
+
+<p>I like this task. Its simplicity makes it a perfect testing performance of 
+showing the power of compactness of a language (for example,
+the Raku solutions 
+"<a href="https://twitter.com/PerlWChallenge" title="Twitter: The Weekly Challenge - Perl and Raku">in a [Twitter] tweet</a>"
+by Mr Markus Holzer)
+ or learning a new language.</p>
+
+<p>My code in Perl and Julia:</p>
+
+<p>In Perl:</p>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>consec </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@a</b></font> = <font color="#34E2E2"><b>@_</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@list</b></font> = ([ <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> ],);
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">1.</font>.<font color="#34E2E2"><b>$#a</b></font>) {
+        <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$a[$i]</b></font> == <font color="#34E2E2"><b>$a[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> + <font color="#AD7FA8">1</font>) {
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>$list[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;@*</b></font>, <font color="#34E2E2"><b>$a[$i]</b></font>;
+        }
+        <font color="#FCE94F">else</font> {
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@list</b></font>, [<font color="#34E2E2"><b>$a[$i]</b></font>];
+        }
+    }
+    <font color="#FCE94F">return</font> \<font color="#34E2E2"><b>@list</b></font>;
+}
+</pre>
+</div>
+
+<p>In Julia:</p>
+
+<div class="code_vim_hl">
+<pre>
+<font color="#FCE94F">function</font> consecutive<font color="#FFD7D7">(</font>a<font color="#FFD7D7">)</font>
+    <font color="#FCE94F">list</font> <font color="#FCE94F">=</font> [ [ a[<font color="#AD7FA8">1</font>] ], ]
+    for i <font color="#FCE94F">=</font> <font color="#AD7FA8">2</font>:length<font color="#FFD7D7">(</font>a<font color="#FFD7D7">)</font>
+        <font color="#FCE94F">if</font> a[i] == a[i<font color="#AD7FA8">-1</font>]+<font color="#AD7FA8">1</font>
+            <font color="#FCE94F">push</font>!<font color="#FFD7D7">(</font><font color="#FCE94F">list</font>[end], a[i]<font color="#FFD7D7">)</font>
+        else
+            <font color="#FCE94F">push</font>!<font color="#FFD7D7">(</font><font color="#FCE94F">list</font>, [ a[i] ]<font color="#FFD7D7">)</font>
+        end
+    end
+    <font color="#FCE94F">return</font> <font color="#FCE94F">list</font>
+end
+</pre>
+</div>
+
+<p><s>In Julia, it is required that elements of an array being the same type. <small>(I don't know the technical term...)</small></s> <font color="red">(Wrong.)</font></p>
+
+<p>Also note that the array of Julia starts indexing from 1 instead of indexing from 0.</p>
+
+<p>Since this is one of my early codes in Julia, I encountered some obstacles. It would be great to learn how to read the feedback of REPL in Julia or any interpreter/compiler of any programming languages for debugging.</p>
+
+<p>Mentioning the usefulness of feedback, it is worth the time to note down my solution for Task 2.</p>
+
+<h4>Task 2: Find Pairs</h4>
+<p>The abundant choice of delimiters is a special feature of Perl.</p>
+
+<p>It's fun to see how many symbols can be used as delimiters:</p>
+
+<div class="code_vim_hl">
+<pre>
+$ perl -E '$_ = "cba"; tr^abc^def^; say'
+fed
+$ perl -E '$_ = "cba"; tr$abc$def$; say'
+fed
+$ perl -E '$_ = "cba"; tr@abc@def@; say'
+fed
+$ perl -E '$_ = "cba"; tr+abc+def+; say'
+fed
+$ perl -E '$_ = "cba"; tr-abc-def-; say'
+fed
+$ perl -E '$_ = "cba"; tr&amp;abc&amp;def&amp;; say'
+fed
+</pre>
+</div>
+
+<p>Therefore the Task 2 code I start it with</p>
+<div class="code_vim_hl">
+<pre>
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@open_uni</b></font>  = <font color="#AD7FA8">qw/ ( [ { &lt; /</font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@close_uni</b></font> = <font color="#AD7FA8">qw/ ) ] } &gt; /</font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>%partner</b></font> = ( <font color="#AD7FA8">&apos;)&apos;</font>=&gt;<font color="#AD7FA8">&apos;(&apos;</font>, <font color="#AD7FA8">&apos;]&apos;</font>=&gt;<font color="#AD7FA8">&apos;[&apos;</font>, <font color="#AD7FA8">&apos;}&apos;</font>=&gt;<font color="#AD7FA8">&apos;{&apos;</font>, <font color="#AD7FA8">&apos;&gt;&apos;</font> =&gt; <font color="#AD7FA8">&apos;&lt;&apos;</font> );
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@neutral_uni</b></font> = <font color="#AD7FA8">qw{ , . ? ! / \ }</font>;
+<font color="#FCE94F">push</font> <font color="#34E2E2"><b>@neutral_uni</b></font>, <font color="#AD7FA8">qw{ @ # $ &amp; + - ^ * % &quot; &apos; }</font>; <font color="#34E2E2"># dangerous zone</font>
+</pre>
+</div>
+
+<p>The given task statement does not state the practical side of the task and
+I guess it is about tidying the pairing of delimiting symbols.
+Hence I decide to run an extra mile, write something with warnings and/or feedbacks.</p>
+
+<p>Like this (extracted from the final production):</p>
+
+<div class="code_vim_hl">
+<pre>
+Test Case 1b
+Delimiters   : (){}
+Search String: for <b>(</b>$a..$b<b>}</b> <b>(</b>cannot_do_sth;<b>}</b>
+    ((
+    }}
+Warning: ( at position 4 may not close appropriately.
+Warning: } at position 11 may not be corresponding to an opening delimiter.
+Feedback: It is recommended that you check other delimiters as well.
+</pre>
+</div>
+
+<p>Originally I ambitiously intended to write the code for multi-line strings! Time does not allow. Ooops.</p>
+
+<p>For the ease of explanation, let us see the output of the final product first:</p>
+
+<div class="code_vim_hl">
+<pre>
+$ perl ch-2.pl '(){}**' '(*Hello*)'
+Delimiters   : (){}**
+Search String: (*Hello*)
+    (**
+    **)
+
+=========================================
+Example 1
+Delimiters   : ""[]()
+Search String: "I like (parens) and the Apple ][+" they said.
+    "(["
+    ")]"
+Warning: " at position 0 may not close appropriately.
+Warning: ] at position 31 may not be corresponding to an opening delimiter.
+Feedback: It is recommended that you check other delimiters as well.
+
+Example 2
+Delimiters   : **//&lt;&gt;
+Search String: /* This is a comment (in some languages) */ &lt;could be a tag&gt;
+    /**/&lt;
+    /**/&gt;
+
+Test Case 1a
+Delimiters   : (){}
+Search String: for ($a..$b) {do_sth;}
+    ({
+    )}
+
+Test Case 1b
+Delimiters   : (){}
+Search String: for ($a..$b} (cannot_do_sth;}
+    ((
+    }}
+Warning: ( at position 4 may not close appropriately.
+Warning: } at position 11 may not be corresponding to an opening delimiter.
+Feedback: It is recommended that you check other delimiters as well.
+
+Test Case 2a
+Delimiters   : (){}**
+Search String: ( ilovePerl()*) {bad;}
+    ((*{
+    )*)}
+Warning: * at position 13 may not close appropriately.
+Warning: ) at position 14 may not be corresponding to an opening delimiter.
+Feedback: It is recommended that you check other delimiters as well.
+
+Test Case 2b
+Delimiters   : (){}**
+Search String: (*ilovePerl()*) {good;}
+    (*(*{
+    *)*)}
+
+Test Case 3
+Delimiters   : &lt;&gt;
+Search String: &lt;html&gt;&lt;head&gt;&lt;title&gt;HELLO&lt;/title&gt;&lt;/head&gt;&lt;/html&gt;
+    &lt;&lt;&lt;&lt;&lt;&lt;
+    &gt;&gt;&gt;&gt;&gt;&gt;
+
+Test Case 4a
+Delimiters   : **//\\
+Search String: */layer/*
+    *//*
+    *//*
+
+Test Case 4b
+Delimiters   : **//\\
+Search String: */wrong layer*/
+    */*/
+    */*/
+Warning: delimiter(s) do not open or close appropriately:
+Delimiters: * / * /
+Positions: 0 1 13 14
+</pre>
+</div>
+
+And the function <tt>find_pair</tt> is called as follows:
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;Example 2&quot;</font>;
+find_pair(
+  [<font color="#AD7FA8">qw&apos; ** // &lt;&gt; &apos;</font>],
+  <font color="#AD7FA8">&apos;/* This is a comment (in some languages) */ &lt;could be a tag&gt;&apos;</font>
+);
+</pre>
+</div>
+
+<p>The implementation of <tt>find_pair</tt> is more than 100 lines so I just put part of it here.</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>find_pair </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>%open_found</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>%close_found</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>%neutral_found</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@char</b></font> = <font color="#FCE94F">split</font> <font color="#FCE94F">//</font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@delimiters</b></font> = <font color="#FCE94F">split</font> <font color="#FCE94F">//</font>, (<font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]-&gt;@*</b></font>);
+
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$pair</b></font> (<font color="#34E2E2"><b>@{$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]}</b></font>) {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$s_head</b></font> = <font color="#FCE94F">substr</font>(<font color="#34E2E2"><b>$pair</b></font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">1</font>);
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$s_tail</b></font> = <font color="#FCE94F">substr</font>(<font color="#34E2E2"><b>$pair</b></font>, <font color="#AD7FA8">1</font>, <font color="#AD7FA8">1</font>);
+        <font color="#34E2E2"><b>$open_found{$s_head}</b></font> = []
+            <font color="#FCE94F">if</font> any { <font color="#34E2E2"><b>$_</b></font> <font color="#FCE94F">eq</font> <font color="#34E2E2"><b>$s_head</b></font> } (<font color="#FCE94F">map</font> <font color="#FCE94F">{substr</font>(<font color="#34E2E2"><b>$_</b></font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">1</font>)<font color="#FCE94F">}</font> <font color="#34E2E2"><b>@open_uni</b></font>); 
+        #...
+    }
+
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$#char</b></font>) {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$c</b></font> = <font color="#34E2E2"><b>$char[$i]</b></font>;
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>$open_found{$c}-&gt;@*</b></font>, <font color="#34E2E2"><b>$i</b></font> <font color="#FCE94F">if</font> <font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$open_found{$c}</b></font>);
+        #...
+    }
+
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@open_positions</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@close_positions</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@all_positions</b></font>;
+
+    <font color="#FCE94F">for</font> (<font color="#FCE94F">values</font> <font color="#34E2E2"><b>%open_found</b></font>, <font color="#FCE94F">values</font> <font color="#34E2E2"><b>%neutral_found</b></font>) {
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@open_positions</b></font>, <font color="#34E2E2"><b>$_-&gt;@*</b></font>;
+    }
+
+    #...
+    <font color="#34E2E2"><b>@all_positions</b></font> = <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@all_positions</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@stack</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@waiting_to_be_closed</b></font>;   <font color="#34E2E2"># variable for warning message</font>
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$early_warn</b></font>;   <font color="#34E2E2"># variable for warning message</font>
+
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> (<font color="#34E2E2"><b>@all_positions</b></font>) {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$c</b></font> = <font color="#34E2E2"><b>$char[$p]</b></font>;
+        <font color="#FCE94F">if</font> (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$open_found{$c}</b></font>)) {
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@stack</b></font>, <font color="#34E2E2"><b>$c</b></font>;
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@waiting_to_be_closed</b></font>, <font color="#34E2E2"><b>$p</b></font>;
+        }
+        #...
+    }
+
+    <font color="#FCE94F">if</font> (!<font color="#34E2E2"><b>$early_warn</b></font> &amp;&amp; <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@stack</b></font> != <font color="#AD7FA8">0</font>
+        &amp;&amp; !<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$close_found{$stack[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]}</b></font>)
+       ) {
+        <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;Warning: delimiter(s) do not open or close appropriately:&quot;</font>;
+        <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;Delimiters: </font><font color="#34E2E2"><b>@stack</b></font><font color="#AD7FA8">&quot;</font>;
+        <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;Positions: &quot;</font>, <font color="#AD7FA8">&quot;</font><font color="#34E2E2"><b>@waiting_to_be_closed</b></font><font color="#AD7FA8">&quot;</font>;
+    }
+    <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$early_warn</b></font>) {
+        <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;Feedback: It is recommended that you check other &quot;</font>,
+            <font color="#AD7FA8">&quot;delimiters as well.&quot;</font>;
+    }
+
+    <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;&quot;</font>;
+}
+
+</pre>
+</div>
+
+<p>Final note: I had thought to skip this task due to the constraint of time. After I finished it last night, I think it's worth the effort (but still can improve further... some ideas: e.g. using edit distance to give suggestions). If you have seen my Twitter, you probably know why I start to use Julia &dash; I gonna work on making math animations for a few months. This is going to be my first formal programming job! In addition, I got admitted to a part-time program in Information Technology &dash; I will start school in mid-Oct, having 9.5 hr of lecture time per week.
+However, like, for the heavy coding (in TWC tasks) of nearly 200 lines of code of Task 2,
+I feel difficult to write down the flow here, or comment the flow within codes. There is still large room of improvement for CY as a coder.
+Need to learn some time management or "energy management" in order to balance different aspects of my life. One of the obvious hurdles is in December, when the Advent of Code event gonna be held.</p>
+
+<p>Stay alert and healthy! □</p>
+
+<hr>
+
+<p><a name="right_of_use"></a>The image of the flat helix is made by me via <tt><a href="https://processing.org">Processing</a></tt>. I declare here that I release it as a public domain image.</p> 
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-131/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>, <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-131/cheok-yin-fung/julia/ch-1.jl" title="ch-1.jl from Cheok-Yin Fung">ch-1.jl</a></tt>, 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-131/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: 26th September, 2021. Updated: 27th September, 2021.</p>
+
+</body>
+
+</html>

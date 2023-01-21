@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #165">
+  <meta name="keywords" content="Perl, Julia">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+
+  <title>CY's Take on The Weekly Challenge #165 </title>
+
+
+  <style>
+    body {background-color:#1E90FF}
+    div.bar li {background-color:yellow}  
+  </style>
+
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #165</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-165/" title="The Weekly Challenge #165">challenges
+in Week #165</a> !</i></b></p>
+
+<hr>
+
+<div class="">
+    <p>Three things related to computing has impacted my recent life. (1) I have got an IT internship position in a small-size company; I have learnt to use Python and Selenium for web scraping &dash; a task I think it is really fun; I also need to update the company website, which is "made in PHP"... !? Alternatively, I could say it is "made in WordPress" because I discovered the plugins and themes in WordPress is so huge so that WordPress has its own "ecosystem", and some of plugins are even commercialized (and popped as ads while I was watching YouTubevideos)! One more thing: my position requires familiarity to <a title="Wikipedia: NoCode" href="https://en.wikipedia.org/wiki/No-code_development_platform">NoCode</a> platforms. It is interesting to investigate on this.</p>
+
+<p>(2) New school term starts. This term we don't have programming-focused class, so I have lost my relatively edge, ooops. The classes are: Business Intelligence (BI), eCommerce and computer network (very elementary, the instructor said it is not over 1/4 of CCNA). All three classes have widened my horizon. I found there are not many open-source BI tools, and PowerBI (from Microsoft) and Tableau (owned by Salesforce) are really powerful. Perhaps it will change how people do presentations or have internal business meetings.
+For the open-source counterparts, I have briefly tried <a href="https://www.metabase.com/">Metabase</a> (coded in Clojure and JavaScript, according to its GitHub site). Lacking an import system from CSV or spreedsheet format, it has a room for catching up.</p>
+
+<p>(3) After the <a href="https://hongkongfp.com/2022/05/04/in-pictures-hong-kongs-east-rail-line-cross-harbour-mtr-link-to-open-may-15-with-new-exhibition-centre-station/" title="News Article from Hong Kong Free Press">Exhibition Centre Station</a> opens, I finally took the courage to upload the <a href="https://metacpan.org/release/CYFUNG/Map-Tube-Hongkong-0.04.1/view/lib/Map/Tube/Hongkong.pm">Map::Tube::Hongkong</a>. Actually the main task I have done was just put the local MTR map into the XML format. I have just edited the CPAN module and released 0.04.1 this morning. There are many details in uploading a CPAN module.
+(One of those things I am surprised by / handled incorrectly is that <i>version</i><tt>0.4.1</tt> is "smaller" than <i>version</i><tt>0.3</tt> or <i>version</i><tt>0.2</tt> on the CPAN display. See also <a href="https://metacpan.org/pod/CPAN::Version">CPAN::Version</a>.) </p>
+
+<p>I have a lot want to say. Like... after <a title="Meet the Champion Interview" href="https://theweeklychallenge.org/blog/meet-the-champion-2022-03">Eric was announced as the Champion</a> in April, I recalled that I brutely expressed interests in <a title="my unfinished GitHub project site on Bridge CPAN module" href="https://github.com/E7-87-83/Games-Cards-Bridge">writing CPAN modules for Contact Bridge</a>, in the "Meet The (Monthly) Champion" section of TWC. But , sometimes promises*, like the contracts during Bridge play, cannot be made [on-time].</p>
+
+<p><small>* Maybe this word is too serious.</small></p>
+
+</div>
+
+<h4>Task 1: Scalable Vector Graphics (SVG)</h4>
+
+<p>The task is beginner-friendly and introduces us to the CPAN module <a href="https://metacpan.org/pod/SVG">SVG</a>. I did some prioritization so the image might look better: putting the drawing of dots in the later stage.</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$img</b></font> = SVG-&gt;new;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@points</b></font>;
+
+<font color="#FCE94F">while</font> (&lt;&gt;) {
+    <font color="#FCE94F">chomp</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@nums</b></font> = <font color="#FCE94F">split</font> <font color="#AD7FA8">&quot;,&quot;</font>, <font color="#34E2E2"><b>$_</b></font>;
+    <font color="#FCE94F">if</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@nums</b></font> == <font color="#AD7FA8">2</font>) {
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@points</b></font>, [<font color="#34E2E2"><b>@nums</b></font>];
+    }
+    <font color="#FCE94F">elsif</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@nums</b></font> == <font color="#AD7FA8">4</font>) {
+        new_line(<font color="#34E2E2"><b>@nums</b></font>);
+    }
+}
+
+new_point(<font color="#34E2E2"><b>$_-&gt;@*</b></font>) <font color="#FCE94F">foreach</font> <font color="#34E2E2"><b>@points</b></font>; </pre>
+</div>
+
+<p>This week I also made use of the CPAN module <a href="https://metacpan.org/pod/ARGV::OrDATA">ARGV::OrDATA</a> by teammate Mr Choroba, so the testing can be shown more easily.</p>
+
+<center>
+<div style="float:none; border: 1px dotted black; font-size:x-small; width:40%">
+<img alt="" src="../docs/assets/wk165_task_one.png" width="100%"/>
+<p><small>a random plot</small></p>
+</div>
+</center>
+
+<h4>Task 2: Line of Best Fit</h4>
+
+<p>I am not good at statistics. Just followed the instructions on <a href="https://www.mathsisfun.com/data/least-squares-regression.html">the mathisfun.com link</a> provided.</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@points</b></font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$slope</b></font> =
+     (  <font color="#34E2E2"><b>$n</b></font> * sum(<font color="#FCE94F">map</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$_-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$_-&gt;[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@points</b></font>)  <font color="#34E2E2"># n sum(xy) - sum(x) sum(y)</font>
+      - sum(<font color="#FCE94F">map{</font><font color="#34E2E2"><b>$_-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@points</b></font>) * sum(<font color="#FCE94F">map{</font><font color="#34E2E2"><b>$_-&gt;[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@points</b></font>) )
+    / ( <font color="#34E2E2"><b>$n</b></font> * sum(<font color="#FCE94F">map{</font><font color="#34E2E2"><b>$_-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>**<font color="#AD7FA8">2</font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@points</b></font>)        <font color="#34E2E2"># n sum(sq x) - sq(sum x)</font>
+         - (sum( <font color="#FCE94F">map</font> <font color="#FCE94F">{</font> <font color="#34E2E2"><b>$_-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@points</b></font> ))**<font color="#AD7FA8">2</font>) ;
+
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$intercept</b></font> =
+     ( sum( <font color="#FCE94F">map</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$_-&gt;[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@points</b></font> )             <font color="#34E2E2"># sum(y) - slope * sum(x)</font>
+    - <font color="#34E2E2"><b>$slope</b></font> * sum( <font color="#FCE94F">map</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$_-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@points</b></font>) )
+    / <font color="#34E2E2"><b>$n</b></font> ;
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>y_best_fit </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$x</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$slope</b></font>*<font color="#34E2E2"><b>$x</b></font> + <font color="#34E2E2"><b>$intercept</b></font>;
+}
+</pre>
+</div>
+
+<p>Another skill I am bad at is packaging. So an extra data file is created and then the Task 2 script forcefully calls the command <tt>perl ch-1.pl &lt; BEST_FIT_DATA &gt; new.svg</tt> to complete the Task 2 via script in Task 1.</p>
+
+<center>
+<div style="float:none; border: 1px dotted black; font-size:x-small; width:40%;">
+<img alt="" src="../docs/assets/wk165_new.png" width="100%"/>
+</div>
+</center>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$line_of_best_fit</b></font> =
+    <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;,&quot;</font>, <font color="#34E2E2"><b>$minx</b></font>,y_best_fit(<font color="#34E2E2"><b>$minx</b></font>),<font color="#34E2E2"><b>$maxx</b></font>,y_best_fit(<font color="#34E2E2"><b>$maxx</b></font>);
+
+<font color="#FCE94F">open</font> <font color="#34E2E2"><b>FH</b></font>, <font color="#AD7FA8">&quot;&gt; BEST_FIT_DATA&quot;</font> <font color="#FCE94F">or</font> <font color="#FCE94F">die</font> <font color="#34E2E2"><b>$!</b></font>;
+<font color="#FCE94F">say</font> <font color="#34E2E2"><b>FH</b></font> <font color="#34E2E2"><b>$line_of_best_fit</b></font>;
+<font color="#FCE94F">say</font> <font color="#34E2E2"><b>FH</b></font> <font color="#34E2E2"><b>$_-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>,<font color="#AD7FA8">&quot;,&quot;</font>,<font color="#34E2E2"><b>$_-&gt;[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> <font color="#FCE94F">for</font> <font color="#34E2E2"><b>@points</b></font>;
+
+<font color="#FCE94F">system</font>(<font color="#AD7FA8">&quot;perl ch-1.pl &lt; BEST_FIT_DATA &gt; new.svg&quot;</font>); <font color="#34E2E2"># applicable on Linux</font>
+</pre>
+</div>
+
+
+<p>After finishing the tasks I recalled Julia. Julia is famous for scientific applications and the least square fit is a basic tool in statistics. After some search I encountered this blogpost: 
+<a href="https://jahoo.github.io/2021/01/11/simplest_linear_regression_example.html">"Simplest least-squares in Julia"</a>, by Jacob Louis Hoover (11th Jan 2021).
+I have followed it step-by-step except the operator "<tt>\</tt>" does not work magically in the current version of Julia. Anyway we can touch more mathematics looking at the task via <a href="https://en.wikipedia.org/wiki/Ordinary_least_squares#Matrix/vector_formulation" title="Wikipedia: Ordinary Least Squares">the lens of matrix operations</a> (See also <a title="Wikipedia: Moore-Penrose pseudoinverse"  href="https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse">Moore-Penrose pseudoinverse</a>.)
+</p>
+
+<center>
+<div style="float:none; border: 1px dotted black; font-size:x-small; width:40%">
+<img alt="" src="../docs/assets/wk165_new_julia.png" width="100%"/>
+</div>
+</center>
+
+<p>The image by Julia is different from that by the Task 2 Perl code and SVG module!
+Calm down and look patiently: the <tt>Plots</tt> in Julia counts the y-coordinates from bottom to top, while the SVG module interpreted them from top to bottom. It would be more obvious if we emphasize to the Julia interpreter to plot the graph with x-y ratio equal to 1:</p>
+
+<div class="code_vim_hl">
+<pre>plot!(
+    x <font color="#FCE94F">-&gt;</font> slope<font color="#FCE94F">*</font>x <font color="#FCE94F">+</font> intercept,
+    legend <font color="#FCE94F">=</font> <font color="#34E2E2"><b>:none</b></font>,
+    ratio = 1,               <font color="#34E2E2">#optional</font>
+)
+</pre>
+</div>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small; width:25%">
+<img alt="" src="../docs/assets/wk165_new.png" width="100%" /><br>
+<img alt="" src="../docs/assets/wk165_new_julia_ratio_eq_1.png" width="100%" />
+</div>
+
+<p>Stay alert and healthy! □</p>
+
+<hr>
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-165/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>, 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-165/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>, <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-165/cheok-yin-fung/julia/ch-2.jl" title="ch-2.jl from Cheok-Yin Fung">ch-2.jl</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: 17th May, 2022.</p>
+<p>Published Date: 20th May, 2022.</p>
+
+<p>Footnote: After releasing the blogpost, I realize that some points on the boundary via my Task 1 script are partially cut. -- Friday, May 20, 2022 PM09:45:00 HKT</p>
+
+</div>
+
+</body>
+
+</html>

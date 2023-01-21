@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Puzzle Created on The Weekly Challenge #123 - N-cube">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+<title>CY's Take on The Weekly Challenge #123 - N-cube </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #123 &dash; N-cube</h2>
+
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-123/" title="The Weekly Challenge #123">challenges
+in Week #123</a> !</i></b></p>
+<hr>
+<p><i>about 1500 words</i>, so a brief content:</p>
+<div style="border: 1px solid #CCCCCC; padding:3px;">
+Prelude<br><br>
+Task 2: Square Points
+<ul>
+    <li>Math Fun: On the Geometry of 3D and 4D space</li>
+    <li>Properties of Squares (and Cubes) and a Primitive Algorithm </li>
+    <li>Math Fun: Properties of n-hypercube</li>
+    <li>Vector Sum Approach</li>
+    <li>Adventure to Cube and Hypercube</li>
+    <li>Numerical Inaccuracy</li>
+    <li>Discussion for the Norm-ONLY Approach</li>
+    <li>Summary</li>
+    <li>Acknowledgement</li>
+</ul>
+<br>
+Links<br>
+Snapshots of Recent Life<br>
+External Image Credits<br>
+<i>links to full codes: <tt><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-123/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>,
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-123/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>,
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-123/cheok-yin-fung/perl/ch-2-cube-hypercube.pl" title="ch-2-cube-hypercube.pl from Cheok-Yin Fung">
+ch-2-cube-hypercube.pl
+</a></tt>
+</i>
+</div>
+<hr>
+
+<h4>Prelude</h4>
+
+<p>I often wrote my blogpost for TWC in a storytelling style, but I feel that its my time to
+put it more "coding-ly" as my knowledge on programming increases. Arrrrrrr... Sometimes
+I have shared my offline life in these blogposts, I decide to put it in the bottom of the blogpost
+if it wants.
+</p>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<img alt="" src="../docs/wiki_img/hypercube_ori.png" width="240px" style="float:right" />
+<br>
+<p><a href="#right_of_use">image info</a></p></div>
+
+<p>As <a href="https://en.wikipedia.org/w/index.php?title=Regular_number&oldid=1035459351#Algorithms">
+noted in the Wikipedia</a>, the generation of ugly numbers is "often used to demonstrate the power 
+of a lazy functional programming language", and I haven't known what functional programming is
+(find some interesting resources like
+<a title="the Dao of FP" href="https://github.com/BartoszMilewski/Publications/tree/master/TheDaoOfFP">
+here</a> or <a href="www.cs.toronto.edu/~sme/presentations/cat101.pdf">here</a> recently, however I guess, for me, it is better to learn Haskell, 
+a purely functional programming language, /*with Category theory in math, */
+in order to grasp the idea of FP throughfully; I need discipline to learn skills
+OR I WILL STRAY TOO FAR LIKE FOR TASK TWO THIS WEEK).
+</p>
+<p>
+I have used brute-force ideas to solve the task one. Not nice to share.
+</p> 
+
+<h4>Task 2: Square Points</h4>
+
+<p>Oh, I like the task too much and decide for me to unusually quote the original task statements here: </p>
+
+<blockquote>TASK #2 › Square Points<br>
+Submitted by: Mohammad S Anwar<br><br>
+
+You are given coordinates of four points i.e. (x1, y1), (x2, y2), (x3, y3) and (x4, y4).<br><br>
+
+Write a script to find out if the given four points form a square.</blockquote>
+
+<p>After seeing the task statements I immediately decided to extend it as <u>a square+cube+hypercube task</u> in arbitary dimensions!</p>
+
+<h5>Math Fun: On the Geometry of 3D and 4D space</h5>
+<p>Hey, do allow me introduce two cool terms I recently learnt: "ana" and "kata". In an Euclidean 3D space,
+which most of us believe ourselves are familiar with, we can have
+Up/Down/North/East/South/West (or Up/Down/Back/Left/Front/Right, esp. if you have
+played Rubik's Cube). In 4D, there is one more axis, thus two more directions we can have,
+and some mathematicians assign "ana" and "kata" as the names for those directions.
+</p>
+<p>
+[Need not to fancy too much about "time as the fourth dimension"...
+The "metric" for measuring distance used by physicists for the dimension of time is called
+Minkowski metric (generalized: Lorentzian metric). And that "4D world" is called
+Minkowski spacetime.] 
+</p>
+<p>
+In my submitted codes, <tt>A/K/U/D/N/E/S/W</tt> are used; the South-East-Down point is picked to
+be the initial point for vector calculation in 3D and the Kata-South-East-Down point 
+is picked for the same purpose in 4D.
+</p>
+
+
+
+<h5>Properties of Squares (and Cubes) and a Primitive Algorithm</h5>
+<p>A quadrilateral with 4 sides equal can be a rhombus but not a square.</p>
+<p>A polyhedron with its 12 sides equal can be a parallelepiped but not a cube.</p>
+<p>To conclude, we have to get more details besides calculations of the lengths of edges.</p>
+
+<p>Before jumping to the next section about cube-check and hypercube-check, we may have to consider checking for the square first.</p>
+
+<p>Let <i>a</i> be the length of an edge of the regular "cube-like" polytope.</p>
+
+<p>
+Though edges are not sufficient conditions for proving/disproving whether a polytope(the umbrella term for polygon, polyhedron, ...)
+is a "cube-like" polytope, it seems that we must know their lengths and check whether they are equal.
+All we have on hand is the coordinates of vertices, without given their "order" in the plane/space.
+</p>
+
+
+<p>
+Discuss the case of a square.  
+We name the vertices are <tt>p0</tt>, <tt>p1</tt>,  <tt>p2</tt>,  and <tt>p3</tt>.
+We have the segment between <tt>p<i>m</i></tt> and <tt>p<i>n</i></tt> can be either an edge or a diagonal.
+We have 6 segments to consider. And we know from high school math that <tt>sqrt(2)*<i>a</i></tt>
+is the length of the diagonal.
+</p>
+
+<p>
+As mentioned, an edge-equal quadrilaternal can be a rhombus. But if we additionally consider
+the length of diagonals, the square has equal-length diagonals and an arbitarily constructed rhombus usually does not.
+Hence we can have a simple algorithm:
+</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">say</font> is_square(<font color="#34E2E2"><b>$pt0</b></font>, <font color="#34E2E2"><b>$pt1</b></font>, <font color="#34E2E2"><b>$pt2</b></font>, <font color="#34E2E2"><b>$pt3</b></font>);
+
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>is_square </b></font>{
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$p0</b></font>,<font color="#34E2E2"><b>$p1</b></font>,<font color="#34E2E2"><b>$p2</b></font>,<font color="#34E2E2"><b>$p3</b></font>) = (<font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>);
+</pre><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>... code block calculate the vectors pairwisely
+
+<pre>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@n_vector</b></font> = <font color="#FCE94F">map</font> <font color="#FCE94F">{</font> norm(<font color="#34E2E2"><b>$_</b></font>) <font color="#FCE94F">}</font> (<font color="#34E2E2"><b>$v0</b></font>, <font color="#34E2E2"><b>$v1</b></font>, <font color="#34E2E2"><b>$v2</b></font><i>, ...</i> );
+    <font color="#34E2E2"><b>@n_vector</b></font> = <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@n_vector</b></font>;
+</pre>
+<p>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>if the first four items of <tt>@n_vector</tt> are equal<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>and the last two items of <tt>@n_vector</tt> are equal<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>then return 1<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>else return 0
+</p>
+}
+
+<pre>
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>norm </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sum</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#34E2E2"><b>$sum</b></font>+= (<font color="#34E2E2"><b>$p-&gt;[$_]</b></font>)**<font color="#AD7FA8">2</font> <font color="#FCE94F">for</font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$p-&gt;$#*</b></font>);
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$sum</b></font>;
+}
+</pre><br>
+<pre>ok is_square( [<font color="#AD7FA8">10</font>,<font color="#AD7FA8">20</font>], [<font color="#AD7FA8">20</font>,<font color="#AD7FA8">20</font>], [<font color="#AD7FA8">20</font>, <font color="#AD7FA8">10</font>], [<font color="#AD7FA8">10</font>, <font color="#AD7FA8">10</font>] ) == <font color="#AD7FA8">1</font>, <font color="#AD7FA8">&quot;Example 1&quot;</font>;
+ok is_square( [<font color="#AD7FA8">12</font>,<font color="#AD7FA8">24</font>], [<font color="#AD7FA8">16</font>,<font color="#AD7FA8">10</font>], [<font color="#AD7FA8">20</font>, <font color="#AD7FA8">12</font>], [<font color="#AD7FA8">18</font>, <font color="#AD7FA8">16</font>] ) == <font color="#AD7FA8">0</font>, <font color="#AD7FA8">&quot;Example 2&quot;</font>;
+ok is_square( [<font color="#AD7FA8">1</font>, <font color="#AD7FA8">2</font>] , [<font color="#AD7FA8">4</font>,<font color="#AD7FA8">3</font>], [<font color="#AD7FA8">3</font>,<font color="#AD7FA8">1</font>], [<font color="#AD7FA8">2</font>,<font color="#AD7FA8">4</font>] ) == <font color="#AD7FA8">1</font>, <font color="#AD7FA8">&quot;Knight&apos;s square&quot;</font>;
+ok is_square( [<font color="#AD7FA8">1</font>, <font color="#AD7FA8">1</font>] , [-<font color="#AD7FA8">1</font>, <font color="#AD7FA8">1</font>], [ <font color="#AD7FA8">1</font>,-<font color="#AD7FA8">1</font>], [-<font color="#AD7FA8">1</font>,-<font color="#AD7FA8">1</font>] ) == <font color="#AD7FA8">1</font>, <font color="#AD7FA8">&quot;centre at origin&quot;</font>;
+</pre>
+
+</div>
+
+
+
+<div style="border: 2px solid #999333; padding: 3px">
+<h5>Math Fun: Properties of n-hypercube</h5>
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<img alt="" src="../docs/wiki_img/Cube_diagonals.png" width="240px" style="float:right" />
+<p><a href="#right_of_use_1">image info</a></p></div>
+
+
+<p>
+Shouldn't we investigate some basic stuff about the cube in order to understand the hypercube?
+</p>
+<p>
+Cube:<br>
+Number of vertices: 8<br>
+Number of edges: 12<br>
+Number of faces: 6<br>
+Number of cubes: 1<br><br>
+Especially for the segments between pairs of vertices:<br>
+Number of edges: 12<br>
+Number of face diagonals: 12<br>
+Number of body diagonals: 4<br>
+Total Number of Segments: 28
+</p>
+<div class="tiz">
+<i>Calculate again for the properties of a cube from those of a square:</i><br>
+Cube:<br>
+Number of vertices: num of vertices in a square &times; 2 = 4 &times; 2 = 8<br>
+Number of edges: num of edges in a square &times; 2 + 4 edges from the self replicating process (black and red in the diagram) = 4 &times; 2 + 4 = 12<br>
+Number of faces: 6<br>
+Number of cubes: 1<br><br>
+<a href="#sq_to_cub"><i>See a supporting diagram.</i></a>
+</div>
+<p>Look at the diagram of the hypercube on right in order to get some sensation on it.
+</p>
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<a href="../docs/wiki_img/hypercube.png">
+<img alt="" src="../docs/wiki_img/hypercube.png" width="240px" style="float:right" />
+</a>
+<p><a href="#right_of_use">image info</a></p></div>
+<p>
+<i>Now we proceed (can be counted from looking at the diagram):</i><br>
+Hypercube:<br>
+Number of vertices: 8 &times; 2 = 16<br>
+Number of edges: num of edges in a cube &times; 2 + 8 edges from the self replicating process = 12&times;2 + 8 = 32<br>
+Number of faces: num of faces in a cube &times; 2 + 12 faces new =  6&times;2 + 4&times;6&divide;2 = 24<br>
+Number of cubes: 2 + 6 = 8<br><br>
+Especially for the segments between pairs of vertices:<br>
+Number of edges: 32<br>
+Number of face diagonals: 2&times;24 = 48<br>
+Number of body diagonals: 4&times;8 = 32<br>
+Number of "hyperdiagonals": 8<br>
+Total Number of Segments: 120
+</p>
+<p>I have circled the four body-diagonal points with respect to the bigger bottom right point
+in red colour
+as I think it might be the most difficult for us to catch them by intuition.</p>
+
+<p>Though we are not going to code for the 5-hypercube, we may try some calculations based on above.<br><br>
+5-hypercube. Yup, disclamier: I cannot "sense" how the 5-hypercube looks like. Here are just calculations
+(number of edges verified on <a href="https://oeis.org/A001787">OEIS sequence A001787</a>)
+:<br>
+Number of vertices: 32<br>
+Number of edges: 32&times;2 + 16 = 80<br>
+Number of faces:  20&times;2 + ? &times; ? &divide; ? = ?? <br>
+<!-- Number of faces:  20&times;2 + ? &times; ? &divide; ? = 80 <br>
+Number of cubes: 40 <br><br>
+Number of (4-)hypercubes: 10 <br><br>
+Especially for the segments between vertices:<br>
+Number of edges: 80 <br>
+Number of face diagonals: 160 <br>
+Number of body diagonals: 160 <br>
+Number of "(4-)hyperdiagonals": 80 <br>
+Number of "5-hyperdiagonals": 16 <br>
+Total Number of Segments: 496 -->
+</p>
+<p>Oh, I resign, I fail to continue to count the remaining! But we can see there are already 80 edges, 
+we can expect an order of magnitude of 10<sup>2</sup> or above for the totol number of concerned segments
+in 5-hypercube. </p>
+</div>
+
+<h5>Vector Sum Approach</h5>
+<p>As said, we cannot solely rely on the length of edges. And the section 
+"Properties of Squares (and Cubes) and a Primitive Algorithm" 
+has already provided an algorithm and codes, 
+what am I going to talk about?</p>
+
+<p>If you read the optional section "Properties of n-hypercube", 
+you will find there would be a huge number of length of segments we are going to calculate if we follow the primitive algorithm.</p>
+
+<p>Another side of the primitive algorithm we need to consider is:
+are there any polytope with same various diagonals which are the same?
+ Intuitively the answer is yes, but... I haven't proved it. 
+So it remains a "conjecture" in our context.
+So... I don't think it is a safe approach for extending to cube or hypercube.
+ 
+A safer approach under the condition that 
+"the diagonal conjecture is not yet proved"
+ is checking the norm of a diagonal against the norm of an edge. </p>
+
+<p>OK let us see the code now:</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>is_square </b></font>{
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$p0</b></font>,<font color="#34E2E2"><b>$p1</b></font>,<font color="#34E2E2"><b>$p2</b></font>,<font color="#34E2E2"><b>$p3</b></font>) = (<font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$v0</b></font> = vec_subtract(<font color="#34E2E2"><b>$p0</b></font>, <font color="#34E2E2"><b>$p1</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$v1</b></font> = vec_subtract(<font color="#34E2E2"><b>$p0</b></font>, <font color="#34E2E2"><b>$p2</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$v2</b></font> = vec_subtract(<font color="#34E2E2"><b>$p0</b></font>, <font color="#34E2E2"><b>$p3</b></font>);
+    <font color="#34E2E2"># &quot;dot product test&quot;;</font>
+    <font color="#34E2E2"># return 0 unless (vec_prod_f($v1, $v2) == 0) xor</font>
+    <font color="#34E2E2">#                (vec_prod_f($v0, $v2) == 0) xor</font>
+    <font color="#34E2E2">#                (vec_prod_f($v0, $v1) == 0);</font>
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@n_vector</b></font> = <font color="#FCE94F">map</font> <font color="#FCE94F">{</font> norm(<font color="#34E2E2"><b>$_</b></font>) <font color="#FCE94F">}</font> (<font color="#34E2E2"><b>$v0</b></font>, <font color="#34E2E2"><b>$v1</b></font>, <font color="#34E2E2"><b>$v2</b></font>);
+    <font color="#34E2E2"><b>@n_vector</b></font> = <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@n_vector</b></font>;
+    <font color="#34E2E2"># &quot;norm test&quot;</font>
+    <font color="#34E2E2">#if ( $n_vector[0] == $n_vector[1] ) {</font>
+<font color="#34E2E2">#   the above conditional is fit for integter coordinates</font>
+<font color="#34E2E2">#   the below is special arrangement starting from the 5th test case </font>
+<font color="#34E2E2">#   or floating point number in general</font>
+    <font color="#FCE94F">if</font> ( <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%f&quot;</font>,<font color="#34E2E2"><b>$n_vector[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>) == <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%f&quot;</font>, <font color="#34E2E2"><b>$n_vector[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)
+       &amp;&amp; <font color="#AD7FA8">2</font>*<font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%f&quot;</font>, <font color="#34E2E2"><b>$n_vector[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>) == <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%f&quot;</font>, <font color="#34E2E2"><b>$n_vector[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>)
+<font color="#34E2E2">#       the above line concerning length of diagonal is sqrt(2)</font>
+<font color="#34E2E2">#       times the edge length would not be a necessary check </font>
+<font color="#34E2E2">#       if we preserve the dot product test, because in</font>
+<font color="#34E2E2">#       Euclidean space, if two vectors are orthogonal and in equal length,</font>
+<font color="#34E2E2">#       we can apply the Pythagorean theorem for the norm of the vector sum.</font>
+<font color="#34E2E2">#       For DEMOSTRATION PURPOSE,</font> 
+<font color="#34E2E2">#       the test of orthogonality (the dot product test) is commented out by brace,</font>
+<font color="#34E2E2">#       but the dot product test will be used both for cube and hypercube.</font>
+         ) {
+        <font color="#FCE94F">return</font> <font color="#AD7FA8">1</font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font>;
+}
+</pre>
+
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>vec_prod </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$first</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$second</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">warn</font> <font color="#AD7FA8">&quot;Not the same dimension in vec_prod </font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$first-&gt;$#*</b></font> != <font color="#34E2E2"><b>$second-&gt;$#*</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sum</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#34E2E2"><b>$sum</b></font>+= (<font color="#34E2E2"><b>$first-&gt;[$_]</b></font>*<font color="#34E2E2"><b>$second-&gt;[$_]</b></font>) <font color="#FCE94F">for</font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$first-&gt;$#*</b></font>);
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$sum</b></font>;
+}
+</pre>
+
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>vec_subtract </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$first</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$second</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ans</b></font> = [];
+    <font color="#FCE94F">warn</font> <font color="#AD7FA8">&quot;Not the same dimension in vec_subtract</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$first-&gt;$#*</b></font> != <font color="#34E2E2"><b>$second-&gt;$#*</b></font>;
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$s</b></font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$first-&gt;$#*</b></font>) {
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>$ans-&gt;@*</b></font>, <font color="#34E2E2"><b>$second-&gt;[$s]</b></font> - <font color="#34E2E2"><b>$first-&gt;[$s]</b></font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$ans</b></font>;
+}
+
+
+
+</pre>
+
+</div>
+
+<p>By the properties of vectors, the diagonal vector is 
+the vector sum of two vectors representing the edge 
+while we are keeping the direction correctly.</p>
+
+<p>
+I will discuss the ugly <tt>&amp;sprintf()</tt> (gonna be replaced by <tt>&amp;norm_f</tt> )
+on the later section "Numerical Inaccuracy". 
+See also the reason of not using dot product test;
+honestly I am not sure which
+(dot product test or checking the norms)
+ is a better combat against numerical inaccuracy;
+therefore they are being "comment out" via <tt>=pod</tt>.</p>
+
+<h5>Adventure to Cube and Hypercube</h5>
+<p>
+I intentionally avoid using permutations in
+the <tt>&amp;is_cube</tt> here but using permtutations in 
+<tt>&amp;is_hypercube</tt>
+for DEMOSTRATING the logic more explicitly for some potential audience. 
+Three nested conditionals, acceptable (?).
+You can get the link for finalized, more concise code at the bottom of the page. 
+</p> 
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>is_cube </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@p</b></font> = <font color="#34E2E2"><b>@_</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>%v</b></font>;
+    <font color="#34E2E2"><b>$v{$_}</b></font> = vec_subtract(<font color="#34E2E2"><b>$p[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$p[$_]</b></font>) <font color="#FCE94F">for</font> (<font color="#AD7FA8">1..7</font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@ind</b></font> = <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font> norm(<font color="#34E2E2"><b>$v{$a}</b></font>) &lt;=&gt; norm(<font color="#34E2E2"><b>$v{$b}</b></font>) <font color="#FCE94F">}</font> <font color="#FCE94F">keys</font> <font color="#34E2E2"><b>%v</b></font>;
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$N</b></font>, <font color="#34E2E2"><b>$W</b></font>, <font color="#34E2E2"><b>$U</b></font>) = (<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]}</b></font> , <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]}</b></font> , <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]}</b></font>) ;
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">unless</font> norm_f(<font color="#34E2E2"><b>$N</b></font>) == norm_f(<font color="#34E2E2"><b>$W</b></font>) &amp;&amp; norm_f(<font color="#34E2E2"><b>$N</b></font>) == norm_f(<font color="#34E2E2"><b>$U</b></font>);
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">unless</font> vec_prod_f(<font color="#34E2E2"><b>$N</b></font>,<font color="#34E2E2"><b>$W</b></font>) == <font color="#AD7FA8">0</font> &amp;&amp; vec_prod_f(<font color="#34E2E2"><b>$W</b></font>,<font color="#34E2E2"><b>$U</b></font>) == <font color="#AD7FA8">0</font>
+                        &amp;&amp; vec_prod_f(<font color="#34E2E2"><b>$U</b></font>,<font color="#34E2E2"><b>$N</b></font>) == <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$NW</b></font> = vec_sum(<font color="#34E2E2"><b>$N</b></font>, <font color="#34E2E2"><b>$W</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$WU</b></font> = vec_sum(<font color="#34E2E2"><b>$W</b></font>, <font color="#34E2E2"><b>$U</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$UN</b></font> = vec_sum(<font color="#34E2E2"><b>$U</b></font>, <font color="#34E2E2"><b>$N</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$bool</b></font> = <font color="#FCE94F">undef</font>;
+    <font color="#FCE94F">if</font> (vec_same_f(<font color="#34E2E2"><b>$NW</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]}</b></font>)) {
+      <font color="#FCE94F">if</font>   (  vec_same_f(<font color="#34E2E2"><b>$WU</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]}</b></font>)
+          &amp;&amp;  vec_same_f(<font color="#34E2E2"><b>$UN</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">5</font><font color="#34E2E2"><b>]}</b></font>) ) { <font color="#34E2E2"><b>$bool</b></font> = <font color="#AD7FA8">1</font>;
+      } <font color="#FCE94F">elsif</font> ( vec_same_f(<font color="#34E2E2"><b>$WU</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">5</font><font color="#34E2E2"><b>]}</b></font>)
+           &amp;&amp;   vec_same_f(<font color="#34E2E2"><b>$UN</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]}</b></font>) ) { <font color="#34E2E2"><b>$bool</b></font> = <font color="#AD7FA8">1</font>;
+      }
+    }
+    <font color="#FCE94F">if</font> (!<font color="#34E2E2"><b>$bool</b></font> &amp;&amp; vec_same_f(<font color="#34E2E2"><b>$NW</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]}</b></font>)) {
+      <font color="#FCE94F">if</font>   (  vec_same_f(<font color="#34E2E2"><b>$WU</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]}</b></font>)
+          &amp;&amp;  vec_same_f(<font color="#34E2E2"><b>$UN</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">5</font><font color="#34E2E2"><b>]}</b></font>) ) { <font color="#34E2E2"><b>$bool</b></font> = <font color="#AD7FA8">1</font>;
+      } <font color="#FCE94F">elsif</font> ( vec_same_f(<font color="#34E2E2"><b>$WU</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">5</font><font color="#34E2E2"><b>]}</b></font>)
+           &amp;&amp;   vec_same_f(<font color="#34E2E2"><b>$UN</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]}</b></font>) ) { <font color="#34E2E2"><b>$bool</b></font> = <font color="#AD7FA8">1</font>;
+      }
+    }
+    <font color="#FCE94F">if</font> (!<font color="#34E2E2"><b>$bool</b></font> &amp;&amp; vec_same_f(<font color="#34E2E2"><b>$NW</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">5</font><font color="#34E2E2"><b>]}</b></font>)) {
+      <font color="#FCE94F">if</font>   (  vec_same_f(<font color="#34E2E2"><b>$WU</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]}</b></font>)
+          &amp;&amp;  vec_same_f(<font color="#34E2E2"><b>$UN</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]}</b></font>) ) { <font color="#34E2E2"><b>$bool</b></font> = <font color="#AD7FA8">1</font>;
+      } <font color="#FCE94F">elsif</font> ( vec_same_f(<font color="#34E2E2"><b>$WU</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]}</b></font>)
+           &amp;&amp;   vec_same_f(<font color="#34E2E2"><b>$UN</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]}</b></font>) ) { <font color="#34E2E2"><b>$bool</b></font> = <font color="#AD7FA8">1</font>;
+      } <font color="#FCE94F">else</font> {
+        <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font>;
+      }
+    }
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">if</font> !<font color="#34E2E2"><b>$bool</b></font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$NWU</b></font> = vec_sum( <font color="#34E2E2"><b>$N</b></font>, <font color="#34E2E2"><b>$WU</b></font>);
+    <font color="#FCE94F">if</font> ( vec_same_f( <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">6</font><font color="#34E2E2"><b>]}</b></font> , <font color="#34E2E2"><b>$NWU</b></font> ) ) {
+<font color="#FCE94F">=pod</font>
+<font color="#5FD7FF">        return 0 unless</font>
+<font color="#5FD7FF">            2*norm_f($N) == norm_f($NW) &amp;&amp;</font>
+<font color="#5FD7FF">            norm_f($NW) == norm_f($WU) &amp;&amp;</font>
+<font color="#5FD7FF">            norm_f($WU) == norm_f($UN) &amp;&amp;</font>
+<font color="#5FD7FF">            3*norm_f($N) == norm_f($NWU);</font>
+<font color="#FCE94F">=cut</font>
+        <font color="#FCE94F">return</font> <font color="#AD7FA8">1</font>;
+    }
+    <font color="#FCE94F">else</font> {
+        <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font>;
+    }
+}
+</pre>
+</div>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>is_hypercube </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@p</b></font> = <font color="#34E2E2"><b>@_</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>%v</b></font>;
+    <font color="#34E2E2"><b>$v{$_}</b></font> = vec_subtract(<font color="#34E2E2"><b>$p[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$p[$_]</b></font>) <font color="#FCE94F">for</font> (<font color="#AD7FA8">1..15</font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@ind</b></font> = <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font> norm(<font color="#34E2E2"><b>$v{$a}</b></font>) &lt;=&gt; norm(<font color="#34E2E2"><b>$v{$b}</b></font>) <font color="#FCE94F">}</font> <font color="#FCE94F">keys</font> <font color="#34E2E2"><b>%v</b></font>;
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$N</b></font>, <font color="#34E2E2"><b>$W</b></font>, <font color="#34E2E2"><b>$U</b></font>, <font color="#34E2E2"><b>$A</b></font>) = ( <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]}</b></font> ,
+                            <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]}</b></font> );
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">unless</font>
+        norm_f(<font color="#34E2E2"><b>$N</b></font>) == norm_f(<font color="#34E2E2"><b>$W</b></font>) &amp;&amp; norm_f(<font color="#34E2E2"><b>$W</b></font>) == norm_f(<font color="#34E2E2"><b>$U</b></font>)
+                             &amp;&amp; norm_f(<font color="#34E2E2"><b>$U</b></font>) == norm_f(<font color="#34E2E2"><b>$A</b></font>);
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">unless</font>
+        vec_prod_f(<font color="#34E2E2"><b>$N</b></font>, <font color="#34E2E2"><b>$W</b></font>) == <font color="#AD7FA8">0</font> &amp;&amp;
+        vec_prod_f(<font color="#34E2E2"><b>$N</b></font>, <font color="#34E2E2"><b>$U</b></font>) == <font color="#AD7FA8">0</font> &amp;&amp;
+        vec_prod_f(<font color="#34E2E2"><b>$N</b></font>, <font color="#34E2E2"><b>$A</b></font>) == <font color="#AD7FA8">0</font> &amp;&amp;
+        vec_prod_f(<font color="#34E2E2"><b>$A</b></font>, <font color="#34E2E2"><b>$W</b></font>) == <font color="#AD7FA8">0</font> &amp;&amp;
+        vec_prod_f(<font color="#34E2E2"><b>$A</b></font>, <font color="#34E2E2"><b>$U</b></font>) == <font color="#AD7FA8">0</font> &amp;&amp;
+        vec_prod_f(<font color="#34E2E2"><b>$W</b></font>, <font color="#34E2E2"><b>$U</b></font>) == <font color="#AD7FA8">0</font> ;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$AU</b></font> = vec_sum(<font color="#34E2E2"><b>$A</b></font>, <font color="#34E2E2"><b>$U</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$AW</b></font> = vec_sum(<font color="#34E2E2"><b>$A</b></font>, <font color="#34E2E2"><b>$W</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$AN</b></font> = vec_sum(<font color="#34E2E2"><b>$A</b></font>, <font color="#34E2E2"><b>$N</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$NW</b></font> = vec_sum(<font color="#34E2E2"><b>$N</b></font>, <font color="#34E2E2"><b>$W</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$WU</b></font> = vec_sum(<font color="#34E2E2"><b>$W</b></font>, <font color="#34E2E2"><b>$U</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$UN</b></font> = vec_sum(<font color="#34E2E2"><b>$U</b></font>, <font color="#34E2E2"><b>$N</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$bool_face</b></font> = <font color="#FCE94F">undef</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$iter_face</b></font> = permutations([<font color="#34E2E2"><b>$AU</b></font>, <font color="#34E2E2"><b>$UN</b></font>, <font color="#34E2E2"><b>$NW</b></font>, <font color="#34E2E2"><b>$WU</b></font>, <font color="#34E2E2"><b>$AW</b></font>, <font color="#34E2E2"><b>$AN</b></font>]);
+    <font color="#FCE94F">while</font> (!<font color="#34E2E2"><b>$bool_face</b></font> &amp;&amp; (<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$iter_face-&gt;next</b></font>)) {
+        <font color="#34E2E2"><b>$bool_face</b></font> =
+            vec_same_f(<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>) &amp;&amp;
+            vec_same_f(<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">5</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>) &amp;&amp;
+            vec_same_f(<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">6</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>) &amp;&amp;
+            vec_same_f(<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">7</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>) &amp;&amp;
+            vec_same_f(<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">8</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]</b></font>) &amp;&amp;
+            vec_same_f(<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">9</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">5</font><font color="#34E2E2"><b>]</b></font>) ;
+    }
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">if</font> !<font color="#34E2E2"><b>$bool_face</b></font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$UNW</b></font> = vec_sum(<font color="#34E2E2"><b>$UN</b></font>, <font color="#34E2E2"><b>$W</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ANW</b></font> = vec_sum(<font color="#34E2E2"><b>$NW</b></font>, <font color="#34E2E2"><b>$A</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$AWU</b></font> = vec_sum(<font color="#34E2E2"><b>$WU</b></font>, <font color="#34E2E2"><b>$A</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$AUN</b></font> = vec_sum(<font color="#34E2E2"><b>$UN</b></font>, <font color="#34E2E2"><b>$A</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$bool_cube</b></font> = <font color="#FCE94F">undef</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$iter_cube</b></font> = permutations([<font color="#34E2E2"><b>$UNW</b></font>, <font color="#34E2E2"><b>$ANW</b></font>, <font color="#34E2E2"><b>$AWU</b></font>, <font color="#34E2E2"><b>$AUN</b></font>]);
+    <font color="#FCE94F">while</font> (!<font color="#34E2E2"><b>$bool_cube</b></font> &amp;&amp; (<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$iter_cube-&gt;next</b></font>)) {
+        <font color="#34E2E2"><b>$bool_cube</b></font> =
+            vec_same_f(<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">10</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>) &amp;&amp;
+            vec_same_f(<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">11</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>) &amp;&amp;
+            vec_same_f(<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">12</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>) &amp;&amp;
+            vec_same_f(<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">13</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$p-&gt;[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>);
+    }
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">if</font> !<font color="#34E2E2"><b>$bool_cube</b></font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$AUNW</b></font> = vec_sum(<font color="#34E2E2"><b>$AU</b></font>,<font color="#34E2E2"><b>$NW</b></font>);
+    <font color="#FCE94F">if</font> ( vec_same_f(<font color="#34E2E2"><b>$v{$ind[</b></font><font color="#AD7FA8">14</font><font color="#34E2E2"><b>]}</b></font>, <font color="#34E2E2"><b>$AUNW</b></font>) ) {</pre>
+<pre><font color="#FCE94F">=pod</font>
+<font color="#5FD7FF">        return 0 unless </font>
+<font color="#5FD7FF">            2*norm_f($N) == norm_f($NW) &amp;&amp;</font>
+<font color="#5FD7FF">            norm_f($NW) == norm_f($AU) &amp;&amp;</font>
+<font color="#5FD7FF">            norm_f($NW) == norm_f($UN) &amp;&amp;</font>
+<font color="#5FD7FF">            norm_f($NW) == norm_f($WU) &amp;&amp;</font>
+<font color="#5FD7FF">            norm_f($NW) == norm_f($AW) &amp;&amp;</font>
+<font color="#5FD7FF">            norm_f($NW) == norm_f($AN) &amp;&amp;</font>
+<font color="#5FD7FF">            3*norm_f($N) == norm_f($UNW) &amp;&amp;</font>
+<font color="#5FD7FF">            3*norm_f($N) == norm_f($ANW) &amp;&amp;</font>
+<font color="#5FD7FF">            3*norm_f($N) == norm_f($AWU) &amp;&amp;</font>
+<font color="#5FD7FF">            3*norm_f($N) == norm_f($AUN) &amp;&amp;</font>
+<font color="#5FD7FF">            4*norm_f($N) == norm_f($AUNW);</font>
+<font color="#FCE94F">=cut</font>
+        <font color="#FCE94F">return</font> <font color="#AD7FA8">1</font>;
+    }
+    <font color="#FCE94F">else</font> {
+        <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font>;
+    }
+}
+</pre>
+</div>
+
+<h5>Numerical Inaccuracy</h5>
+
+<p>
+When all the coordinates are integers, there will not be any problems.
+What if we supply <tt>sqrt($INT)</tt> or <tt>sin($ANGLE)</tt>?
+It was found that Perl 5 (maybe many other programming language which
+are not built-in radical or "good <tt>sin</tt> function").
+ does not work well. 
+Luckily a rouadabout is found:<br>
+<tt>sprintf("%f", $non-integer-value)</tt>.</p>
+<p>Here are code excepts from <tt>ch-2-cube-hypercube.pl</tt>:
+</p>
+<div class="code_vim_hl">
+
+<pre>
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>vec_prod </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$first</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$second</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">warn</font> <font color="#AD7FA8">&quot;Not the same dimension in vec_prod </font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$first-&gt;$#*</b></font> != <font color="#34E2E2"><b>$second-&gt;$#*</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sum</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#34E2E2"><b>$sum</b></font>+= (<font color="#34E2E2"><b>$first-&gt;[$_]</b></font>*<font color="#34E2E2"><b>$second-&gt;[$_]</b></font>) <font color="#FCE94F">for</font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$first-&gt;$#*</b></font>);
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$sum</b></font>;
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>vec_prod_f </b></font>{
+    <font color="#FCE94F">return</font> <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%f&quot;</font>, vec_prod(<font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>));
+}
+
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>norm </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sum</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#34E2E2"><b>$sum</b></font>+= (<font color="#34E2E2"><b>$p-&gt;[$_]</b></font>)**<font color="#AD7FA8">2</font> <font color="#FCE94F">for</font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$p-&gt;$#*</b></font>);
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$sum</b></font>;
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>norm_f </b></font>{
+    <font color="#FCE94F">return</font> <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%f&quot;</font>, norm(<font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>));
+}
+
+</pre>
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>vec_same </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$first</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$second</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">warn</font> <font color="#AD7FA8">&quot;Not the same dimension in vec_same</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$first-&gt;$#*</b></font> != <font color="#34E2E2"><b>$second-&gt;$#*</b></font>;
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$s</b></font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$first-&gt;$#*</b></font>) {
+        <font color="#FCE94F">return</font> <font color="#FCE94F">undef</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$first-&gt;[$s]</b></font> != <font color="#34E2E2"><b>$second-&gt;[$s]</b></font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">1</font>;
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>vec_same_f </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$first</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$second</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">warn</font> <font color="#AD7FA8">&quot;Not the same dimension in vec_same_f</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$first-&gt;$#*</b></font> != <font color="#34E2E2"><b>$second-&gt;$#*</b></font>;
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$s</b></font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$first-&gt;$#*</b></font>) {
+        <font color="#FCE94F">return</font> <font color="#FCE94F">undef</font> <font color="#FCE94F">if</font> <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%f&quot;</font>,<font color="#34E2E2"><b>$first-&gt;[$s]</b></font>) != <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%f&quot;</font>,<font color="#34E2E2"><b>$second-&gt;[$s]</b></font>);
+    }
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">1</font>;
+}
+</pre>
+
+</div>
+
+<h5>Discussion for the Norm-ONLY Approach</h5>
+<div style="float:right; border: 1px dotted black; font-size:xx-small;">
+<img alt="" src="../docs/assets/wk123_t2.png" width="340px" style="float:right" />
+<br>
+<p>self made</p></div>
+<p>
+It is possible to calculate all the lengths between points, sort them,
+and compare whether a cluster of them is equally valued (or whether they are correct
+multiples of the length of the edges).
+However, the number of total segments exponentially increases as the dimension increases.
+And I don't know yet what the minimum number of segment length
+to be checked is (except for squares).
+<br><br>
+Another mathematical point is, if we fix a point as "reference origin",
+we only need to calculate and sort 2<sup><tt>N</tt></sup>-1 vectors.
+Not out of surprise is that the distribution of lengths of the vectors
+follow the Pascal triangle:
+</p>
+<p>
+For <tt>N</tt> = 2, check (1) diagonal;<br>
+For <tt>N</tt> = 3, check (2, 1) diagonals;<br>
+For <tt>N</tt> = 4, check (3, 3, 1) diagonals;<br>
+For <tt>N</tt> = 5, check (4, 6, 4, 1) diagonals;<br>
+...</p>
+
+<p>
+If we calculate all the segments, there are
+2<sup><tt>N</tt>-1</sup> &times; (2<sup><tt>N</tt></sup>-1) segments, 
+and the distribution of the lengths is a bit more unpleasant to be calculated:
+</p>
+<p>
+For <tt>N</tt> = 2, check (2) diagonals;<br>
+For <tt>N</tt> = 3, check (12, 4) diagonals;<br>
+For <tt>N</tt> = 4, check (48, 32, 8) diagonals;<br>
+...</p>
+
+<h5>Summary</h5>
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<a name="sq_to_cub"></a><img alt="" src="../docs/assets/sq_to_cub.png" width="240px" style="float:right" />
+<br>
+<p>Replication of a square makes a cube; self made</p></div>
+
+<p>
+I don't do the <tt>&amp;is_<b>5</b>-hypercube</tt>. But you can see
+it will be about checking the orthogonality of the set of 31 vectors origined
+from one of the vertices,
+sorting their norms; 
+just bear in mind that the distribution of the lengths of the vectors
+is (5, 10, 10, 5, 1), check whether the vector sums of the edges are same as diagonals...
+</p>
+
+<p>Stay alert and healthy! □</p>
+
+<h5>Acknowledgement</h5>
+
+<p>Thank Simon Proctor for discussion.</p>
+
+<hr>
+
+<h4>Links</h4>
+
+<p>I watched them with help of the auto-translated functionality on YouTube.</p>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=LQFkUjYzOn8">La quatrième dimension #1 - Définition - Micmaths</a><br>
+Discussion of what dimension is through the concept of objects moving parallel to an axis<br> 
+(Terminology in Math: a set of pairwise non-parallel vectors spanning space?)<br>
+briefly introduce why we can see only 2D but familiar with (or say, the brain can process) 3D objects<br>
+<br>
+</li>
+<li><a href="https://www.youtube.com/watch?v=IbV0UoXXcOY">La quatrième dimension #2 - Représenter la 4D - Micmaths</a><br>
+A hypercube appears from 10 min 24 sec to 12 min 48 sec.
+</li>
+</ul>
+
+<p>Some details on the mathematics of n-hypercubes:</p>
+<ul>
+<li><a href="https://mathworld.wolfram.com/Hypercube.html">Wolfram MathWorld: Hypercube</a></li>
+</ul>
+<hr>
+<div class="tiz">
+<h5 style="color:black; font-size: medium">Snapshots of Recent Life</h5>
+
+<p>Talking about my growth on various directions is a great side-effect of TWC posts 
+to keep track on my effort, especially in programming and IT.</p>
+
+<p>1. I feel I learnt enough bash so I stop coding the tasks by it. 
+However, bash, as a shell, is not only about scripting. It also provides
+some features like "press tab and then available choices are given" or "<tt>!$</tt>". 
+I learnt these from a
+Kindle Book <i>Bash Command Line Pro Tips</i>, by Jason Cannon. The next language to learn
+should be C (start for TWC tasks only), after I complete the CPAN targets <tt>Games::Cards::Bridge</tt>
+and extend <tt>Map::Tube::[cities in PRC]</tt>. ...</p>
+
+<p>2. I finally made it how to automate the <tt>git push</tt> through the SSH keys.
+However, I still found the concepts of SSH foreign. Maybe I need to read its Definitive Guide(?).</p>
+
+<p>3. I often felt I might be a target of
+black-hat hackers because of abnormal cursor movements, strange typos and buzz on audio output. 
+Finally I bought a USB mouse and stopped using the touchpad.
+Things have worked well. Okay, it is highly probable that the typos are my responsibility...
+</p>
+
+<p>4. Previously I drafted two programming tasks on geometry of surfaces.
+but confused with how to handle the numerical errors and/or significant figures. 
+And as said above, I confused with the numerical stuff on Task 2 this week.
+There are some floating-point arithmetic computing books around but I am more concerned
+with the mathematical side rather than the computing side.
+The life partner of one of my physicist friends (more precisely, my friend is an astronomist),
+is an applied mathematician.
+He is kind and shares his lecture videos on the topic with me!
+Hope that I can learn the material well.
+</p>
+</div>
+
+<hr>
+
+<p><a name="right_of_use"></a>The original image of the tesseract (4-hypercube) is made by
+<a href="https://en.wikipedia.org/wiki/User:Tomruen">Tom Ruen</a>
+using <a href="http://www.software3d.com/Stella.php">Stella</a> &dash; a software coded by Robert Webb.
+The Wikimedia Commons page of the image is 
+<a href="https://commons.wikimedia.org/wiki/File:Schlegel_wireframe_8-cell.png">here</a>.
+It is licensed under the Creative Commons Attribution-Share Alike 3.0 Unported license.
+</p> 
+
+<p><a name="right_of_use_1"></a>The image of the cube with a face diagonal
+and a body diagonal marked is made by <a href="https://commons.wikimedia.org/wiki/User:Ervinpospisil~commonswiki">Ervinpospisil</a> 
+and <a href="https://commons.wikimedia.org/wiki/User:Nonenmac">R. A. Nonenmacher</a>.
+Its Wikimedia Commons page is 
+<a href="https://commons.wikimedia.org/wiki/File:Cube diagonals.svg">here</a>.
+eleased under CC-BY-SA <a href="https://creativecommons.org/licenses/by-sa/4.0/">4.0</a>/<a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">3.0</a>/<a href="https://creativecommons.org/licenses/by-sa/2.5/deed.en">2.5</a>/<a href="https://creativecommons.org/licenses/by-sa/2.5/deed.en">2.0</a>/<a href="https://creativecommons.org/licenses/by-sa/2.5/deed.en">1.0</a> and <a href="https://commons.wikimedia.org/wiki/Commons:GNU_Free_Documentation_License,_version_1.2">GNU Free Documentation License</a>.</p>
+
+<p><small>Except from images and codes from other personnels (including derived works), the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>links for CY's full codes: <tt><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-123/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>,
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-123/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>,
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-123/cheok-yin-fung/perl/ch-2-cube-hypercube.pl" title="ch-2-cube-hypercube.pl from Cheok-Yin Fung">
+ch-2-cube-hypercube.pl
+</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Created Date: 28th July, 2021. Last Modified: 1st Aug, 2021.</p>
+
+</body>
+
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #128">
+  <meta name="keywords" content="Perl, Programming Languages">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+
+<title> CY's Take on The Weekly Challenge #128 </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2> CY's Take on The Weekly Challenge #128 </h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-128/" title="The Weekly Challenge #128">challenges
+in Week #128</a> !</i></b></p>
+
+<hr>
+
+<p>Previous Challenges: I have updated my <a href="challenge_miscellaneous.html" title="short notes on TWC">short notes on The Weekly Challenge</a>.</p>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<image alt="" src="../docs/assets/platform.jpg" style="float:right" width="400px"/>
+<p>When will the next train come...? And what <i>should be</i> the next station...?</p>
+<p><a href="#right_of_use">image info</a></p></div>
+
+<h4>Task 1: Maximum Sub-Matrix</h4>
+
+<p>It grabbed me several hours to handle the typing and casting. This <a href="https://www.perlmonks.org/?node_id=920045#920063">link</a> is useful in general but did not help in this case. Finally I realised that the numeric value 011 is interpreted by the Perl interpreter as base-8 number. A roundabout which does not affect the completion of the task is concatenating a "<tt>1</tt>" on its leading position. (Well, honestly, I coded it from early morning to lunch time, upto a degree that I was not sure what I was doing; the trailing position is concatenated by a <tt>1</tt> as well.)</p>
+
+<p>I compared the matrix row by row and used 
+<a href="https://en.wikipedia.org/wiki/Bitwise_operation#Truth_table_for_all_binary_logical_operators">NOR</a>.</p>
+
+<p>And then the script replaces "<tt>1</tt>" by "<tt>x</tt>", "<tt>0</tt>" by "<tt>o</tt>".</p>
+
+<p>Usually, I want the code speaks, not the comments. Hence I post a code with running result. This code is made of the final submitted code and the code during production.</p>
+
+<p>The name of the important subroutine <tt>contiguous_block_of_xs</tt> explains the use of itself, so I skipped its details here.</p>
+
+<div class="code_vim_hl">
+<pre><font color="#5FD7FF">#!/usr/bin/perl</font>
+<font color="#34E2E2"># The Weekly Challenge 128</font>
+<font color="#34E2E2"># Task 1 Maximum Sub-Matrix</font>
+<font color="#34E2E2"># Usage: $ ch-1.pl </font>
+<font color="#FCE94F">use </font><font color="#AD7FA8">v5.12.0</font>;
+<font color="#FCE94F">use warnings</font>;
+<font color="#FCE94F">use </font>List::Util <font color="#AD7FA8">qw/max/</font>;
+<font color="#FCE94F">use </font>Test::More <font color="#AD7FA8">tests</font> =&gt; <font color="#AD7FA8">2</font>;
+<font color="#FCE94F">use </font>Test::Deep;
+
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>max_sub_matrix </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$bin</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$M</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>$bin-&gt;@*</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$N</b></font> = <font color="#AD7FA8">2</font> + <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>$bin-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]-&gt;@*</b></font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arr_bin</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arr_dec</b></font>;
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$M</b></font>-<font color="#AD7FA8">1</font>) {
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@arr_bin</b></font>, <font color="#FCE94F">join</font>(<font color="#AD7FA8">&quot;&quot;</font>, <font color="#34E2E2"><b>$bin-&gt;[$i]-&gt;@*</b></font>) ;
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@arr_dec</b></font>, <font color="#AD7FA8">2</font>**(<font color="#AD7FA8">2</font>+<font color="#34E2E2"><b>$bin-&gt;[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]-&gt;$#*</b></font>)+<font color="#AD7FA8">2</font>*<font color="#FCE94F">oct</font>(<font color="#AD7FA8">&quot;0b&quot;</font>.<font color="#34E2E2"><b>$arr_bin[$i]</b></font>)+<font color="#AD7FA8">1</font>;
+    }
+
+
+    <font color="#34E2E2">#  === BEGIN: use the last row as reference and initialization ===</font>
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$btm_line</b></font> = <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%0b&quot;</font>, my_not(<font color="#34E2E2"><b>$arr_dec[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$N</b></font>));
+    <font color="#34E2E2"><b>$btm_line</b></font> =~ <font color="#FCE94F">tr/</font><font color="#AD7FA8">01</font><font color="#FCE94F">/</font><font color="#AD7FA8">ox</font><font color="#FCE94F">/</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$max_area</b></font> = contiguous_block_of_xs(<font color="#34E2E2"><b>$btm_line</b></font>);
+    <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;bottom line area: </font><font color="#34E2E2"><b>$max_area</b></font><font color="#AD7FA8">&quot;</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$max_width</b></font> = <font color="#34E2E2"><b>$max_area</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$max_height</b></font> = <font color="#AD7FA8">1</font>;
+    <font color="#34E2E2">#  === END: use the last row as reference and initialization =====</font>
+
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$M</b></font>-<font color="#AD7FA8">2</font>) {
+
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$temp</b></font> = <font color="#34E2E2"><b>$arr_dec[$i]</b></font>;
+        <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;== &quot;</font>, <font color="#34E2E2"><b>$arr_dec[$i]</b></font>, <font color="#AD7FA8">&quot;(</font><font color="#34E2E2"><b>$arr_bin[$i]</b></font><font color="#AD7FA8">)&quot;</font> , <font color="#AD7FA8">&quot; ==&quot;</font>;
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$tmp_temp</b></font> = <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%0b&quot;</font>, my_not(<font color="#34E2E2"><b>$temp</b></font>, <font color="#34E2E2"><b>$N</b></font>));
+        <font color="#34E2E2"><b>$tmp_temp</b></font> =~ <font color="#FCE94F">tr/</font><font color="#AD7FA8">01</font><font color="#FCE94F">/</font><font color="#AD7FA8">ox</font><font color="#FCE94F">/</font>;
+
+    <font color="#34E2E2">#  ====== BEGIN: whether the i-th row contains a large number of x&apos;s ===</font>
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$the_row_ones</b></font> = contiguous_block_of_xs(<font color="#34E2E2"><b>$tmp_temp</b></font>);
+        <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$the_row_ones</b></font> &gt; <font color="#34E2E2"><b>$max_area</b></font>) {
+            <font color="#34E2E2"><b>$max_height</b></font> = <font color="#AD7FA8">1</font>;
+            <font color="#34E2E2"><b>$max_width</b></font> = <font color="#34E2E2"><b>$the_row_ones</b></font>;
+            <font color="#34E2E2"><b>$max_area</b></font> = <font color="#34E2E2"><b>$the_row_ones</b></font>;
+        }
+    <font color="#34E2E2">#  ====== END: whether the i-th row contains a large number of x&apos;s =====</font>
+
+    <font color="#34E2E2">#  === BEGIN: check from the next row to the bottom of the matrix ===</font>
+        <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$j</b></font> (<font color="#34E2E2"><b>$i</b></font>+<font color="#AD7FA8">1.</font>.<font color="#34E2E2"><b>$M</b></font>-<font color="#AD7FA8">1</font>) {
+            <font color="#FCE94F">say</font> <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%0b&quot;</font>,<font color="#34E2E2"><b>$arr_dec[$j]</b></font>);
+            <font color="#34E2E2"><b>$temp</b></font> = not_or( <font color="#34E2E2"><b>$temp</b></font>, <font color="#34E2E2"><b>$arr_dec[$j]</b></font>, <font color="#34E2E2"><b>$N</b></font>);
+
+            <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$x</b></font> = <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%0b&quot;</font>,<font color="#34E2E2"><b>$temp</b></font>);
+            <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;binary string version of x: </font><font color="#34E2E2"><b>$x</b></font><font color="#AD7FA8">&quot;</font>;      <font color="#34E2E2"># testing line</font>
+            <font color="#34E2E2"><b>$x</b></font> =~ <font color="#FCE94F">tr/</font><font color="#AD7FA8">01</font><font color="#FCE94F">/</font><font color="#AD7FA8">ox</font><font color="#FCE94F">/</font>;
+            <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$this_height</b></font> = <font color="#34E2E2"><b>$j</b></font>-<font color="#34E2E2"><b>$i</b></font>+<font color="#AD7FA8">1</font>;
+            <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$this_width</b></font> = contiguous_block_of_xs(<font color="#34E2E2"><b>$x</b></font>);
+
+            <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$this_area</b></font> = <font color="#34E2E2"><b>$this_width</b></font> * <font color="#34E2E2"><b>$this_height</b></font>;
+            <font color="#FCE94F">printf</font> <font color="#AD7FA8">&quot;   %0b</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>, <font color="#34E2E2"><b>$arr_dec[$j]</b></font>;
+            <font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;x: &quot;</font>, <font color="#34E2E2"><b>$x</b></font>, <font color="#AD7FA8">&quot; h: &quot;</font>, <font color="#34E2E2"><b>$this_height</b></font>, <font color="#AD7FA8">&quot;   w: &quot;</font>, <font color="#34E2E2"><b>$this_width</b></font>, <font color="#AD7FA8">&quot; &quot;</font>; <font color="#34E2E2">#testing line</font>
+            <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;area: &quot;</font>, <font color="#34E2E2"><b>$this_area</b></font>; <font color="#34E2E2">#testing line</font>
+            <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$this_area</b></font> &gt; <font color="#34E2E2"><b>$max_area</b></font>) {
+                <font color="#34E2E2"><b>$max_height</b></font> = <font color="#34E2E2"><b>$this_height</b></font>;
+                <font color="#34E2E2"><b>$max_width</b></font> = <font color="#34E2E2"><b>$this_width</b></font>;
+                <font color="#34E2E2"><b>$max_area</b></font> = <font color="#34E2E2"><b>$this_area</b></font>;
+            }
+
+    <font color="#34E2E2">#  ============ BEGIN: preparation for next loop ================</font>
+            <font color="#34E2E2"><b>$temp</b></font> = ~<font color="#34E2E2"><b>$temp</b></font>;
+    <font color="#34E2E2">#  ============ END: preparation for next loop ==================</font>
+    <font color="#34E2E2">#  === END: check from the next row to the bottom of the matrix ===</font>
+
+        }
+    }
+    <font color="#FCE94F">return</font> zeros(<font color="#34E2E2"><b>$max_height</b></font>, <font color="#34E2E2"><b>$max_width</b></font>) <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$max_area</b></font> &gt; <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">return</font> [];
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>contiguous_block_of_xs </b></font>{
+    # skip here
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>zeros</b></font> {
+    # skip here
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>my_not </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$N</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">return</font> ~<font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> &amp; (<font color="#AD7FA8">2</font>**(<font color="#34E2E2"><b>$N</b></font>-<font color="#AD7FA8">1</font>)-<font color="#AD7FA8">1</font>);
+}
+
+
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>not_or </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$N</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">return</font> ~(<font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> | <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>) &amp; (<font color="#AD7FA8">2</font>**(<font color="#34E2E2"><b>$N</b></font>-<font color="#AD7FA8">1</font>)-<font color="#AD7FA8">1</font>) ;
+}
+
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>print_matrix </b></font>{
+    # skip here
+}
+
+
+
+cmp_deeply(
+    max_sub_matrix(
+        [[<font color="#AD7FA8">1</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">1</font>,<font color="#AD7FA8">0</font>,],
+         [<font color="#AD7FA8">1</font>,<font color="#AD7FA8">1</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">1</font>,],
+         [<font color="#AD7FA8">1</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,]]
+    ) ,
+    [ [<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>], [<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>] ,[<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>] ],
+    <font color="#AD7FA8">&quot;Example 1&quot;</font>,
+);
+
+
+cmp_deeply(
+    max_sub_matrix(
+       [[ <font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">1</font>,<font color="#AD7FA8">1</font> ],
+        [ <font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">1</font> ],
+        [ <font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>,<font color="#AD7FA8">1</font>,<font color="#AD7FA8">0</font> ]]
+    ) ,
+    [ [<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>], [<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>] ,[<font color="#AD7FA8">0</font>,<font color="#AD7FA8">0</font>] ] ,
+    <font color="#AD7FA8">&quot;Example 2&quot;</font>
+);
+
+
+</pre>
+</div>
+
+<div class="code_vim_hl">
+<pre>
+$ perl ch-1-for-blogpost.pl
+
+bottom line area: 5
+== 197(100010) ==
+11100011
+binary string version of x: 11000
+   11100011
+x: xxooo h: 2   w: 2 area: 4
+11000001
+binary string version of x: 11000
+   11000001
+x: xxooo h: 3   w: 2 area: 6
+== 227(110001) ==
+11000001
+binary string version of x: 11100
+   11000001
+x: xxxoo h: 2   w: 3 area: 6
+ok 1 - Example 1
+
+
+bottom line area: 2
+== 39(0011) ==
+100011
+binary string version of x: 11000
+   100011
+x: xxooo h: 2   w: 2 area: 4
+100101
+binary string version of x: 11000
+   100101
+x: xxooo h: 3   w: 2 area: 6
+== 35(0001) ==
+100101
+binary string version of x: 11000
+   100101
+x: xxooo h: 2   w: 2 area: 4
+ok 2 - Example 2
+
+</pre>
+</div>
+
+<p style="display:none">Time Complexity: O(MN).</p>
+
+<p>At the end I would like to say, for me, this is the most challenging Task 1 recently. It 
+reminds me that I haven't coded the <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-079">Trapped Rain Water of Week 080</a>.</p>
+
+<h4>Task 2: Minimum Platforms</h4>
+
+<p>I was lazy but finally I try for this task: write a brute-force/not-that-time-efficient 
+solution and then write a thoughtful solution, and compare whether they give the same 
+result.</p>
+
+<p>The primitive subroutine is "time-driven"; the thoughtful subrountine is "event-driven". (Terminology 
+inspired by <a href="https://www.coursera.org/learn/algorithms-part1">the algorithm course</a> 
+from Princeton Univesity: <a href="https://algs4.cs.princeton.edu/61event/">details</a>.)</p>
+
+<p>For the thoughtful subrountine, hashes store the number of trains in the station and use the minutes as hash keys.</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>platforms_needed </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arrive_min</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]-&gt;@*</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@depart_min</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;@*</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>%station_traffic</b></font>;
+    <font color="#FCE94F">for</font> (<font color="#34E2E2"><b>@arrive_min</b></font>) {
+        <font color="#FCE94F">if</font> (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$station_traffic{$_}</b></font>)) {
+            <font color="#34E2E2"><b>$station_traffic{</b></font> <font color="#34E2E2"><b>$_</b></font> <font color="#34E2E2"><b>}</b></font>++;
+        }
+        <font color="#FCE94F">else</font> {
+            <font color="#34E2E2"><b>$station_traffic{</b></font> <font color="#34E2E2"><b>$_</b></font> <font color="#34E2E2"><b>}</b></font> = <font color="#AD7FA8">1</font>;
+        }
+    }
+    <font color="#FCE94F">for</font> (<font color="#34E2E2"><b>@depart_min</b></font>) {
+        #skip here, similar to the above loop
+    }
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@events</b></font> = <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#FCE94F">keys</font> <font color="#34E2E2"><b>%station_traffic</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$status</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$max_status</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">for</font> (<font color="#34E2E2"><b>@events</b></font>) {
+        <font color="#34E2E2"><b>$status</b></font> += <font color="#34E2E2"><b>$station_traffic{</b></font> <font color="#34E2E2"><b>$_</b></font> <font color="#34E2E2"><b>}</b></font>;
+        <font color="#34E2E2"><b>$max_status</b></font> = <font color="#34E2E2"><b>$status</b></font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$status</b></font> &gt; <font color="#34E2E2"><b>$max_status</b></font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$max_status</b></font>;
+}
+</pre>
+</div>
+
+<p>For the primitive subroutine, I let the code speak: <br>(it works on the assumption that
+neither two trains come nor leave the station at the same time)
+</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>platforms_needed_primitive </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arrive_min</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]-&gt;@*</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@depart_min</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]-&gt;@*</b></font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$max_p</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$t</b></font> (<font color="#AD7FA8">0..1439</font>) { # 60*24-1 = 1439
+        <font color="#34E2E2"><b>$p</b></font>++ <font color="#FCE94F">if</font> any { <font color="#34E2E2"><b>$t</b></font> == <font color="#34E2E2"><b>$_</b></font> } <font color="#34E2E2"><b>@arrive_min</b></font>;
+        <font color="#34E2E2"><b>$max_p</b></font> = <font color="#34E2E2"><b>$p</b></font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$p</b></font> &gt; <font color="#34E2E2"><b>$max_p</b></font>;
+        <font color="#34E2E2"><b>$p</b></font>-- <font color="#FCE94F">if</font> any { <font color="#34E2E2"><b>$t</b></font> == <font color="#34E2E2"><b>$_</b></font> } <font color="#34E2E2"><b>@depart_min</b></font>;
+    }
+
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$max_p</b></font>;
+}
+</pre>
+</div>
+
+<p>Wear your mask, stay alert and healthy! □</p>
+
+<hr>
+
+<h5>Footnotes:</h5>
+
+<div class="tiz">
+<img src="../docs/assets/lang_Sep3rd21.png" alt="" width="80%" />
+
+<p>This week, a tweet from the creator of <a href="https://adventofcode.com/">Advent of Code</a> made me reminds what language I would use in the coming December. I like LISP, and for marketing reason, I thought of learning its modern dialect, <a href="https://en.wikipedia.org/wiki/Clojure">Clojure</a>. I have been also interested in Haskell &dash; again a functional programming language. Just discover I get the book <i>Perl Debugged</i> by Peter Scott and Ed Wright, and I should learn how to use a debugger and trace values of variables by official tools (instead of using "<tt>print</tt>" or "<tt>say</tt>"). For living, better focus on one to three programming languages first; for AoC, try to collect all fifty stars first. I decide I will use Perl for the event this year. Codes from last year is <a href="https://github.com/E7-87-83/AdventOfCode" title="E7-87-83 GitHub: AoC 2021">here</a>. You are going to see my solutions <a href="https://github.com/E7-87-83/AdventOfCode/tree/main/2021" title="E7-87-83 GitHub: AoC 2021">here</a>. I may blog about AoC <a href="https://E7-87-83.github.io/coding/blog.html">HERE</a>.</p>
+
+<p>There are still many other concerns recently, especially on education and career, and I had many negative thoughts. I am trying to go back to regular cross country running &dash; a hobby not related to coding, science or math &dash; to alter the focus.</p>
+
+<p>Anyway hopefully I can have a December 2021 full of codes.</p>
+</div>
+<hr>
+
+<p><a name="right_of_use"></a>The image of the train station is taken by me in 2009 and you may share it under the free and open content spirit.</p> 
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-128/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>, 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-128/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com; I check email everyday.</p>
+<p>Created Date: 3rd September, 2021. Updated: 4th Sep 07:43 HKT.</p>
+
+</body>
+
+</html>

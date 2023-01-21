@@ -1,0 +1,115 @@
+body {
+    background: white;
+    margin: 0;
+    border: 0;
+    font-family: serif;
+    padding: 2ex;
+}
+
+div.heading {
+    border-bottom: 1px black solid;
+    width:100%; 
+}
+
+div.heading p {}
+
+div.code_vim_hl {
+    color:white; 
+    background-color:black;
+}
+
+
+div.console_output {
+    color:white;
+    background-color:#4B0082;
+    padding-left: 5px;
+}
+
+
+
+/* https://www.w3docs.com/snippets/css/
+    how-to-wrap-text-in-a-pre-tag-with-css.html */
+pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+}
+
+
+
+.bar li {
+    list-style-type:none;
+    border: 1px #666633 outset;
+    padding-top:0.5ex;
+    padding-bottom:0.6ex;
+    padding-right:0.3ex;
+    margin-top:0.5ex;
+    margin-bottom:0.5ex;
+    text-align:left;
+    background-color:#EEEEFF;
+    width: 100%;
+    clear:both;
+}
+
+.bar li a {
+    text-decoration:none;
+    color:#006600;
+}
+
+
+
+.bar li.here {
+    color:#CC0000;
+    text-align:left;
+    font-weight:bold;
+    background-color:#FFEFDD;
+
+}
+
+div.main {
+    color:#000033;
+    background-color:white;
+    border-top: 1px outset gray;
+    border-left: 1px outset gray;
+    border-right: 1px outset gray;
+    border-bottom: 1px outset gray;
+    padding:1ex;
+    width:100%; 
+}
+
+.main a { 
+    text-decoration:none; 
+    border-bottom:1px dotted blue; 
+    color:blue;
+}
+
+.main a:hover {
+    border-top: 1px dotted blue; 
+    background-color:aqua
+}
+
+
+div.tiz {color:yellow;}
+
+
+h1 {
+    margin-bottom:2ex;
+    color:red;
+    border-bottom:1px dotted green;
+}
+
+h2 {
+    border-bottom:1px solid #000066;
+    border-right:1px solid #000066;
+    margin-right:10%;
+}
+
+h3 {
+}
+
+disappearForMobile {
+    display:none;
+}

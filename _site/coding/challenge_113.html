@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #113">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+<title>CY's Take on The Weekly Challenge #113</title></head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #113</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku, go to <a href="https://perlweeklychallenge.org/">https://perlweeklychallenge.org</a>, code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://perlweeklychallenge.org/blog/perl-weekly-challenge-113/">challenges in Week #113</a> !</i></b></p>
+
+<hr>
+
+<h4>Task 1: Represent Integer</h4>
+
+<p>An important assertion is: for a non-zero digit <tt>$D</tt>, any positive integers larger than or equal to <tt>$D*10</tt> can be represented in the way specific in the task statement. This comes from <a href="https://en.wikipedia.org/wiki/Modular_arithmetic">modulo arithmetic</a> or <a href="https://en.wikipedia.org/wiki/Mathematical_induction">mathematical induction</a>, whatever.</p>
+
+<p>For a positive integer smaller than <tt>$D*10</tt>, there are two very similar ways to determine whether it is "representable": </p>
+
+<blockquote><tt>
+<b>sub&nbsp;</b><font color="#007f00">step_down</font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#&nbsp;Example&nbsp;&nbsp;&nbsp;I:&nbsp;if&nbsp;N&nbsp;=&nbsp;82,&nbsp;D&nbsp;=&nbsp;9,&nbsp;it&nbsp;hints&nbsp;82&nbsp;=&nbsp;9*7+19</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#&nbsp;Example&nbsp;&nbsp;II:&nbsp;if&nbsp;N&nbsp;=&nbsp;64,&nbsp;D&nbsp;=&nbsp;7,&nbsp;it&nbsp;hints&nbsp;64&nbsp;=&nbsp;7*1+57</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#&nbsp;Example&nbsp;III:&nbsp;if&nbsp;N&nbsp;=&nbsp;30,&nbsp;D&nbsp;=&nbsp;8,&nbsp;the&nbsp;set&nbsp;{8,&nbsp;18,&nbsp;28}&nbsp;...</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#&nbsp;Example&nbsp;&nbsp;IV:&nbsp;if&nbsp;N&nbsp;=&nbsp;44,&nbsp;D&nbsp;=&nbsp;6,&nbsp;it&nbsp;hints&nbsp;44&nbsp;=&nbsp;6*3+26</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$digit</font>&nbsp;=&nbsp;<font color="#0000ff"><b>$_</b></font>[0];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$short</font>&nbsp;=&nbsp;<font color="#0000ff"><b>$_</b></font>[<font color="#00007f">1</font>];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$temp_short</font>&nbsp;=&nbsp;<font color="#0000ff">$short</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>do</b>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#00007f">1</font>&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$temp_short</font>&nbsp;=~&nbsp;<font color="#ffa500">/</font><font color="#0000ff">$digit</font><font color="#ffa500">/</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$temp_short</font>&nbsp;<font color="#ffa500">-</font>=&nbsp;<font color="#0000ff">$digit</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<b>while</b>&nbsp;(<font color="#0000ff">$temp_short</font>&nbsp;&gt;&nbsp;0);&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;0;<br>
+}<br>
+<br>
+<b>sub&nbsp;</b><font color="#007f00">last_digit</font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#&nbsp;Example&nbsp;&nbsp;&nbsp;I:&nbsp;if&nbsp;N&nbsp;=&nbsp;82,&nbsp;D&nbsp;=&nbsp;9,&nbsp;it&nbsp;hints&nbsp;82&nbsp;=&nbsp;72+10&nbsp;=&nbsp;9*8+10&nbsp;=&nbsp;9*7+19</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#&nbsp;Example&nbsp;&nbsp;II:&nbsp;if&nbsp;N&nbsp;=&nbsp;64,&nbsp;D&nbsp;=&nbsp;7,&nbsp;it&nbsp;hints&nbsp;64&nbsp;=&nbsp;14+50&nbsp;=&nbsp;7*2+50&nbsp;=&nbsp;7*1+57</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#&nbsp;Example&nbsp;III:&nbsp;if&nbsp;N&nbsp;=&nbsp;30,&nbsp;D&nbsp;=&nbsp;8,&nbsp;the&nbsp;set&nbsp;{8,&nbsp;18,&nbsp;28}&nbsp;...</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#&nbsp;Example&nbsp;&nbsp;IV:&nbsp;if&nbsp;N&nbsp;=&nbsp;44,&nbsp;D&nbsp;=&nbsp;6,&nbsp;it&nbsp;hints&nbsp;44&nbsp;=&nbsp;24+20&nbsp;=&nbsp;6*4+20&nbsp;=&nbsp;6*3+26</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$digit</font>&nbsp;=&nbsp;<font color="#0000ff"><b>$_</b></font>[0];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$short</font>&nbsp;=&nbsp;<font color="#0000ff"><b>$_</b></font>[<font color="#00007f">1</font>];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$last_digit_of_short</font>&nbsp;=&nbsp;<font color="#0000ff">$short</font>&nbsp;%&nbsp;<font color="#00007f">10</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$i</font>&nbsp;=&nbsp;<font color="#00007f">1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>while</b>&nbsp;(<font color="#0000ff">$digit</font>*<font color="#0000ff">$i</font>&nbsp;&lt;&nbsp;<font color="#0000ff">$short</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$digit</font>*<font color="#0000ff">$i</font>&nbsp;%&nbsp;<font color="#00007f">10</font>&nbsp;&nbsp;==&nbsp;<font color="#0000ff">$last_digit_of_short</font>&nbsp;)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#00007f">1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$i</font>++;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;0;<br>
+}</tt></blockquote>
+
+<p>Let us do some optimization according to the fact that the base is 10: </p>
+
+<blockquote><tt>
+<b>sub&nbsp;</b><font color="#007f00">representable</font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;#...
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#00007f">1</font>&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$N</font>&nbsp;&gt;=&nbsp;<font color="#00007f">10</font>*<font color="#0000ff">$D</font>;&nbsp;&nbsp;&nbsp;<br>
+<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#00007f">1</font>&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$N</font>&nbsp;%&nbsp;<font color="#0000ff">$D</font>&nbsp;==&nbsp;0;&nbsp;&nbsp;<font color="#7f7f7f"><i>#&nbsp;$N&nbsp;=&nbsp;$D&nbsp;+&nbsp;$D&nbsp;+&nbsp;...&nbsp;+&nbsp;$D,&nbsp;esp&nbsp;$D&nbsp;==&nbsp;1</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;0&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$D</font>&nbsp;==&nbsp;<font color="#00007f">2</font>&nbsp;||&nbsp;<font color="#0000ff">$D</font>&nbsp;==&nbsp;<font color="#00007f">5</font>;
+
+<br><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$D</font>&nbsp;==&nbsp;4&nbsp;&amp;&amp;&nbsp;<font color="#0000ff">$N</font>&nbsp;&gt;&nbsp;<font color="#00007f">10</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#0000ff">$N</font>&nbsp;%&nbsp;<font color="#00007f">2</font>&nbsp;==&nbsp;0&nbsp;?&nbsp;<font color="#00007f">1</font>&nbsp;:&nbsp;0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$D</font>&nbsp;==&nbsp;<font color="#00007f">8</font>&nbsp;&amp;&amp;&nbsp;<font color="#0000ff">$N</font>&nbsp;&gt;=&nbsp;40)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#0000ff">$N</font>&nbsp;%&nbsp;<font color="#00007f">2</font>&nbsp;==&nbsp;0&nbsp;?&nbsp;<font color="#00007f">1</font>&nbsp;:&nbsp;0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$D</font>&nbsp;==&nbsp;<font color="#00007f">6</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;0&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$N</font>&nbsp;%&nbsp;<font color="#00007f">2</font>&nbsp;!=&nbsp;0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>&nbsp;&nbsp;&nbsp;&nbsp;# call &amp;step_down or &amp;last_digit...<br>}</tt></blockquote>
+
+<p>The math of "representable number" in an arbitary base has certain interesting mathematical properties and I am stil exploring them. What kinds of interesting properties? For example, in base-10, for digits <tt>$D</tt> coprime to 10 (i.e. 3, 7 and 9), the number of "representable" positive integers smaller than <tt>$D*10</tt> is <tt>(10-1)*($D+1)/2</tt>:</p>
+
+<blockquote><tt><ul><li>
+<u>3</u>: 3, 6, 9, 12, 13, 15, 16, 18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29 (18 terms);</li><li>
+<u>7</u>: 7, 14, 17, 21, 24, 27, 28, 31, 34, 35, 37, 38, 41, 42, 44, 45, 47, 48, 49, 51, 52, 54, 55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 66, 67, 68, 69 (36 terms);</li><li>
+<u>9</u>: 9, 18, 19, 27, 28, 29, 36, 37, 38, 39, 45, 46, 47, 48, 49, 54, 55, 56, 57, 58, 59, 63, 64, 65, 66, 67, 68, 69, 72, 73, 74, 75, 76, 77, 78, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89 (45 terms).</li>
+</ul></tt></blockquote>
+
+<p>For completeness, note that the handle of the case of <tt>$D = 0</tt>, is <tt>return 1 if $N &gt;= <i>$base</i>*<i>$base</i>; return $N % <i>$base</i> == 0 ? 1 : 0; </tt> .</p>
+
+<h4>Task 2: Recreate Binary Tree</h4>
+
+<p>Firstly, take an assumption that the input are integers. But the task statement does not specific whether zero and/or negative numbers are allowed, hence for the null nodes, we can't set them as <tt>0</tt> or <tt>-1</tt>. Luckily, we have <tt>undef</tt> in Perl.</p>
+
+<p> Among the possible data structures for getting the sum of the values in nodes of a binary tree, "<a href="https://en.wikipedia.org/wiki/Binary_tree#Methods_for_storing_binary_trees">an implicitly breadth-first orderred one-dimensional array</a>"<small>(paraphrased from Wikipedia)</small> should be the easiest to implement. </p>
+
+<p>Another advantage of this data structure is that it is easy to input: </p>
+
+<blockquote><tt># Usage: ch-2.pl [binary tree in array format, 'x' for null nodes]</tt></blockquote>
+
+<blockquote><tt><br>
+<b>my</b>&nbsp;<font color="#0000ff">@tree</font>&nbsp;=&nbsp;<font color="#007f00">map</font>&nbsp;{&nbsp;<font color="#0000ff"><b>$_</b></font>&nbsp;<font color="#ffa500">eq</font>&nbsp;<font color="#ffa500">'</font><font color="#ff0000">x</font><font color="#ffa500">'</font>&nbsp;?&nbsp;<font color="#007f00">undef</font>&nbsp;:&nbsp;<font color="#0000ff"><b>$_</b></font>&nbsp;}&nbsp;<font color="#0000ff"><b>@ARGV</b></font>;<br>
+<br>
+<b>my</b>&nbsp;<font color="#0000ff">$sum</font>&nbsp;=&nbsp;0;<br>
+<br>
+<b>for</b>&nbsp;(<font color="#0000ff">@tree</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$sum</font>&nbsp;+=&nbsp;<font color="#0000ff"><b>$_</b></font>&nbsp;<b>if</b>&nbsp;<font color="#007f00">defined</font>(<font color="#0000ff"><b>$_</b></font>);<br>
+}<br>
+<br>
+<b>for</b>&nbsp;(<font color="#0000ff">@tree</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff"><b>$_</b></font>&nbsp;=&nbsp;<font color="#0000ff">$sum</font>&nbsp;<font color="#ffa500">-</font>&nbsp;<font color="#0000ff"><b>$_</b></font>&nbsp;<b>if</b>&nbsp;<font color="#007f00">defined</font>(<font color="#0000ff"><b>$_</b></font>);<br>
+}<br>
+<br>
+print_tree(<font color="#0000ff">@tree</font>);</tt></blockquote>
+
+<p>Using the example in the task statement, we have:</p>
+
+<blockquote><pre>$ perl ch-2.pl 1 2 3 4 x 5 6 x 7
+27 26 25 24 x 23 22 x 21 
+</pre></blockquote>
+
+<p>After the first round of coding, I felt a bit bored. Why not provide <u>a hash of hashes implementation</u> for the binary trees? I hadn't done that before. Look at the history of submission; the closest thing I had done is <a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-057/cheok-yin-fung/perl/ch-1.pl#L59">the nested array implementation</a>(Week #057) for the binary trees. I have typed Java and OO stuff so hard recently that it took some time for me to code out the hash of hashes: </p>
+
+<blockquote><tt>
+<b>sub&nbsp;</b><font color="#007f00">tree_build</font>&nbsp;{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#&nbsp;use&nbsp;for&nbsp;print_pretty_tree</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">@t</font>&nbsp;=&nbsp;<font color="#0000ff">@</font>{<font color="#0000ff"><b>$_</b></font>[0]};<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$ind</font>&nbsp;=&nbsp;<font color="#0000ff"><b>$_</b></font>[<font color="#00007f">1</font>];&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">%leaf</font>&nbsp;=&nbsp;(&nbsp;<font color="#ffa500">"</font><font color="#ff0000">v</font><font color="#ffa500">"</font>&nbsp;=&gt;&nbsp;<font color="#0000ff">$t</font>[<font color="#0000ff">$ind</font>]&nbsp;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$leaf</font>{<font color="#ffa500">"</font><font color="#ff0000">l</font><font color="#ffa500">"</font>}&nbsp;=&nbsp;tree_build(\<font color="#0000ff">@t</font>,&nbsp;<font color="#0000ff">$ind</font>*<font color="#00007f">2</font>+<font color="#00007f">1</font>)&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;<font color="#007f00">defined</font>(<font color="#0000ff">$t</font>[<font color="#0000ff">$ind</font>*<font color="#00007f">2</font>+<font color="#00007f">1</font>]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$leaf</font>{<font color="#ffa500">"</font><font color="#ff0000">r</font><font color="#ffa500">"</font>}&nbsp;=&nbsp;tree_build(\<font color="#0000ff">@t</font>,&nbsp;<font color="#0000ff">$ind</font>*<font color="#00007f">2</font>+<font color="#00007f">2</font>)&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;<font color="#007f00">defined</font>(<font color="#0000ff">$t</font>[<font color="#0000ff">$ind</font>*<font color="#00007f">2</font>+<font color="#00007f">2</font>]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;\<font color="#0000ff">%leaf</font>;<br>
+}</tt></blockquote>
+
+<p>And just like what I did in Week #057, I ask <span style="font-family:sans-serif"><a href="https://perldoc.perl.org/Data::Dumper">Data::Dumper</a></span> for output: </p>
+
+<blockquote><tt>
+<b>sub&nbsp;</b><font color="#007f00">print_pretty_tree</font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">@tr</font>&nbsp;=&nbsp;<font color="#0000ff">@_</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$hash_tree</font>&nbsp;=&nbsp;tree_build(&nbsp;\<font color="#0000ff">@tr</font>,&nbsp;0);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$Data</font>::<font color="#0000ff">Dumper</font>::<font color="#0000ff">Terse</font>&nbsp;=&nbsp;<font color="#00007f">1</font>;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$Data</font>::<font color="#0000ff">Dumper</font>::<font color="#0000ff">Indent</font>&nbsp;=&nbsp;<font color="#00007f">2</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$Data</font>::<font color="#0000ff">Dumper</font>::<font color="#0000ff">Sortkeys</font>&nbsp;=&nbsp;<font color="#00007f">1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">print</font>&nbsp;<font color="#ffa500">"</font><font color="#ff00ff">\n</font><font color="#ffa500">"</font>;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">print</font>&nbsp;<font color="#ffa500">"</font><font color="#ff0000">Output&nbsp;in&nbsp;Hash&nbsp;Format:</font><font color="#ff00ff">\n</font><font color="#ffa500">"</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">print</font>&nbsp;Dumper&nbsp;<font color="#0000ff">$hash_tree</font>;&nbsp;<br>
+}</tt></blockquote>
+
+<p>The updated result is: </p>
+
+<blockquote><pre>$ perl ch-2.pl 1 2 3 4 x 5 6 x 7
+Output in Array Format:
+27 26 25 24 x 23 22 x 21 
+
+Output in Hash Format:
+{
+  'l' => {
+           'l' => {
+                    'r' => {
+                             'v' => 21
+                           },
+                    'v' => 24
+                  },
+           'v' => 26
+         },
+  'r' => {
+           'l' => {
+                    'v' => 23
+                  },
+           'r' => {
+                    'v' => 22
+                  },
+           'v' => 25
+         },
+  'v' => 27
+}</pre></blockquote>
+
+<hr>
+
+<p>Stay alert and healthy! □</p>
+
+<p><i>link for full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-113/cheok-yin-fung/perl/ch-1.pl">ch-1.pl</a></tt>, <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-113/cheok-yin-fung/perl/ch-2.pl">ch-2.pl</a></tt></i></p>
+
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+
+<p>Created Date: 19th May, 2021; last updated: 20th May, 2021 05:09 HKT</p>
+
+</body>
+
+</html>

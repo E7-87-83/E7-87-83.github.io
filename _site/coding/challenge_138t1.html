@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #xxx">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+
+<title>CY's Take on The Weekly Challenge #138 Task 1 and Some Previous Tasks on Calendar Date</title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #138 Task 1 and Some Previous Tasks on Calendar Date</h2>
+  <h2><small>Comparing Perl, Java and Julia</small></h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-138/#TASK1" title="The Weekly Challenge #138">challenges
+in Week #138, specific in Task 1</a> !</i></b></p>
+
+<p><b>But you gonna also see details to <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-132/#TASK1" title="The Weekly Challenge #132">Week #132 Task 1</a> and <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-137/#TASK1" title="The Weekly Challenge #137">Week #137 Task 1</a> on this blogpost.</b></p>
+
+<hr>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small; width: 220px">
+<a href="../docs/assets/2022kalender.png"><image alt="" src="../docs/assets/dodecahedron.png" style="float:right" /></a><br>
+(fair use, from Ole Arntzen)<br><a href="https://folk.uib.no/nmioa/kalender/" title="Download a 12 sided calendar" target="_blank">Download Your 12 sided calendar</a></div>
+
+
+
+<h5>Week #132 Task 1: Mirror Dates</h5>
+
+<p>Input: a date (yyyy/mm/dd). Output: "backward mirror date" and "forward mirror date".</p>
+
+<blockquote>[For the task.] <i>Assuming today is 2021/09/22.</i><br>
+Example 1:<br><br>
+
+Input: 2021/09/18<br>
+Output: 2021/09/14, 2021/09/26<br><br>
+
+On the date you were born, someone who was your current age, would have been born on 2021/09/14.<br>
+Someone born today will be your current age on 2021/09/26.
+</blockquote>
+
+
+<h5>Week #137 Task 1: Long Year</h5>
+
+<p>Input: N/A. Output: number of long years between 1900 and 2100.</p>
+
+<blockquote>A year is Long if it has 53 weeks. (For more information...) <a href="https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year">wikipedia</a> </blockquote>
+
+<h5>Week #138 Task 1: Work Days</h5>
+
+<p>Input: a positive integer indicated the year. Output: number of work days in that year.</p>
+
+<blockquote>For the task, we consider, Monday - Friday as workdays.</blockquote>
+
+<p>
+Note that I decide not to use any modules outside the standard library of each programming language. I just checked out the handy <tt><a href="https://metacpan.org/pod/Date::Calc">Date::Calc</a></tt> on <span title="Comprehensive Perl Archive Network">CPAN</span>, and it equips programmer many handy functions (like what are in the standard libary of Java or Julia), better than my struggling usage of <tt><a href="https://metacpan.org/pod/Time::Local">Time::Local</a></tt>.
+</p>
+
+<p>
+In terms of data structures or algorithms, these three tasks are quite simple. On the practical side, we have to be familiar with the date(/time) library we are using. As an early hint for the summary, "the standard library" of Perl solutions are the most complicated.
+</p>
+
+<h4>Overview for the Languages</h4>
+
+<p>I choose to code both in Java, Julia and Perl for the tasks.</p>
+
+<h5>Java</h5>
+<p>
+Though not being a <i>purely</i> object-oriented programming language, one must know the rules of Java's typing and Java's Object-Oriented system in order to use it effectively. For the tasks mentioned, <tt>java.time.LocalDate</tt> has been my friend. (Besides <tt>java.time.LocalDate</tt>, there are <tt>java.time.LocalDateTime</tt>, <tt>java.time.Year</tt>, <tt>java.time.YearMonth</tt> and <tt>java.time.ZonedDateTime</tt> to handle the date and/or time operation.)
+</p>
+
+<h5>Julia</h5>
+<p>
+The <tt>Dates</tt> module is within standard library of Julia and it handles both date and time operation. I made the largest advantage of the library through using <tt>Dates.week()</tt> in Week 137. The resulting code has just 15 lines essentially.
+</p>
+
+<p>Julia is a very young dynamic language. From the info from its official website, Julia 1.0 was released in August 2018, and I am using version 1.6.3.</p>
+
+<p>The developers <a href="https://julialang.org/blog/2012/02/why-we-created-julia/">stated that they are "greedy" and want a multi-purpose language</a>. Many fans of Julia seems agree to the ambition. Besides scientific computing and (pure/applied) math modules, for evidence of the ambition, they have also module for documentation(<a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a>).</p>
+<p>By the way, the developers also said they want the language "as natural for string processing as <i>Perl</i>" and "as good at gluing programs together as the shell". I haven't tried Julia's capacity on these areas.
+</p>
+<p>
+I also have to admit here that I haven't well handle many features of Julia, e.g. macro (idea from LISP) and its rich type system. In order to keep being (relatively) rich, one has to be careful and make some inconvenience in life. To see an example:
+</p>
+<div class="code_vim_hl" style="background-color:#666666">
+<pre>               <font color="#8AE234"><b>_</b></font>
+   <font color="#729FCF"><b>_</b></font>       _ <font color="#EF2929"><b>_</b></font><font color="#8AE234"><b>(_)</b></font><font color="#AD7FA8"><b>_</b></font>     |  Documentation: https://docs.julialang.org
+  <font color="#729FCF"><b>(_)</b></font>     | <font color="#EF2929"><b>(_)</b></font> <font color="#AD7FA8"><b>(_)</b></font>    |
+   _ _   _| |_  __ _   |  Type &quot;?&quot; for help, &quot;]?&quot; for Pkg help.
+  | | | | | | |/ _` |  |
+  | | |_| | | | (_| |  |  Version 1.6.3 (2021-09-23)
+ _/ |\__&apos;_|_|_|\__&apos;_|  |  Official https://julialang.org/ release
+|__/                   |
+
+<font color="#8AE234"><b>julia&gt; </b></font>B = rand(3, 3)  # a random matrix, so few code to generate
+3×3 Matrix{Float64}:
+ 0.780488  0.758598   0.0491861
+ 0.612032  0.0468023  0.0547018
+ 0.131136  0.334803   0.170626
+
+<font color="#8AE234"><b>julia&gt; </b></font>variable = B[1,2] # get its entry on row 1 and col 2
+0.758597987877625
+
+<font color="#8AE234"><b>julia&gt; </b></font># note that Julia&apos;s arrays begin with 1 by default 
+
+<font color="#8AE234"><b>julia&gt; </b></font># Now I want an 3 x 3 identity matrix...
+
+<font color="#8AE234"><b>julia&gt; </b></font>I = Matrix{Int}(I, 3, 3)
+<font color="#EF2929"><b>ERROR: </b></font>UndefVarError: I not defined
+Stacktrace:
+ [1] top-level scope
+<font color="#555753">   @ </font><font color="#555753"><u style="text-decoration-style:single">REPL[5]:1</u></font>
+
+<font color="#8AE234"><b>julia&gt; </b></font>I = ([1, 0, 0], [0, 1, 0], [0, 0, 1])
+([1, 0, 0], [0, 1, 0], [0, 0, 1])
+
+<font color="#8AE234"><b>julia&gt; </b></font>B + I
+<font color="#EF2929"><b>ERROR: </b></font>MethodError: no method matching +(::Matrix{Float64}, ::Tuple{Vector{Int64}, Vector{Int64}, Vector{Int64}})
+Closest candidates are:
+  +(::Any, ::Any, <font color="#EF2929">::Any</font>, <font color="#EF2929">::Any...</font>) at operators.jl:560
+  +(::Array, <font color="#EF2929">::Array...</font>) at arraymath.jl:43
+  +(::Array, <font color="#EF2929">::SparseArrays.AbstractSparseMatrixCSC</font>) at /buildworker/worker/package_linux64/build/usr/share/julia/stdlib/v1.6/SparseArrays/src/sparsematrix.jl:1745
+  ...
+Stacktrace:
+ [1] top-level scope
+<font color="#555753">   @ </font><font color="#555753"><u style="text-decoration-style:single">REPL[7]:1</u></font>
+
+<font color="#8AE234"><b>julia&gt; </b></font>I = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+3-element Vector{Vector{Int64}}:
+ [1, 0, 0]
+ [0, 1, 0]
+ [0, 0, 1]
+
+<font color="#8AE234"><b>julia&gt; </b></font>B + I
+<font color="#EF2929"><b>ERROR: </b></font>DimensionMismatch(&quot;dimensions must match: a has dims (Base.OneTo(3), Base.OneTo(3)), must have singleton at dim 2&quot;)
+Stacktrace:
+<i>skipped</i>
+
+<font color="#8AE234"><b>julia&gt; </b></font>I = [1, 0, 0; 0, 1, 0; 0, 0, 1]
+<font color="#EF2929"><b>ERROR: </b></font>syntax: unexpected semicolon in array expression around REPL[10]:1
+Stacktrace:
+ [1] top-level scope
+<font color="#555753">   @ </font><font color="#555753"><u style="text-decoration-style:single">REPL[10]:1</u></font>
+
+<font color="#8AE234"><b>julia&gt; </b></font>I = [1 0 0; 0 1 0; 0 0 1]
+3×3 Matrix{Int64}:
+ 1  0  0
+ 0  1  0
+ 0  0  1
+
+<font color="#8AE234"><b>julia&gt; </b></font>B + I
+3×3 Matrix{Float64}:
+ 1.78049   0.758598  0.0491861
+ 0.612032  1.0468    0.0547018
+ 0.131136  0.334803  1.17063
+
+<font color="#8AE234"><b>julia&gt; </b></font># finally get it right after referencing some materials
+
+<font color="#8AE234"><b>julia&gt; </b></font>using LinearAlgebra
+WARNING: using LinearAlgebra.I in module Main conflicts with an existing identifier.
+
+<font color="#8AE234"><b>julia&gt; </b></font>B + LinearAlgebra.I
+3×3 Matrix{Float64}:
+ 1.78049   0.758598  0.0491861
+ 0.612032  1.0468    0.0547018
+ 0.131136  0.334803  1.17063
+
+<font color="#8AE234"><b>julia&gt; </b></font>A = rand(2, 2)
+2×2 Matrix{Float64}:
+ 0.158673    0.498452
+ 0.00449048  0.731519
+
+<font color="#8AE234"><b>julia&gt; </b></font>A + LinearAlgebra.I
+2×2 Matrix{Float64}:
+ 1.15867     0.498452
+ 0.00449048  1.73152
+
+<font color="#8AE234"><b>julia&gt; </b></font># get it right by the standard package
+
+</pre>
+
+</div>
+
+<h5>Perl</h5>
+<p><font color="red">
+(It is most likely Perl hackers, especially TWC participants, would read this blogpost, should I still introduce Perl for consistency? For the virtue of Laziness, and self knowledge of the limitations of my ability, I should skip it!)
+</p>
+<p>
+Okay.</font> It is worth mentioned that Perl is the oldest among the programming languages in this blogpost. <a href="https://perldoc.perl.org/perlhist">Perl 1.000 released on 18th December, 1987</a>. 
+</p>
+<p>
+If you have heard some bad words about Perl, I should refer you to Mark Gardner's article in October: <i><a href="https://phoenixtrap.com/2021/10/19/the-reports-of-perls-death-have-been-greatly-exaggerated/
+">The reports of Perl’s death have been greatly exaggerated</a></i>.
+</p>
+<p>
+From my limited exploration, I feel that the losing popularity of Perl is mostly contributed by the popularity Python, which has targeted at a similar group of users. <i>Many people around me have learnt Python as their first programming language, so they stick to it, and think Python's quite good without actual comparsion.</i> I just want to raise a stupid proposal: unlike the trend &dash; learning programming begins with Python or JavaScript, a beginner learns programming the best through learning LISP(Common Lisp or Scheme? doesn't matter for the starter), Smalltalk and a language they are going to <b>work</b> with. Yes, learn 3 within the same period of time. The current scope of LISP or Smalltalk makes them sutiable for beginners without overwhelming beginners with fancy external libraries or syntactic sugar &dash; learners can learn these stuff for the remaining "programming language to be began with". I like the consistent and pure syntax of LISP or Smalltalk brings.
+</p>
+
+<p>Anyway, <b>if one would like to learn the *nix systems, Perl is a great language to start with, since it has many ideas from the Unix shell script &dash; while Perl makes some improvements.</b>
+</p>
+
+<p>
+Put a full stop to my silly and limited opinion (as a record of what discussions I saw in some days before). 
+</p>
+
+<h4>More on Perl: module <tt>Time::gmtime</tt> and <tt>Time::localtime</tt></h4>
+
+<p>I discover the standard library modules <tt><a href="https://metacpan.org/pod/Time::gmtime">Time::gmtime</a></tt> and <tt><a href="https://metacpan.org/pod/Time::localtime">Time::localtime</a></tt> during drafting of this blogpost. They &dash; actually, just one of them &dash; I decided to stick with <tt>gmtime</tt> after cleaning up &dash; greatly improves the readability of the Perl codes.</p>
+
+<p>How <tt>Time::gmtime</tt> have improved the codes? Let us see two excerpts, in the tasks "Mirror Dates" and "Long Year":</p>
+
+<p>Mirror Dates</p>
+
+<p>Before:</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">return</font>
+    (<font color="#34E2E2"><b>$d_s-&gt;[</b></font><font color="#AD7FA8">5</font><font color="#34E2E2"><b>]</b></font>+<font color="#AD7FA8">1900</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+    .(<font color="#34E2E2"><b>$d_s-&gt;[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]</b></font>&lt;=<font color="#AD7FA8">8</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_s-&gt;[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]</b></font>+<font color="#AD7FA8">1</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+    .(<font color="#34E2E2"><b>$d_s-&gt;[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>&lt;<font color="#AD7FA8">10</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_s-&gt;[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>)
+    .<font color="#AD7FA8">&quot;, &quot;</font>
+    .(<font color="#34E2E2"><b>$d_j-&gt;[</b></font><font color="#AD7FA8">5</font><font color="#34E2E2"><b>]</b></font>+<font color="#AD7FA8">1900</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+    .(<font color="#34E2E2"><b>$d_j-&gt;[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]</b></font>&lt;=<font color="#AD7FA8">8</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_j-&gt;[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]</b></font>+<font color="#AD7FA8">1</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+   .(<font color="#34E2E2"><b>$d_j-&gt;[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>&lt;<font color="#AD7FA8">10</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_j-&gt;[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>);
+</pre>
+</div>
+
+<p>After:</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">return</font>
+    (<font color="#34E2E2"><b>$d_s-&gt;year</b></font>()+<font color="#AD7FA8">1900</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+    .(<font color="#34E2E2"><b>$d_s-&gt;mon</b></font>()&lt;=<font color="#AD7FA8">8</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_s-&gt;mon</b></font>()+<font color="#AD7FA8">1</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+    .(<font color="#34E2E2"><b>$d_s-&gt;mday</b></font>()&lt;<font color="#AD7FA8">10</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_s-&gt;mday</b></font>())
+    .<font color="#AD7FA8">&quot;, &quot;</font>
+    .(<font color="#34E2E2"><b>$d_j-&gt;year</b></font>()+<font color="#AD7FA8">1900</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+    .(<font color="#34E2E2"><b>$d_j-&gt;mon</b></font>()&lt;=<font color="#AD7FA8">8</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_j-&gt;mon</b></font>()+<font color="#AD7FA8">1</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+    .(<font color="#34E2E2"><b>$d_j-&gt;mday</b></font>()&lt;<font color="#AD7FA8">10</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_j-&gt;mday</b></font>());
+</pre>
+</div>
+
+<p>Long Year</p>
+<p>Before:</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>%wday</b></font> = ( 
+    <font color="#AD7FA8">&quot;Mon&quot;</font> =&gt; <font color="#AD7FA8">1</font>,  
+    <font color="#AD7FA8">&quot;Tue&quot;</font> =&gt; <font color="#AD7FA8">2</font>,  
+    <font color="#AD7FA8">&quot;Wed&quot;</font> =&gt; <font color="#AD7FA8">3</font>,  
+    <font color="#AD7FA8">&quot;Thu&quot;</font> =&gt; <font color="#AD7FA8">4</font>,  
+    <font color="#AD7FA8">&quot;Fri&quot;</font> =&gt; <font color="#AD7FA8">5</font>,  
+    <font color="#AD7FA8">&quot;Sat&quot;</font> =&gt; <font color="#AD7FA8">6</font>,  
+    <font color="#AD7FA8">&quot;Sun&quot;</font> =&gt; <font color="#AD7FA8">7</font>,  
+);  
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$fourthJan</b></font> = <font color="#FCE94F">localtime</font> timegm_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">4</font>, <font color="#AD7FA8">0</font>, <font color="#34E2E2"><b>$y</b></font>; 
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$a</b></font> = <font color="#34E2E2"><b>$wday{</b></font>(<font color="#FCE94F">split</font> <font color="#AD7FA8">&quot; &quot;</font>, <font color="#34E2E2"><b>$fourthJan</b></font>)[<font color="#AD7FA8">0</font>]<font color="#34E2E2"><b>}</b></font>;
+
+#<i>...skip some code</i>
+
+<font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$a</b></font> &gt;= <font color="#AD7FA8">4</font> &amp;&amp; <font color="#34E2E2"><b>$b</b></font> &gt;= <font color="#AD7FA8">4</font>) {
+    <font color="#FCE94F">say</font> <font color="#34E2E2"><b>$y</b></font>; 
+    <font color="#34E2E2"><b>$c</b></font>++;
+}</pre>
+
+</div>
+
+
+<p>After:</p>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$fourthJan</b></font> = <font color="#FCE94F">gmtime</font> timegm_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">4</font>, <font color="#AD7FA8">0</font>, <font color="#34E2E2"><b>$y</b></font>; 
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$a</b></font> = <font color="#34E2E2"><b>$fourthJan-&gt;wday</b></font>();
+
+#<i>...skip some code</i>
+
+<font color="#FCE94F">if</font> ((<font color="#34E2E2"><b>$a</b></font> &gt;= <font color="#AD7FA8">4</font> || <font color="#34E2E2"><b>$a</b></font> == <font color="#AD7FA8">0</font>) &amp;&amp; (<font color="#34E2E2"><b>$b</b></font> &gt;= <font color="#AD7FA8">4</font> || <font color="#34E2E2"><b>$b</b></font> == <font color="#AD7FA8">0</font>)) {
+    <font color="#FCE94F">say</font> <font color="#34E2E2"><b>$y</b></font>; 
+    <font color="#34E2E2"><b>$c</b></font>++;
+}   
+</pre>
+</div>
+
+
+<p>
+This is the end of the introduction. We are going to see how CY's takes for the three tasks now.
+</p>
+<hr>
+<h4>TWC #132 Task: Mirror Dates</h4>
+<p><u>Short Description</u><br>Input: a date (yyyy/mm/dd). Output: "backward mirror date" and "forward mirror date".</p>
+
+<p>
+The main point is found out the number of days inbetween <i>"today"</i> and the date who someone was born.
+</p>
+
+<h5>Java on Mirror Dates</h5>
+<p>
+I use the <tt>to<a href="http://www.catb.org/jargon/html/E/epoch.html" title="Jargon File: Epoch">Epoch</a>Day</tt> method to calculate the difference. 
+</p>
+<div class="code_vim_hl">
+<pre><font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">void</font> mirror_dates (<font color="#87FFAF">int</font> birth_year,<font color="#87FFAF">int</font> birth_month, <font color="#87FFAF">int</font> birth_day) {
+    LocalDate my_today = LocalDate.of(<font color="#AD7FA8">2021</font>,<font color="#AD7FA8">9</font>,<font color="#AD7FA8">22</font>);
+    LocalDate birthday = LocalDate.of(birth_year, birth_month, birth_day);
+    <font color="#87FFAF">long</font> y1 = my_today.toEpochDay() - birthday.toEpochDay();
+    LocalDate d_senior = birthday.minusDays(y1);
+    LocalDate d_junior = my_today.plusDays(y1);
+    System.out.println(d_senior);
+    System.out.println(d_junior);
+}   
+</pre>
+</div>
+
+<h5>Julia on Mirror Dates</h5>
+<p>
+It is quite straightforward, but one has to look up the functions of <tt>Dates</tt>. <tt> Dates.values(my_today - my_date_of_birth)</tt> leads to what we want.
+</p>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">function</font> <font color="#34E2E2"><b>mirror_dates</b></font>(my_date_of_birth)
+   my_today <font color="#FCE94F">=</font> <font color="#87FFAF">Date</font>(<font color="#AD7FA8">2021</font>,<font color="#AD7FA8">09</font>,<font color="#AD7FA8">22</font>)
+   y1 <font color="#FCE94F">=</font> Dates.values(my_today <font color="#FCE94F">-</font> my_date_of_birth)
+   d_senior <font color="#FCE94F">=</font> my_date_of_birth <font color="#FCE94F">-</font> Dates.Day(y1)
+   d_junior <font color="#FCE94F">=</font> my_today <font color="#FCE94F">+</font> Dates.Day(y1)
+   println(d_senior)
+   println(d_junior)
+<font color="#FCE94F">end</font>
+</pre>
+
+</div>
+
+
+<h5>Perl on Mirror Dates</h5>
+<p>
+<tt>timelocal_nocheck</tt> or <tt>timegm_nocheck</tt> gives the <a href="http://www.catb.org/jargon/html/E/epoch.html" title="Jargon File: Epoch">epoch</a> seconds. Then we can count the difference and then divide it by 86400 (== 24*60*60).
+</p>
+
+<div class="code_vim_hl">
+
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>mirror </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arr_today</b></font> = (<font color="#AD7FA8">22</font>, <font color="#AD7FA8">8</font>, <font color="#AD7FA8">2021</font>); <font color="#34E2E2"># Wed Sep 22 2021</font>
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$_today</b></font> = timegm_nocheck(<font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#34E2E2"><b>@arr_today</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arr_birth</b></font> = (<font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>-<font color="#AD7FA8">1</font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$_birth</b></font> = timegm_nocheck(<font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#34E2E2"><b>@arr_birth</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$y1</b></font> = <font color="#FCE94F">int</font> ((<font color="#34E2E2"><b>$_today</b></font> - <font color="#34E2E2"><b>$_birth</b></font>)/<font color="#AD7FA8">86400</font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$d_senior</b></font> = <font color="#FCE94F">gmtime</font> timegm_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>,
+                        <font color="#34E2E2"><b>$arr_birth[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>-<font color="#34E2E2"><b>$y1</b></font>, <font color="#34E2E2"><b>$arr_birth[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$arr_birth[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$d_junior</b></font> = <font color="#FCE94F">gmtime</font> timegm_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>,
+                        <font color="#34E2E2"><b>$arr_today[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>+<font color="#34E2E2"><b>$y1</b></font>, <font color="#34E2E2"><b>$arr_today[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$arr_today[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">return</font> [ <font color="#34E2E2"><b>$d_senior</b></font>, <font color="#34E2E2"><b>$d_junior</b></font> ];
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>mirror_str </b></font>{
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$byear</b></font>, <font color="#34E2E2"><b>$bmonth</b></font>, <font color="#34E2E2"><b>$bday</b></font>) = <font color="#FCE94F">split</font> <font color="#FCE94F">/</font><font color="#FFD7D7">\/</font><font color="#FCE94F">/</font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#34E2E2"><b>$bmonth</b></font> =~ <font color="#FCE94F">s/</font><font color="#AD7FA8">^0</font><font color="#FCE94F">//</font>;  <font color="#34E2E2"># remove leading zeros</font>
+    <font color="#34E2E2"><b>$bday</b></font> =~ <font color="#FCE94F">s/</font><font color="#AD7FA8">^0</font><font color="#FCE94F">//</font>;    <font color="#34E2E2"># remove leading zeros</font>
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$d_s</b></font>, <font color="#34E2E2"><b>$d_j</b></font>) = mirror(<font color="#34E2E2"><b>$byear</b></font>, <font color="#34E2E2"><b>$bmonth</b></font>, <font color="#34E2E2"><b>$bday</b></font>)-&gt;@*;
+
+    <font color="#FCE94F">return</font>
+         (<font color="#34E2E2"><b>$d_s-&gt;year</b></font>()+<font color="#AD7FA8">1900</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+        .(<font color="#34E2E2"><b>$d_s-&gt;mon</b></font>()&lt;=<font color="#AD7FA8">8</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_s-&gt;mon</b></font>()+<font color="#AD7FA8">1</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+        .(<font color="#34E2E2"><b>$d_s-&gt;mday</b></font>()&lt;<font color="#AD7FA8">10</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_s-&gt;mday</b></font>())
+        .<font color="#AD7FA8">&quot;, &quot;</font>
+        .(<font color="#34E2E2"><b>$d_j-&gt;year</b></font>()+<font color="#AD7FA8">1900</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+        .(<font color="#34E2E2"><b>$d_j-&gt;mon</b></font>()&lt;=<font color="#AD7FA8">8</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_j-&gt;mon</b></font>()+<font color="#AD7FA8">1</font>).<font color="#AD7FA8">&quot;/&quot;</font>
+        .(<font color="#34E2E2"><b>$d_j-&gt;mday</b></font>()&lt;<font color="#AD7FA8">10</font> ? <font color="#AD7FA8">0</font> : <font color="#AD7FA8">&quot;&quot;</font>).(<font color="#34E2E2"><b>$d_j-&gt;mday</b></font>());
+}
+
+<pre>ok mirror_str(<font color="#AD7FA8">&quot;2021/09/18&quot;</font>) <font color="#FCE94F">eq</font> <font color="#AD7FA8">&quot;2021/09/14, 2021/09/26&quot;</font>, <font color="#AD7FA8">&quot;Example 1&quot;</font>;
+
+# maybe I should further refactor the code by adding one more subroutine supporting <tt>&amp;mirror_str</tt>
+</pre>
+</div>
+
+
+<h4>TWC #137 Task: Long Year</h4>
+<p><u>Short Description</u><br>Input: N/A. Output: number of long years between 1900 and 2100.</p>
+<p>According to <a href="https://en.wikipedia.org/wiki/ISO_8601">Wikipedia: ISO 8601</a>, </p>
+
+<blockquote>
+There are several mutually equivalent and compatible descriptions of week 01:
+
+<ul>
+<li>the week with the starting year's first Thursday in it (the formal ISO definition),</li>
+<li>the week with 4 January in it,</li>
+<li>the first week with the majority (four or more) of its days in the starting year, and</li>
+<li>the week starting with the Monday in the period 29 December - 4 January.</li>
+</ul>
+</blockquote>
+
+<p>
+Since <tt>365/7 = 52...1</tt> and <tt>366/7 = 52...2</tt>, for a Long Year (== a year having 53 weeks), it should have the 01st Jan included in its Week 01 and 31st Dec included in its Week 53.
+</p>
+
+<p>From Wikipedia, we get four appoaches to tackle the task! CY's way to tackle it is checking on 04th Jan and 31st Dec: if <tt>04th Jan, YYYY</tt> is on or after Thursday and <tt>31st Dec, YYYY</tt> is on or after Thursday (taken Sunday as the 7th day of the week), then we get a long year.</p>
+
+<h5>Java on Long Year</h5>
+<div class="code_vim_hl">
+<pre>    LocalDate fourthJan = LocalDate.of(y, <font color="#AD7FA8">1</font>, <font color="#AD7FA8">4</font>); 
+    <font color="#87FFAF">int</font> a = gdow( (fourthJan.getDayOfWeek()).toString() );
+    LocalDate YearLastDay = LocalDate.of(y, <font color="#AD7FA8">12</font>, <font color="#AD7FA8">31</font>);
+    <font color="#87FFAF">int</font> b = gdow( (YearLastDay.getDayOfWeek()).toString() );
+    <font color="#FCE94F">if</font> (a &gt;= <font color="#AD7FA8">4</font> &amp;&amp; b &gt;= <font color="#AD7FA8">4</font>)
+    {   
+        System.out.println(y);
+        c++;
+    } 
+
+
+
+<font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">int</font> gdow(String a)
+{
+    <font color="#FCE94F">switch</font>(a)
+    {
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;MONDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">1</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;TUESDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">2</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;WEDNESDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">3</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;THURSDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">4</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;FRIDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">5</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;SATURDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">6</font>;
+        <font color="#FCE94F">case</font> <font color="#AD7FA8">&quot;SUNDAY&quot;</font>: <font color="#FCE94F">return</font> <font color="#AD7FA8">7</font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font>;
+}
+  
+</pre>
+</div>
+
+
+<h5>Julia on Long Year</h5>
+<p>There is a <tt>Dates.week()</tt> function which we can take advantage of
+</p>
+<div class="code_vim_hl">
+<pre>
+t(y) <font color="#FCE94F">=</font> <font color="#87FFAF">Date</font>(y, <font color="#AD7FA8">1</font>, <font color="#AD7FA8">4</font>)
+e(y) <font color="#FCE94F">=</font> <font color="#87FFAF">Date</font>(y, <font color="#AD7FA8">12</font>, <font color="#AD7FA8">31</font>)
+
+#<i>... skip some code</i>
+
+    <font color="#FCE94F">if</font> Dates.week(e(y)) <font color="#FCE94F">-</font> Dates.week(t(y)) <font color="#FCE94F">==</font> <font color="#AD7FA8">52</font>
+        println(y)
+        <font color="#FCE94F">global</font> c <font color="#FCE94F">=</font> c<font color="#FCE94F">+</font><font color="#AD7FA8">1</font>
+    <font color="#FCE94F">end</font>
+</pre>
+</div>
+
+
+
+<h5>Perl on Long Year</h5>
+<div class="code_vim_hl">
+<pre>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$fourthJan</b></font> = <font color="#FCE94F">gmtime</font> timegm_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">4</font>, <font color="#AD7FA8">0</font>, <font color="#34E2E2"><b>$y</b></font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$a</b></font> = <font color="#34E2E2"><b>$fourthJan-&gt;wday</b></font>();
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$yearLastDay</b></font> = <font color="#FCE94F">gmtime</font> timegm_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">31</font>, <font color="#AD7FA8">11</font>, <font color="#34E2E2"><b>$y</b></font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$b</b></font> = <font color="#34E2E2"><b>$yearLastDay-&gt;wday</b></font>();
+    <font color="#FCE94F">if</font> ((<font color="#34E2E2"><b>$a</b></font> &gt;= <font color="#AD7FA8">4</font> || <font color="#34E2E2"><b>$a</b></font> == <font color="#AD7FA8">0</font>) &amp;&amp; (<font color="#34E2E2"><b>$b</b></font> &gt;= <font color="#AD7FA8">4</font> || <font color="#34E2E2"><b>$b</b></font> == <font color="#AD7FA8">0</font>)) {
+        <font color="#FCE94F">say</font> <font color="#34E2E2"><b>$y</b></font>;
+        <font color="#34E2E2"><b>$c</b></font>++;
+    }
+</pre>
+</div>
+
+<h4>TWC #138 Task: Work Days</h4>
+<p><u>Short Description</u><br>Input: a positive integer indicated the year. Output: number of work days in that year.</p>
+
+<p>After calculation, we discover that there are only three possible values of number of work days of a year: 260, 261 and 262. One may play some tricks on this piece of info, but CY's laziness causes her have no time for this trick.</p>
+
+<p>In the codes, we count the number of weeks between the first Monday on Jan and last Monday of Dec, then do a primary school arithmetic operation: <tt>(days in between) / 7 * 5;</tt>, and then add the work days in the beginning of the year and the work days in the end of the year which haven't covered. </p>
+
+<h5>Java on Work Days</h5>
+<p>The method <tt>getDayOfYear()</tt> in <tt>java.time.LocalDate</tt> is crucial.</p>
+<div class="code_vim_hl">
+<pre><font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">int</font> numOfWorkDays (<font color="#87FFAF">int</font> year) {
+    LocalDate MondayJan = LocalDate.of(year, <font color="#AD7FA8">1</font>, <font color="#AD7FA8">1</font>);
+    <font color="#87FFAF">int</font> ans = <font color="#AD7FA8">0</font>;
+    <font color="#87FFAF">int</font> ga = gd(MondayJan);
+    <font color="#FCE94F">while</font> (ga != <font color="#AD7FA8">1</font>)
+    {
+        <font color="#FCE94F">if</font> (ga &lt;= <font color="#AD7FA8">5</font> &amp;&amp; ga &gt;= <font color="#AD7FA8">2</font>)
+            ans++;
+        MondayJan = MondayJan.plusDays(<font color="#AD7FA8">1</font>);
+        ga = gd(MondayJan);
+    }
+    LocalDate lastDay = MondayJan.plusWeeks(<font color="#AD7FA8">51</font>);
+    ans += <font color="#AD7FA8">51</font>*<font color="#AD7FA8">5</font>;
+    <font color="#87FFAF">int</font> gb = gd(lastDay);
+    <font color="#FCE94F">while</font> (lastDay.getDayOfYear() &lt; lastDay.lengthOfYear())
+    {
+        <font color="#FCE94F">if</font> (gb &lt;= <font color="#AD7FA8">5</font> &amp;&amp; gb &gt;= <font color="#AD7FA8">1</font>)
+            ans++;
+        lastDay = lastDay.plusDays(<font color="#AD7FA8">1</font>);
+        gb = gd(lastDay);
+    }
+    ans += gb &lt;= <font color="#AD7FA8">5</font> ? <font color="#AD7FA8">1</font> : <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">return</font> ans;
+}
+
+
+
+<font color="#87FFAF">public</font> <font color="#87FFAF">static</font> <font color="#87FFAF">int</font> gd(LocalDate date)
+{
+    <font color="#FCE94F">var</font> a = date.getDayOfWeek();
+    <font color="#FCE94F">switch</font>(a)
+    {
+        <font color="#FCE94F">case</font> MONDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">1</font>;
+        <font color="#FCE94F">case</font> TUESDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">2</font>;
+        <font color="#FCE94F">case</font> WEDNESDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">3</font>;
+        <font color="#FCE94F">case</font> THURSDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">4</font>;
+        <font color="#FCE94F">case</font> FRIDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">5</font>;
+        <font color="#FCE94F">case</font> SATURDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">6</font>;
+        <font color="#FCE94F">case</font> SUNDAY: <font color="#FCE94F">return</font> <font color="#AD7FA8">7</font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font>;
+}
+
+</pre>
+</div>
+
+<h5>Julia on Work Days</h5>
+<p>The function <tt>Dates.dayofyear()</tt> is crucial.</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">function</font> <font color="#34E2E2"><b>num_of_work_days</b></font>(year)
+    ans <font color="#FCE94F">=</font> <font color="#AD7FA8">0</font>
+    my_day <font color="#FCE94F">=</font> <font color="#87FFAF">Date</font>(year, <font color="#AD7FA8">1</font>, <font color="#AD7FA8">1</font>)
+    <font color="#FCE94F">while</font> Dates.dayofweek(my_day) <font color="#FCE94F">!=</font> Dates.Monday
+        <font color="#FCE94F">if</font> workday(my_day)
+            ans <font color="#FCE94F">+=</font> <font color="#AD7FA8">1</font>
+        <font color="#FCE94F">end</font>
+        my_day <font color="#FCE94F">+=</font> Dates.Day(<font color="#AD7FA8">1</font>)
+    <font color="#FCE94F">end</font>
+
+    FirstMondayJan <font color="#FCE94F">=</font> my_day
+
+    SundayDec <font color="#FCE94F">=</font> Dates.lastdayofweek(<font color="#87FFAF">Date</font>(year,<font color="#AD7FA8">12</font>,<font color="#AD7FA8">31</font>))
+    <font color="#FCE94F">if</font> (Dates.year( SundayDec <font color="#FCE94F">+</font> Dates.Day(<font color="#AD7FA8">1</font>) ) <font color="#FCE94F">==</font> year<font color="#FCE94F">+</font><font color="#AD7FA8">1</font>)
+        SundayDec <font color="#FCE94F">-=</font> Dates.Day(<font color="#AD7FA8">7</font>)
+    <font color="#FCE94F">end</font>
+
+
+    LastMondayDec <font color="#FCE94F">=</font> SundayDec <font color="#FCE94F">+</font> Dates.Day(<font color="#AD7FA8">1</font>);
+
+    ans <font color="#FCE94F">+=</font> <font color="#AD7FA8">5</font><font color="#FCE94F">*</font>(Dates.dayofyear(LastMondayDec) <font color="#FCE94F">-</font> Dates.dayofyear(FirstMondayJan))<font color="#FCE94F">/</font><font color="#AD7FA8">7</font>
+    ans <font color="#FCE94F">=</font> convert(<font color="#87FFAF">Int64</font>, ans)
+
+    my_day <font color="#FCE94F">=</font> LastMondayDec
+    <font color="#FCE94F">while</font> Dates.year(my_day) <font color="#FCE94F">==</font> year
+        <font color="#FCE94F">if</font> workday(my_day)
+            ans <font color="#FCE94F">+=</font> <font color="#AD7FA8">1</font>
+        <font color="#FCE94F">end</font>
+        my_day <font color="#FCE94F">+=</font> Dates.Day(<font color="#AD7FA8">1</font>)
+    <font color="#FCE94F">end</font>
+
+    <font color="#FCE94F">return</font> ans
+<font color="#FCE94F">end</font>
+</pre>
+</div>
+
+<h5>Perl on Work Days</h5>
+<p>Calculate the formula with epoch seconds.</p>
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>count_work_days </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$y</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$_01Jan</b></font> = <font color="#FCE94F">localtime</font> timelocal_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">1</font>, <font color="#AD7FA8">0</font>, <font color="#34E2E2"><b>$y</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$d_01Jan</b></font> = <font color="#34E2E2"><b>$_01Jan-&gt;wday</b></font>();
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$diff</b></font> = (<font color="#AD7FA8">1</font> - <font color="#34E2E2"><b>$d_01Jan</b></font>) % <font color="#AD7FA8">7</font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$firstMonday</b></font> = timelocal_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">1</font>+<font color="#34E2E2"><b>$diff</b></font>, <font color="#AD7FA8">0</font>, <font color="#34E2E2"><b>$y</b></font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$_31Dec</b></font> = <font color="#FCE94F">localtime</font> timelocal_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">31</font>, <font color="#AD7FA8">11</font>, <font color="#34E2E2"><b>$y</b></font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$d_31Dec</b></font> = <font color="#34E2E2"><b>$_31Dec-&gt;wday</b></font>();
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$back_diff</b></font> = (<font color="#34E2E2"><b>$d_31Dec</b></font> - <font color="#AD7FA8">5</font>) % <font color="#AD7FA8">7</font>;
+
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$MondayAfterLastFriday</b></font>
+        = timelocal_nocheck <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">3</font>-<font color="#34E2E2"><b>$back_diff</b></font>, <font color="#AD7FA8">0</font>, <font color="#34E2E2"><b>$y</b></font>+<font color="#AD7FA8">1</font>;
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ans</b></font>
+        = <font color="#AD7FA8">5</font> * <font color="#FCE94F">int</font> (
+            (<font color="#34E2E2"><b>$MondayAfterLastFriday</b></font>
+            -<font color="#34E2E2"><b>$firstMonday</b></font>)
+                /<font color="#AD7FA8">86400</font>/<font color="#AD7FA8">7</font>
+          );
+
+
+    <font color="#34E2E2"><b>$ans</b></font> += <font color="#AD7FA8">6</font>-<font color="#34E2E2"><b>$d_01Jan</b></font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$d_01Jan</b></font> &gt; <font color="#AD7FA8">1</font>;
+    <font color="#34E2E2"><b>$ans</b></font> += <font color="#34E2E2"><b>$d_31Dec</b></font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$d_31Dec</b></font> &lt; <font color="#AD7FA8">5</font>;
+
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$ans</b></font>;
+}
+</pre>
+</div>
+<h3>Summary</h3>
+
+<p>The article <i>Don't Just Learn the Language, Understand Its Culture</i> by Anders Norås, from the book <i>97 Things Every Programmer Should Know</i> (Feb 2010, O'Reilly), has pushed me to finish this blogpost. We have seen Perl looks a bit complicated relative to Java and Julia in some of three tasks, but if CY plays with <tt><a href="https://metacpan.org/pod/Date::Calc">Date::Calc</a></tt>, every Perlish thing becomes as convenient as in Java or Julia.
+</p>
+
+<p>
+<s>Departing words: <font color="red">CPAN is a part of Perl culture. If you pull out Perl alone from the vast amount of CPAN modules, it is unwise!</font></s>
+</p>
+
+<p><span style="color:white; background-color:red">There is <tt><a href="https://perldoc.perl.org/Time::Piece">Time::Piece</a></tt> as a core module in Perl.</span> (Added on 15th Nov, 2021.)</p>
+
+<p>Stay alert and healthy! □</p>
+
+<hr>
+
+<p><font color="#333333">About the image: I used to amusing my tutorial students by giving them the dodecahedron calenders in order to move them by the beauty of mathematics.</font></p>
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i><b>References</b><br><br>
+
+Perl:<br>
+<a href="https://metacpan.org/pod/Time::Local">https://metacpan.org/pod/Time::Local</a><br><br>
+
+Julia:<br>
+<a href="https://docs.julialang.org/en/v1/stdlib/Dates/">https://docs.julialang.org/en/v1/stdlib/Dates/</a><br><br>
+
+Java:<br> 
+<a href="https://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html">LocalDate (Java Platform SE 8)</a>
+</i></p>
+
+
+<p><i><b>links for CY's full codes:</b> <br>
+Perl<br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-132/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung, Week #132">ch-1.pl</a></tt> #132<br> 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-137/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung, Week #137">ch-1.pl</a></tt> #137<br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-138/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung, Week #137">ch-1.pl</a></tt> #138<br><br>
+
+Julia<br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-132/cheok-yin-fung/julia/ch-1.jl" title="ch-1.jl from Cheok-Yin Fung, Week #132">ch-1.jl</a></tt> #132<br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-137/cheok-yin-fung/julia/ch-1.jl" title="ch-1.jl from Cheok-Yin Fung, Week #137">ch-1.jl</a></tt> #137<br> 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-138/cheok-yin-fung/julia/ch-1.jl" title="ch-1.jl from Cheok-Yin Fung, Week #137">ch-1.jl</a></tt> #138<br><br>
+
+Java<br>
+P.S. From the TWC Java expert Mohammad Meraj Zia's code, I have learnt that I have missed the <tt>java.time.DayOfWeek</tt> library. So gd() and gdow() in the above codes can be simplified. <br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-132/cheok-yin-fung/java/MirrorDates.java" title="ch-1.jl from Cheok-Yin Fung, Week #132">MirrorDates.java</a></tt> // 132<br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-137/cheok-yin-fung/java/LongYear.java" title="ch-1.jl from Cheok-Yin Fung, Week #137">LongYear.java</a></tt> // 137 <br>
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-138/cheok-yin-fung/java/WorkDays.java" title="ch-1.jl from Cheok-Yin Fung, Week #137">WorkDays.java</a></tt> // 138
+
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: 14th November, 2021.</p>
+
+</body>
+
+</html>

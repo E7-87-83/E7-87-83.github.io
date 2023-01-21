@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #112">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+<title>CY's Take on The Weekly Challenge #115</title>
+</head>
+
+<body>
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+
+  <h2>CY's Take on The Weekly Challenge #115</h2>
+  
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku, go to <a href="https://perlweeklychallenge.org/">https://perlweeklychallenge.org</a>, code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<hr>
+
+<h4>Task 1: String Chain</h4>
+
+<p>We can solve this by brute-force: counting all possible permutations and check whether the last alphabet of a component is the first alphabet of next component. But we can treat the task as a task of graph theory.</p>
+
+<p>Treat the strings as edges and the first(and last) alphabets as vertices.</p>
+
+<blockquote>A directed graph has an <i>Eulerian cycle</i> if and only if every vertex has equal in-degree and out-degree, and all of its vertices belong to a single connected component of the underlying undirected graph. (Source: <a href="https://en.wikipedia.org/wiki/Eulerian_path#Properties" title="Properties of Eulerian path">Wikipedia</a>, <i>much</i> rephrased)</blockquote>
+
+<p>Therefore there are two parts of my code:</p>
+
+<ol>
+<li>Check the in-degree and out-degree of each vertex;</li>
+<li>check whether the underlying undirected graph is connected.</li>
+</ol>
+
+<p>First part:</p>
+<blockquote><tt><b>sub&nbsp;</b><font color="#007f00">consistent_degrees</font>&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">@edges</font>&nbsp;=&nbsp;<font color="#0000ff">@_</font>;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">%i_vertex</font>;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">%o_vertex</font>;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$str</font>&nbsp;(<font color="#0000ff">@edges</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$head</font>&nbsp;=&nbsp;<font color="#007f00">substr</font>&nbsp;<font color="#0000ff">$str</font>,&nbsp;0,&nbsp;<font color="#00007f">1</font>;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$tail</font>&nbsp;=&nbsp;<font color="#007f00">substr</font>&nbsp;<font color="#0000ff">$str</font>,&nbsp;<font color="#00007f">-1</font>,&nbsp;<font color="#00007f">1</font>;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">push</font>&nbsp;<font color="#0000ff">$i_vertex</font>{<font color="#0000ff">$tail</font>}<font color="#ffa500">-</font>&gt;<font color="#0000ff">@</font><font color="#0000ff"><b>*,</b></font>&nbsp;<font color="#0000ff">$head</font>;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">push</font>&nbsp;<font color="#0000ff">$o_vertex</font>{<font color="#0000ff">$head</font>}<font color="#ffa500">-</font>&gt;<font color="#0000ff">@</font><font color="#0000ff"><b>*,</b></font>&nbsp;<font color="#0000ff">$tail</font>;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$letter</font>&nbsp;(<font color="#007f00">keys</font>&nbsp;<font color="#0000ff">%i_vertex</font>)&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(!<font color="#0000ff">$o_vertex</font>{<font color="#0000ff">$letter</font>})&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;0;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#007f00">scalar</font>&nbsp;<font color="#0000ff">@</font>{<font color="#0000ff">$i_vertex</font>{<font color="#0000ff">$letter</font>}}<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!=&nbsp;<font color="#007f00">scalar</font>&nbsp;<font color="#0000ff">@</font>{<font color="#0000ff">$o_vertex</font>{<font color="#0000ff">$letter</font>}})&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;0;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#00007f">1</font>;<BR>
+}</tt></blockquote>
+
+
+<p>Second part:</p>
+
+<blockquote><tt>
+<b>sub&nbsp;</b><font color="#007f00">is_connected</font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">@edges</font>&nbsp;=&nbsp;<font color="#0000ff">@_</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">%collected</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">%vertex_neigh</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$str</font>&nbsp;(<font color="#0000ff">@edges</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$head</font>&nbsp;=&nbsp;<font color="#007f00">substr</font>&nbsp;<font color="#0000ff">$str</font>,&nbsp;0,&nbsp;<font color="#00007f">1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$tail</font>&nbsp;=&nbsp;<font color="#007f00">substr</font>&nbsp;<font color="#0000ff">$str</font>,&nbsp;<font color="#00007f">-1</font>,&nbsp;<font color="#00007f">1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$collected</font>{<font color="#0000ff">$head</font>}&nbsp;=&nbsp;<font color="#00007f">-1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$collected</font>{<font color="#0000ff">$tail</font>}&nbsp;=&nbsp;<font color="#00007f">-1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">push</font>&nbsp;<font color="#0000ff">$vertex_neigh</font>{<font color="#0000ff">$head</font>}<font color="#ffa500">-</font>&gt;<font color="#0000ff">@</font><font color="#0000ff"><b>*,</b></font>&nbsp;<font color="#0000ff">$tail</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">push</font>&nbsp;<font color="#0000ff">$vertex_neigh</font>{<font color="#0000ff">$tail</font>}<font color="#ffa500">-</font>&gt;<font color="#0000ff">@</font><font color="#0000ff"><b>*,</b></font>&nbsp;<font color="#0000ff">$head</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#&nbsp;depth-first&nbsp;search</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">@stack</font>&nbsp;=&nbsp;<font color="#007f00">substr</font>(<font color="#0000ff">$edges</font>[0],&nbsp;0,&nbsp;<font color="#00007f">1</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>while</b>&nbsp;(<font color="#007f00">scalar</font>&nbsp;<font color="#0000ff">@stack</font>&nbsp;!=&nbsp;0)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$cur</font>&nbsp;=&nbsp;<font color="#007f00">pop</font>&nbsp;<font color="#0000ff">@stack</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$collected</font>{<font color="#0000ff">$cur</font>}&nbsp;==&nbsp;<font color="#00007f">1</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>next</b>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>else</b>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$neigh</font>&nbsp;(<font color="#0000ff">$vertex_neigh</font>{<font color="#0000ff">$cur</font>}<font color="#ffa500">-</font>&gt;<font color="#0000ff">@</font><font color="#0000ff"><b>*)</b></font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#007f00">push</font>&nbsp;<font color="#0000ff">@stack</font>,&nbsp;<font color="#0000ff">$neigh</font>&nbsp;<b>if</b>&nbsp;<font color="#0000ff">$collected</font>{<font color="#0000ff">$neigh</font>}&nbsp;==&nbsp;<font color="#00007f">-1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">$collected</font>{<font color="#0000ff">$cur</font>}&nbsp;=&nbsp;<font color="#00007f">1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#7f7f7f"><i>#check&nbsp;connectedness</i></font><font color="#7f7f7f"><i><br>
+</i></font>&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>&nbsp;<b>my</b>&nbsp;<font color="#0000ff">$letter</font>&nbsp;(<font color="#007f00">keys</font>&nbsp;<font color="#0000ff">%collected</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b>&nbsp;(<font color="#0000ff">$collected</font>{<font color="#0000ff">$letter</font>}&nbsp;==&nbsp;<font color="#00007f">-1</font>)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;0;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>return</b>&nbsp;<font color="#00007f">1</font>;<br>
+}</tt></blockquote>
+
+
+
+
+<p>As the question does not request us output a possible chain, I just stop here. An algorithm can be found, again, on <a href="https://en.wikipedia.org/wiki/Eulerian_path#Hierholzer's_algorithm" title="Hierholzer's algorithm">Wikipedia</a>.</p>
+
+<p>I thought of providing a guest language submission of Java, but I found I deleted my previous Java code on <i><a href="http://rosalind.info">rosalind.info</a></i> (a site on bioinformatics algorithms) (though I have recollected that I made an <tt>Edge</tt> class and <tt>Vertex</tt> class for those tasks); and this week wasn't a fine week for me; hence I just slacked off.</p>
+
+<p>Anyway... A mere accident is going to be mentioned. During my coding, initially, I wrote the default case as:</p>
+
+<blockquote><code>my $S = @ARGV || ("abc");</code></blockquote>
+
+It kept bringing me the number of strings (scalar context of <tt>@ARGV</tt>) and, return 1 (because I am testing with small number of strings). Ooops. Finally I realized the problem is on <tt>||</tt>. The code was then changed:
+
+<blockquote><tt>my @S = @ARGV;<br>
+@S = ("<i>IT DOESNT MATTER</i> ") if !@S;</tt></blockquote>
+
+<h4>Task 2: Largest Multiple</h4>
+
+<p>Sort the digits from largest to smallest, pick up the smallest even digit to be the last digit, then output the number.</p>
+
+<h4>A Few Words on Previous Week</h4>
+
+<p> <i>Challenge 114, Task 2</i> : I just divided several cases for task 2 "Higher Integer Set Bits" (<i><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-114/cheok-yin-fung/perl/ch-2.pl">code</a></i>). Never thought of the simple idea of keeping change of "<tt>01</tt>" to "<tt>10</tt>". Oh. </p>
+
+<p> <i>Challenge 111, Task 2</i> : I read the <a href="https://perlweeklychallenge.org/blog/review-challenge-111/">Perl review</a> and found my submitted code trapped by case-insenitiveness. :( Maybe this is why experience in programming is important. :)</p>
+
+<hr>
+
+<p>Stay alert (even if you have taken the vaccine); furthermore, care for the less lucky people in our flat world! □</p>
+
+<p><i>link for codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-115/cheok-yin-fung/perl/ch-1.pl">ch-1.pl</a></tt>, <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-115/cheok-yin-fung/perl/ch-2.pl">ch-2.pl</a></tt></i></p>
+
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Created Date: 6th May, 2021; last updated: 22:20 HKT</p>
+</div>
+</body>
+</html>

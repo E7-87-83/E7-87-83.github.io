@@ -1,0 +1,471 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #155">
+  <meta name="keywords" content="Perl, number theory, linear recurrence">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+  <style>
+    body {background-color:#1E90FF} 
+    div.bar li {background-color:yellow}
+  </style>
+  <title>CY's Take on The Weekly Challenge #155 </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul> 
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main"> 
+  <h2>CY's Take on The Weekly Challenge #155</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-155/" title="The Weekly Challenge #155">challenges
+in Week #155</a> !</i></b></p>
+
+<p>Two number theory tasks.</p>
+
+<hr>
+
+
+
+<h4>Task 1: Fortunate Numbers</h4>
+
+<blockquote>(From Wikipedia) One of unsolved problems in mathematics:<br>
+Fortune's conjecture: Are any Fortunate numbers composite?</blockquote>
+
+<p>
+I have never thought that things like primorial can go with such an interesting and natural conjecture.</p>
+
+<p>Back to our task. Looking at the wikipedia page linked from the task statement, we know that there
+are TWO sequences of Fortunate numbers:</p> 
+
+<p>The first one is <code>a<sub>1</sub></code>(<i>n</i>)
+is the smallest integer <i>m</i> so that <i>m</i> + primorial(<i>n</i>) is prime.</p>
+
+<p>The second one is <code>sort {$a&lt;=&gt;$b}
+<a href="https://metacpan.org/pod/List::Util#uniqint">uniqint</a> a<sub>1</sub></code>
+(or equivalently, <code>uniqint sort {$a&lt;=&gt;$b} a<sub>1</sub></code> <sup><a href="#remark1">[1]</a></sup>). </p> 
+
+<p>The task requires us to generate the second sequence.</p>
+
+<p>&nbsp;</p>
+
+<p>A concern is, <code>a<sub>1</sub></code>(<i>x</i>) can be smaller than <code>a<sub>1</sub></code>(<i>y</i>) when <i>x</i> &gt;
+<i>y</i>. So how do we know when to stop generating terms of 
+<code>a<sub>1</sub></code>?
+</p>
+
+<p>Keep reading on the Wikipedia gives us a hint: "The Fortunate number for primorial(<i>n</i>)
+is always above <i>p</i><sub><i>n</i></sub>."</p>
+
+<p>So after we get a length-<code>$N</code> list of non-duplicate values of <code>a<sub>1</sub></code>
+we grasp its largest element <code>$E</code>, and check whether there are Fortunate numbers smaller than <code>$E</code>.
+The check will be stopped when we reach <i>j</i>, where <i>j</i>
+is determined from the inequality
+<i>p</i><sub><i>j</i></sub> &le; <code>$E</code> &lt; <i>p</i><sub><i>j</i>+1</sub>
+.</p>
+
+<p>&nbsp;</p>
+<p>The worry has been cleared and we should start to code:</p>
+
+<p>The first part, to generate <code>a<sub>1</sub></code> up to a certain "large-enough" value:</p>
+
+<div class="code_vim_hl">
+<pre>
+# first part
+
+{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$k</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font> - <font color="#AD7FA8">1</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$tmp_int</b></font> = <font color="#34E2E2"><b>$primes[$k]</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$tmp_int</b></font>++;
+    } <font color="#FCE94F">while</font> (!is_prime( <font color="#34E2E2"><b>$primorials[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> + <font color="#34E2E2"><b>$tmp_int</b></font> ));
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@fort_unsort</b></font>, <font color="#34E2E2"><b>$tmp_int</b></font>;
+    iter_primorial();    <i><font color="grey"># generate the next primorial</font></i>
+    <font color="#34E2E2"><b>@fort_sorted</b></font> = uniqint <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+}
+</pre>
+</div>
+
+<p>Terms in <code>@primorials</code> grow fast and I set them to be <code>Math::BigInt</code> objects. This is the reason that I generate it one-by-one &dash; avoid eating up memory.</p>
+
+<p>The second part, to check whether there are any small Fortunate numbers
+not yet included in <code>@fort_unsort</code>:</p> 
+
+<div class="code_vim_hl">
+
+<pre>
+# second part
+
+{
+    # ... 
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$k</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font> - <font color="#AD7FA8">1</font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$tmp_int</b></font> = <font color="#34E2E2"><b>$primes[$k]</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$tmp_int</b></font>++;
+    } <font color="#FCE94F">while</font> (!is_prime( <font color="#34E2E2"><b>$primorials[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> + <font color="#34E2E2"><b>$tmp_int</b></font> ));
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@fort_unsort</b></font>, <font color="#34E2E2"><b>$tmp_int</b></font>;
+    <font color="#34E2E2"><b>@fort_sorted</b></font> = uniqint <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+}
+
+</pre>
+
+</div>
+
+<p>I try to keep the size of <code>@primes</code> and <code>@primorials</code> same.
+And at certain moment I felt the name of <code>@primes</code> confusing, because it is not a full list
+of primes. Then I changed it into <code>@ch_primes</code>.</p>
+
+<p>Here I reveal the loop conditional for the second part:</p>
+
+<div class="code_vim_hl">
+
+<pre><font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &gt; <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)</pre>
+
+</div>
+
+<p>The loop conditional for the first part, actually, can be quite arbitary. Each time the block runs, <code>@fort_sorted</code> is either increased by 1 or remain the same. One may casually use 
+<code>while (scalar @fort_sorted != 2*$N )</code>
+or
+<code>while (scalar @fort_sorted &lt; 2*$N )</code>
+, and s/he could even skip the second part ... IF LUCKY ENOUGH?
+</p>
+
+<p>To go on a steady pace, I use</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">while</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_sorted</b></font> &lt; <font color="#34E2E2"><b>$N</b></font>) 
+</pre>
+</div>
+
+<p>Since the first part and the second part look so similar, I combine them by a <a href="https://www.perlmonks.com/?node_id=301355">short-circuit or</a>; here is the code:</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$N</b></font> = <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> || <font color="#AD7FA8">8</font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@ch_primes</b></font> = (<font color="#AD7FA8">2</font>);
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@primorials</b></font> = ( Math::BigInt-&gt;new(<font color="#AD7FA8">2</font>) );
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@fort_unsort</b></font> = ();
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@fort_sorted</b></font> = ();
+
+
+<font color="#FCE94F">while</font> ( !<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)
+               ||
+        <font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &gt; <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>
+) {
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$k</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$tmp_int</b></font> = <font color="#34E2E2"><b>$ch_primes[$k]</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$tmp_int</b></font>++;
+    } <font color="#FCE94F">while</font> (!is_prime( <font color="#34E2E2"><b>$primorials[$k]</b></font> + <font color="#34E2E2"><b>$tmp_int</b></font> ));
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@fort_unsort</b></font>, <font color="#34E2E2"><b>$tmp_int</b></font>;
+    iter_primorial() <font color="#FCE94F">while</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font> &lt;= <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+    iter_prime() <font color="#FCE94F">while</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@ch_primes</b></font> &lt;= <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font>;
+    <font color="#34E2E2"><b>@fort_sorted</b></font> = uniqint <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+}
+
+<font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;Answer: </font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>, <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;, &quot;</font>, <font color="#34E2E2"><b>@fort_sorted[</b></font><font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+</pre>
+
+</div>
+
+<p>while the supporting subroutines <code>&amp;iter_prime</code> and <code>&amp;iter_primorial</code> are</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">sub </font><font color="#34E2E2"><b>iter_prime </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$new_int</b></font> = <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$new_int</b></font>++;
+    } <font color="#FCE94F">while</font> (!is_prime(<font color="#34E2E2"><b>$new_int</b></font>));
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@ch_primes</b></font>, <font color="#34E2E2"><b>$new_int</b></font>;
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>iter_primorial </b></font>{
+    iter_prime() <font color="#FCE94F">while</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@ch_primes</b></font> &lt;= <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font>; 
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@primorials</b></font>,
+      <font color="#34E2E2"><b>$primorials[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$ch_primes[</b></font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@primorials</b></font> <font color="#34E2E2"><b>]</b></font>;
+}
+</pre>
+</div>
+
+<p>Sample run:</p>
+
+<div class="console_output"><pre>
+$ perl ch-1.pl 10
+Answer: 
+3, 5, 7, 13, 17, 19, 23, 37, 47, 59
+</pre>
+</div>
+<p> --- </p>
+
+<p>Is the heuristic <code>while (scalar @fort_sorted &lt; 2*$N )</code>
+good? Let add a line <code>say scalar @fort_unsort;</code> and see:
+</p>
+
+<table border="1" style="text-align:center">
+<tr>  <th><code>$N</code></th>  <th><code>scalar @fort_unsort</code></th>  </tr>
+<tr>  <td>8</td>  <td>10</td>  </tr>
+<tr>  <td>16</td>  <td>24</td>  </tr>
+<tr>  <td>38</td>  <td>63</td>  </tr>
+<tr>  <td>50</td>  <td>84</td>  </tr>
+<tr>  <td>101</td>  <td>183</td>  </tr>
+<tr>  <td>150</td>  <td>272</td>  </tr>
+</table>
+
+<p> --- </p>
+
+<p>I have drawn an alternative version of the  code
+after reading <code>polettix</code>'s blogpost on
+the task. We need not store the values of many primorials;
+we can just store one and proceed.</p>
+
+<div class="code_vim_hl">
+
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>@ch_primes</b></font> = (<font color="#AD7FA8">2</font>);
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$my_primorial</b></font> = Math::BigInt-&gt;new(<font color="#AD7FA8">2</font>);
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ind_primorial</b></font> = <font color="#AD7FA8">1</font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@fort_unsort</b></font> = ();
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@fort_sorted</b></font> = ();
+
+
+<font color="#FCE94F">while</font> ( !<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)
+               ||
+        <font color="#34E2E2"><b>$fort_sorted[$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &gt; <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>
+) {
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$k</b></font> = <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$tmp_int</b></font> = <font color="#34E2E2"><b>$ch_primes[$k]</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$tmp_int</b></font>++;
+    } <font color="#FCE94F">while</font> (!is_prime( <font color="#34E2E2"><b>$my_primorial</b></font> + <font color="#34E2E2"><b>$tmp_int</b></font> ));
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@fort_unsort</b></font>, <font color="#34E2E2"><b>$tmp_int</b></font>;
+    iter_primorial() <font color="#FCE94F">while</font> <font color="#34E2E2"><b>$ind_primorial</b></font> &lt;= <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+    iter_prime() <font color="#FCE94F">while</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@ch_primes</b></font> &lt;= <font color="#34E2E2"><b>$ind_primorial</b></font>;
+    <font color="#34E2E2"><b>@fort_sorted</b></font> = uniqint <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@fort_unsort</b></font>;
+}
+
+<font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;Answer: </font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>, <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;, &quot;</font>, <font color="#34E2E2"><b>@fort_sorted[</b></font><font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$N</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>iter_prime </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$new_int</b></font> = <font color="#34E2E2"><b>$ch_primes[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">do</font> {
+        <font color="#34E2E2"><b>$new_int</b></font>++;
+    } <font color="#FCE94F">while</font> (!is_prime(<font color="#34E2E2"><b>$new_int</b></font>));
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@ch_primes</b></font>, <font color="#34E2E2"><b>$new_int</b></font>;
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>iter_primorial </b></font>{
+    iter_prime() <font color="#FCE94F">while</font> <font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@ch_primes</b></font> &lt;= <font color="#34E2E2"><b>$ind_primorial</b></font>; 
+    <font color="#34E2E2"><b>$my_primorial</b></font> *= <font color="#34E2E2"><b>$ch_primes[</b></font> <font color="#34E2E2"><b>$ind_primorial</b></font> <font color="#34E2E2"><b>]</b></font>;
+    <font color="#34E2E2"><b>$ind_primorial</b></font>++;
+}
+</pre>
+
+</div>
+
+<p>An anecdote: we never assume the Fortunate conjecture true all along the code process, though, 
+it's quite cool.</p>
+
+<h4>Task 2: Pisano Period</h4>
+
+<p>As usual I try to generalize. This time I generalize it into arbitary length of "order" of linear recurrence.</p>
+
+<div class="code_vim_hl"><pre><a href="https://oeis.org/wiki/Index_to_OEIS:_Section_Rec">https://oeis.org/wiki/Index_to_OEIS:_Section_Rec</a>
+
+ch-2.pl $N 2   1 1       0 1   # Fibonacci numbers
+
+ch-2.pl $N 2   1 1       2 1   # Lucas numbers    #OEIS:<a href="https://oeis.org/A000032">A000032</a>
+
+ch-2.pl $N 2   1 2       0 1   # Pell numbers     #OEIS:<a href="https://oeis.org/A000129">A000129</a>
+
+ch-2.pl $N 3   1 1 0  1 1 1 # Padovan numbers     #OEIS:<a href="https://oeis.org/A000931">A000931</a>
+
+ch-2.pl $N 3   1 1 1  0 0 1 # Tribonacci numbers  #OEIS:<a href="https://oeis.org/A000073">A000073</a>
+
+ch-2.pl $N 3   1 0 1  1 1 1 # Narayana's cows sequence #<a href="https://oeis.org/A000930">A000930</a>
+
+ch-2.pl $N 6  -1 -1 0 -1 2 1   1 2 2 4 5 9             #<a href="https://oeis.org/A001224">A001224</a>
+
+ch-2.pl $N 6   1 -1 -1 0 1 1   1 1 2 3 4 5             #<a href="https://oeis.org/A001399">A001399</a>
+
+</pre></div>
+
+<p>So, how does the script work?</p>
+
+<div class="code_vim_hl">
+
+<pre><font color="#FCE94F">  1 sub </font><font color="#34E2E2"><b>pisano_period </b></font>{
+<font color="#FCE94F">  2 </font>    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$N</b></font>, <font color="#34E2E2"><b>$t</b></font>, <font color="#34E2E2"><b>$rec</b></font>, <font color="#34E2E2"><b>$seq</b></font>) = <font color="#34E2E2"><b>@_</b></font>;
+<font color="#FCE94F">  3 </font>    <font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;(Some of) Parameters are too large.</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>
+<font color="#FCE94F">  4 </font>        <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$N</b></font>**<font color="#34E2E2"><b>$t</b></font> + <font color="#34E2E2"><b>$t</b></font> - <font color="#AD7FA8">1</font> &gt; <font color="#AD7FA8">8_000_000</font>;
+<font color="#FCE94F">  5 </font>
+<font color="#FCE94F">  6 </font>    <font color="#34E2E2"><b>@$seq</b></font> = <font color="#FCE94F">map</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$_</b></font> % <font color="#34E2E2"><b>$N</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@$seq</b></font>;
+<font color="#FCE94F">  7 </font>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ori_seqstate</b></font> = [<font color="#34E2E2"><b>@$seq</b></font>];
+<font color="#FCE94F">  8 </font>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$new_seqstate</b></font> = [<font color="#34E2E2"><b>@$ori_seqstate</b></font>];
+<font color="#FCE94F">  9 </font>    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$count</b></font> = <font color="#AD7FA8">0</font>;
+<font color="#FCE94F"> 10 </font>    <font color="#FCE94F">do</font> {
+<font color="#FCE94F"> 11 </font>        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$new_val</b></font> = sum <font color="#FCE94F">map</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$rec-&gt;[$_]</b></font>*<font color="#34E2E2"><b>$new_seqstate-&gt;[$_]</b></font><font color="#FCE94F">}</font> (<font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$t</b></font>-<font color="#AD7FA8">1</font>);
+<font color="#FCE94F"> 12 </font>        <font color="#34E2E2"><b>$new_val</b></font> = <font color="#34E2E2"><b>$new_val</b></font> % <font color="#34E2E2"><b>$N</b></font>;
+<font color="#FCE94F"> 13 </font>        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@{$seq}</b></font>, <font color="#34E2E2"><b>$new_val</b></font>;
+<font color="#FCE94F"> 14 </font>        <font color="#FCE94F">shift</font> <font color="#34E2E2"><b>@{$new_seqstate}</b></font>;
+<font color="#FCE94F"> 15 </font>        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@{$new_seqstate}</b></font>, <font color="#34E2E2"><b>$new_val</b></font>;
+<font color="#FCE94F"> 16 </font>        <font color="#34E2E2"><b>$count</b></font>++;
+<font color="#FCE94F"> 17 </font>        <font color="#FCE94F">die</font> <font color="#AD7FA8">&quot;Patterns not found</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$count</b></font> &gt; <font color="#34E2E2"><b>$N</b></font>**<font color="#34E2E2"><b>$t</b></font> + <font color="#34E2E2"><b>$t</b></font>;
+<font color="#FCE94F"> 18 </font>    } <font color="#FCE94F">while</font> (!cmp_num_arr(<font color="#34E2E2"><b>$new_seqstate</b></font>, <font color="#34E2E2"><b>$ori_seqstate</b></font>));
+<font color="#FCE94F"> 19 </font>
+<font color="#FCE94F"> 20 </font>    <font color="#FCE94F">return</font> [<font color="#34E2E2"><b>@$seq[</b></font><font color="#AD7FA8">0.</font>.<font color="#34E2E2"><b>$count</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>];
+<font color="#FCE94F"> 21 </font>}
+</pre>
+
+</div>
+
+
+<p><u>line 02</u>: Let's explain it using examples.</p><p>
+For the input <code>ch-2.pl 7 3 &nbsp; 1 0 1 &nbsp; 1 1 1</code>, the desired output is the info of the periodic behavior of the Narayana's cows sequence modulo 7. 
+</p><p><code>$rec</code> will be <code>[1,0,1]</code> (the sequence is defined by a(<i>n</i>-1)+a(<i>n</i>-3) for <i>n</i> &ge; 3) and
+<code>$ori_seqstate</code> will be <code>[1,1,1]</code> (a(0)=a(1)=a(2)=1).
+</p><p>
+For the input <code>ch-2.pl 17 2  &nbsp; 1 2 &nbsp; 0 1</code>, the desired output is the info of the periodic behavior of the Pell numbers modulo 17.
+</p><p> 
+<code>$rec</code> will be <code>[1,2]</code> (the sequence is defined by 2 &times; a(<i>n</i>-1)+a(<i>n</i>-2) for <i>n</i> &ge; 2) and
+<code>$ori_seqstate</code> will be <code>[0,1]</code> (a(0)=0, a(1)=1).
+</p>
+
+<p><u>line 03-04, line 17</u>:
+<code>$N**$t + $t - 1</code> is a lazy upper bound. 
+By the pigeonhole principle in discrete math, 
+there are <code>$N**$t</code> possible length-<code>$t</code>-sequence
+ (while the possible values of members of the length-<code>$t</code>-sequence
+are <code>0</code> to <code>$N-1</code>). </p>
+
+<p><u>line 11</u>: I am curious if there is a more compact way to write it. 
+Note that <code>$rec-&gt;@*</code> and <code>$new_seqstate-&gt;@*</code> have same number of elements. </p>
+
+<p><u>line 14-15</u>: They can be replaced by <code>$new_seqstate = [ @$new_seqstate[1..$t-1] , $new_val ];</code> .</p>
+
+<p><u>line 18</u>: <code>&amp;cmp_num_arr</code> is a rough supportive subroutine checking whether two lists are the same.</p>
+
+<p><u><b>line 17</b></u>: I have to admit that I have given up. Depending on the initial condition, <code>$ori_seqstate</code> may appear once; for instance, for a recurrence sequence specified by a(0)=a(1)=1 and a(<i>n</i>) = 4 a(<i>n</i>-1) + 4 a(<i>n</i>-2), then the code here will return a "Patterns not found" message for many <code>$N</code>.
+I have not done the details math of the necessary and sufficient condition for a linear recurrence sequence which surely generates a Pisano-like period. 
+</p>
+
+<p>Sample run:</p>
+
+<div class="console_output"><pre>
+$ perl ch-2.pl 16 2  1 1  0 1 # Fibonacci numbers 
+1..4
+length: 24
+terms: 0, 1, 1, 2, 3, 5, 8, 13, 5, 2, 7, 9, 0, 9, 9, 2, 11, 13, 8, 5, 13, 2, 15, 1
+ok 1 - Required Case (Period of Fibonacci numbers mod 3)
+ok 2 - Pisano period for mod 2
+ok 3 - Pisano-like period for Padovan numbers mod 3
+ok 4 - Pisano-like period for Padovan numbers mod 7
+</pre>
+</div>
+
+
+<p>Anyway, have fun exploring the periodic behavior of linear recurrence sequences.</p>
+
+<table border="1" style="text-align:center">
+<tr>  <th><code>$N</code></th>
+      <th>Sequence</th>
+      <th>Period Length</th>  </tr>
+<tr>  <td>2</td>  <td>Fibonacci</td> <td>3</td> </tr>
+<tr>  <td>3</td>  <td>Fibonacci</td> <td>8</td> </tr>
+<tr>  <td>7</td>  <td>Fibonacci</td> <td>16</td> </tr>
+<tr>  <td>101</td>  <td>Fibonacci</td> <td>50</td> </tr>
+<tr>  <td>191</td>  <td>Fibonacci</td> <td>190</td> </tr>
+<tr>  <td>2</td>  <td>Padovan</td> <td>7</td> </tr>
+<tr>  <td>3</td>  <td>Padovan</td> <td>13</td> </tr>
+<tr>  <td>7</td>  <td>Padovan</td> <td>48</td> </tr>
+<tr>  <td>101</td>  <td>Padovan</td> <td>100</td> </tr>
+<tr>  <td>191</td>  <td>Padovan</td> <td>7296</td> </tr>
+<tr>  <td>2</td>  <td>Tribonacci</td> <td>4</td> </tr>
+<tr>  <td>3</td>  <td>Tribonacci</td> <td>13</td> </tr>
+<tr>  <td>7</td>  <td>Tribonacci</td> <td>48</td> </tr>
+<tr>  <td>43</td>  <td>Tribonacci</td> <td>308</td> </tr>
+<tr>  <td>101</td>  <td>Tribonacci</td> <td>680</td> </tr>
+<tr>  <td>191</td>  <td>Tribonacci</td> <td>36673</td> </tr>
+<tr>  <td>193</td>  <td>Tribonacci</td> <td>4656</td> </tr>
+<tr>  <td>197</td>  <td>Tribonacci</td> <td>3234</td> </tr>
+<tr>  <td>199</td>  <td>Tribonacci</td> <td>198</td> </tr>
+<tr>  <td>2</td>  <td>Narayana's cow</td> <td>7</td> </tr>
+<tr>  <td>3</td>  <td>Narayana's cow</td> <td>8</td> </tr>
+<tr>  <td>7</td>  <td>Narayana's cow</td> <td>57</td> </tr>
+<tr>  <td>53</td>  <td>Narayana's cow</td> <td>468</td> </tr>
+<tr>  <td>101</td>  <td>Narayana's cow</td> <td>10303</td> </tr>
+<tr>  <td>191</td>  <td>Narayana's cow</td> <td>36673</td> </tr>
+<tr>  <td>193</td>  <td>Narayana's cow</td> <td>37443</td> </tr>
+<tr>  <td>197</td>  <td>Narayana's cow</td> <td>2156</td> </tr>
+<tr>  <td>199</td>  <td>Narayana's cow</td> <td>3960</td> </tr>
+<tr>  <td>2</td>  <td>OEIS:A001224</td> <td>12</td> </tr>
+<tr>  <td>3</td>  <td>OEIS:A001224</td> <td>16</td> </tr>
+<tr>  <td>7</td>  <td>OEIS:A001224</td> <td>32</td> </tr>
+<tr>  <td>11</td>  <td>OEIS:A001224</td> <td>20</td> </tr>
+<tr>  <td>13</td>  <td>OEIS:A001224</td> <td>56</td> </tr>
+<tr>  <td>2</td>  <td>OEIS:A001399</td> <td>12</td> </tr>
+<tr>  <td>3</td>  <td>OEIS:A001399</td> <td>18</td> </tr>
+<tr>  <td>4</td>  <td>OEIS:A001399</td> <td>24</td> </tr>
+<tr>  <td>5</td>  <td>OEIS:A001399</td> <td>30</td> </tr>
+<tr>  <td>7</td>  <td>OEIS:A001399</td> <td>42</td> </tr>
+<tr>  <td>11</td>  <td>OEIS:A001399</td> <td>66</td> </tr>
+<tr>  <td>13</td>  <td>OEIS:A001399</td> <td>78</td> </tr>
+</table>
+
+<p>Well, there are many fun discussions on the properties of Fibonacci sequences on <i><a href="https://math.stackexchange.com/questions/tagged/fibonacci-numbers">Mathematics Stack Exchange</a></i>,
+some related to the Pisano Period.</p>
+
+<p>Unfortunately, I have been infected by COVID-19 Omicron this week &dash; tested with rapid tests. Three shots of vaccine were injected before.
+And three exams in April. I better speak less and take more rest. Everyone take care.</p>
+
+<p>Stay alert and healthy everyone! Hope for peace and justice on East Europe! □</p>
+
+<hr>
+
+<p>Remarks:</p>
+
+<p>1: <a name="remark1"></a>From my testing up to the highest member of the sequence is 1103, the performance between the different order of occurring of the two array operations seems to be very close.</p>
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-155/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>, 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-155/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: 10th March, 2022; typos and grammars fixed on 14th March.</p>
+
+</body>
+
+</html>

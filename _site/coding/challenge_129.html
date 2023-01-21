@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #129">
+  <meta name="keywords" content="Perl", "Object::Pad">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+
+<title>Basic Data Structure Experiments with Object::Pad (for The Weekly Challenge #129) </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>Basic Data Structure Experiments with <tt>Object::Pad</tt><br><small>for The Weekly Challenge #129</small></h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-129/" title="The Weekly Challenge #129">challenges
+in Week #129</a> !</i></b></p>
+
+<hr>
+
+<div style="float:right; border: 1px dotted black; font-size:xx-small;">
+<image alt="" src="../docs/assets/challenge_129.jpg" style="float:right" width="400px"/>
+<p><a href="#right_of_use">image info</a></p></div>
+
+<p>
+The four core elements of object-oriented programming are said to be "encapsulation" ,
+"inheritance" , "polymorphism" and "abstraction". 
+Let us see how abstraction is performed via
+the actively developping <a href="https://metacpan.org/pod/Object::Pad"><tt>Object::Pad</tt></a> module &dash; making a tree (node) class and a linked list class through <tt>Object::Pad</tt>, 
+for tackling The Weekly Challenge tasks this week. (The version number of <tt>Object::Pad</tt> here is <tt>0.52</tt>.)
+</p>
+
+<p><small>Apology: CY hasn't learnt inner classes in OO.</small></p>
+
+<h4>Task 1: Root Distance</h4>
+<p>The tree node class is essentially about 30 lines:</p>
+<div class="code_vim_hl">
+
+<pre>class TreeNode {
+    has <font color="#34E2E2"><b>$parent</b></font> :reader :writer :param :<a href="https://metacpan.org/pod/Object::Pad::SlotAttr::Isa">Isa</a>(TreeNode) = <font color="#FCE94F">undef</font>;
+    has <font color="#34E2E2"><b>$list_of_children</b></font> :reader :writer :param = [];
+    has <font color="#34E2E2"><b>$is_root</b></font> :reader :param = <font color="#AD7FA8">0</font>;
+
+    method set_children {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$c</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+        <font color="#34E2E2"><b>$c-&gt;set_parent</b></font>(<font color="#34E2E2"><b>$self</b></font>);
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>$list_of_children-&gt;@*</b></font>, <font color="#34E2E2"><b>$c</b></font>;
+    }
+
+    method root_distance {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$self</b></font>;
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$d</b></font> = <font color="#AD7FA8">0</font>;
+        <font color="#FCE94F">while</font> (!<font color="#34E2E2"><b>$p-&gt;is_root</b></font>) {
+            <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$p-&gt;parent</b></font>;
+            <font color="#34E2E2"><b>$d</b></font>++;
+        }
+        <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$d</b></font>;
+    }
+
+    BUILD {
+        <font color="#FCE94F">if</font> (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$parent</b></font>)) {
+            <font color="#34E2E2"><b>$parent-&gt;set_children</b></font>(<font color="#34E2E2"><b>$self</b></font>);
+        }
+        <font color="#FCE94F">else</font> {
+            <font color="#34E2E2"><b>$is_root</b></font> = <font color="#AD7FA8">1</font>;
+        }
+    }
+}
+</pre>
+</div>
+
+<p>(By CY's understanding:) The <tt>BUILD</tt> blocks act like the initializer blocks in Java.</p>
+
+<p>The use of "<tt>:reader</tt>" or "<tt>:writer</tt>" can be learnt from 
+<a href="https://metacpan.org/pod/Object::Pad#:reader,-:reader(NAME)" title="metacpan - Object::Pad, :reader">
+the official document</a>. 
+The <u>setter</u>(<u>:writer</u>) are <tt>method set_<i>abc</i></tt>
+and <u>getter</u>(<u>:reader</u>) are <tt>method <i>abc</i></tt>. 
+</p>
+<!--<p>(Note that when the slot is named <tt>_<i>abc</i></tt> and its declaration comes with a ":reader", its getter is <tt><i>abc</i></tt>. Yes, omit the underscore!)</p>-->
+
+<p>Come to see how it is being used:</p>
+<div class="code_vim_hl"><pre><font color="#34E2E2"># Example 1</font>
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n1</b></font> = TreeNode-&gt;new();
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n2</b></font> = TreeNode-&gt;new(<font color="#AD7FA8">parent</font> =&gt; <font color="#34E2E2"><b>$n1</b></font>);
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n3</b></font> = TreeNode-&gt;new(<font color="#AD7FA8">parent</font> =&gt; <font color="#34E2E2"><b>$n1</b></font>);
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n4</b></font> = TreeNode-&gt;new(<font color="#AD7FA8">parent</font> =&gt; <font color="#34E2E2"><b>$n3</b></font>);
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n5</b></font> = TreeNode-&gt;new(<font color="#AD7FA8">parent</font> =&gt; <font color="#34E2E2"><b>$n4</b></font>);
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$n6</b></font> = TreeNode-&gt;new(<font color="#AD7FA8">parent</font> =&gt; <font color="#34E2E2"><b>$n4</b></font>);
+
+ok <font color="#34E2E2"><b>$n6-&gt;root_distance</b></font>() == <font color="#AD7FA8">3</font>, <font color="#AD7FA8">&quot;Example 1 - Node 6&quot;</font>;
+ok <font color="#34E2E2"><b>$n5-&gt;root_distance</b></font>() == <font color="#AD7FA8">3</font>, <font color="#AD7FA8">&quot;Example 1 - Node 5&quot;</font>;
+ok <font color="#34E2E2"><b>$n2-&gt;root_distance</b></font>() == <font color="#AD7FA8">1</font>, <font color="#AD7FA8">&quot;Example 1 - Node 2&quot;</font>;
+ok <font color="#34E2E2"><b>$n4-&gt;root_distance</b></font>() == <font color="#AD7FA8">2</font>, <font color="#AD7FA8">&quot;Example 1 - Node 4&quot;</font>;
+
+__END__
+
+Tree:
+        1
+       / \
+      2   3
+           \
+            4
+           / \
+          5   6
+</pre></div>
+
+<h4>Task 2: Add Linked Lists</h4>
+
+
+<div style="float:right; border: 1px dotted black; background-color:white;">
+<pre>
+ref to 
+root
+node
+ |
+ v
++-+-+   +-+-+   +-+-+   +-+-+
+|.|.+-&gt; |.|.+-&gt; |.|.+-&gt; |.|.+-&gt; undef
++++-+   +++-+   +++-+   +++-+ 
+ |       |       |       | 
+ v       v       v       v
+ 2       3       5       7
+</pre>
+<p style="font-size:x-small"><a href="#right_of_use">diagram info</a></p>
+</div>
+
+<p>Read the hint of task description first:</p>
+
+<blockquote>... expecting a class representing linked list. 
+It should have methods to create a linked list 
+given list of single digit positive numbers <b>(I)</b> and 
+a method to add new member. <b>(II)</b> Also have a method 
+that takes 2 linked list objects and returns a 
+new linked list. <b>(III)</b> Finally a method to print the 
+linked list object in a user friendly format. <b>(IV)</b>
+</blockquote>
+
+<p>So we have to implement at least four methods.</p>
+
+<p> Begin to code!
+Two classes are defined. The first is <tt>LLNode</tt>, 
+the second is <tt>LinkedList</tt>. The implementation of <tt>LinkedList</tt> chosen is
+<a href="https://en.wikipedia.org/wiki/Linked_list#Tradeoffs" title="Wikipedia: Linked list">
+ a singly linked list without a known end element</a>.
+</p>
+
+<p><tt>LLNode</tt>:</p>
+
+<div class="code_vim_hl">
+<pre>
+class LLNode {
+    has <font color="#34E2E2"><b>$next</b></font> :reader :writer :param :<a href="https://metacpan.org/pod/Object::Pad::SlotAttr::Isa">Isa</a>(LLNode) = <font color="#FCE94F">undef</font>;
+    has <font color="#34E2E2"><b>$val</b></font> :reader :writer :param = <font color="#FCE94F">undef</font>;
+
+    method a_copy {
+        <font color="#FCE94F">return</font> LLNode-&gt;new(<font color="#AD7FA8">val</font>=&gt;<font color="#34E2E2"><b>$self-&gt;val</b></font>);
+    }
+}
+</pre>
+</div>
+
+<p><tt>LinkedList</tt>:</p>
+<div class="code_vim_hl">
+<pre>class LinkedList {
+
+    has <font color="#34E2E2"><b>$head_node</b></font> :reader :writer :param :<a href="https://metacpan.org/pod/Object::Pad::SlotAttr::Isa">Isa</a>(LLNode) = <font color="#FCE94F">undef</font>;
+
+    method create_list {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@digit</b></font> = <font color="#34E2E2"><b>@_</b></font>;
+        #skip details
+    }
+
+    method append_element {
+        <font color="#34E2E2"># an O(N) operation, seldom used</font>
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$dgt</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$head_node</b></font>;
+        <font color="#FCE94F">while</font> (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$p-&gt;next</b></font>)) {
+            <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$p-&gt;next</b></font>;
+        }
+        <font color="#34E2E2"><b>$p-&gt;set_next</b></font>( LLNode-&gt;new(<font color="#AD7FA8">val</font>=&gt;<font color="#34E2E2"><b>$dgt</b></font>) );
+    }
+
+    method a_reverse_linked_list {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$rvrs</b></font> = LinkedList-&gt;new();
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@stack</b></font>;
+        #details below
+        <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$rvrs</b></font>;
+    }
+
+    method a_reverse_linked_list_with_carriers {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$rvrs</b></font> = LinkedList-&gt;new();
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@stack</b></font>;
+        #skip details
+        <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$rvrs</b></font>;
+    }
+
+    method directly_add_another_linked_list {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$sum</b></font> = LinkedList-&gt;new();
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$another</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$s</b></font> = <font color="#34E2E2"><b>$self-&gt;head_node</b></font>;
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$a</b></font> = <font color="#34E2E2"><b>$another-&gt;head_node</b></font>;
+        <font color="#34E2E2"><b>$sum-&gt;set_head_node</b></font>(LLNode-&gt;new( <font color="#AD7FA8">val</font> =&gt; <font color="#34E2E2"><b>$s-&gt;val</b></font> + <font color="#34E2E2"><b>$a-&gt;val</b></font> ));
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$sum-&gt;head_node</b></font>;
+        <font color="#FCE94F">while</font> (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$s-&gt;next</b></font>) &amp;&amp; <font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$a-&gt;next</b></font>)) {
+            <font color="#34E2E2"><b>$s</b></font> = <font color="#34E2E2"><b>$s-&gt;next</b></font>;
+            <font color="#34E2E2"><b>$a</b></font> = <font color="#34E2E2"><b>$a-&gt;next</b></font>;
+            <font color="#34E2E2"><b>$p-&gt;set_next</b></font>( LLNode-&gt;new( <font color="#AD7FA8">val</font> =&gt; <font color="#34E2E2"><b>$s-&gt;val</b></font> + <font color="#34E2E2"><b>$a-&gt;val</b></font> ) );
+            <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$p-&gt;next</b></font>;
+        }
+        <font color="#FCE94F">while</font> (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$s-&gt;next</b></font>)) {
+            <font color="#34E2E2"><b>$s</b></font> = <font color="#34E2E2"><b>$s-&gt;next</b></font>;
+            <font color="#34E2E2"><b>$p-&gt;set_next</b></font>( LLNode-&gt;new( <font color="#AD7FA8">val</font> =&gt; <font color="#34E2E2"><b>$s-&gt;val</b></font> ) );
+            <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$p-&gt;next</b></font>;
+        }
+        <font color="#FCE94F">while</font> (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$a-&gt;next</b></font>)) {
+            <font color="#34E2E2"><b>$a</b></font> = <font color="#34E2E2"><b>$a-&gt;next</b></font>;
+            <font color="#34E2E2"><b>$p-&gt;set_next</b></font>( LLNode-&gt;new( <font color="#AD7FA8">val</font> =&gt; <font color="#34E2E2"><b>$a-&gt;val</b></font> ) );
+            <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$p-&gt;next</b></font>;
+        }
+        <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$sum</b></font>;
+    }
+
+    method wk129_add_another_linked_list {
+        #details below
+    }
+
+    method <font color="#FCE94F">print</font> {
+        #trivial, skip details
+    }
+
+}
+</pre>
+
+</div>
+
+<p>As you can see, 
+the requirement (I) is the responsibility of <tt>method create_list</tt>,
+the requirement (II) is the that of <tt>method append_element</tt>,
+(III) &dash; <tt>method wk129_add_another_linked_list</tt>,
+and (IV) &dash; <tt>method print</tt> (yeah, it has the same name as the built-in <tt>print</tt> but such naming is legal).
+</p>
+
+<p>For this task, our "main dish" is (III), so let us see its operations step by step.</p>
+<p>In terms of source codes:</p>
+<div class="code_vim_hl">
+<pre>
+method wk129_add_another_linked_list {
+    <font color="#FCE94F">return</font>   <font color="#34E2E2"><b>$self-&gt;a_reverse_linked_list</b></font>
+          -&gt;directly_add_another_linked_list(
+              <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]-&gt;a_reverse_linked_list</b></font>
+            )
+          -&gt;a_reverse_linked_list_with_carriers;
+}
+</pre></div>
+
+<p>In words:</p>
+<ol>
+<li> make a "reversed version" of the linked list instance; </li>
+<li> make a "reversed version" of the other linked list in the argument; </li>
+<li> directly add the two linked lists up;</li>
+<li> make a "reversed version" of the prior linked list
+while keep taking care of the "carriers" defined in the task.</li>
+</ol>
+
+<p>Now, we are going to use the two linked lists in Example 2 to illustrate:</p>
+
+<div class="code_vim_hl">
+<pre><font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ex2_L1</b></font> = LinkedList-&gt;new();
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>$ex2_L2</b></font> = LinkedList-&gt;new();
+
+<font color="#34E2E2"><b>$ex2_L1-&gt;create_list</b></font>(<font color="#AD7FA8">1</font>,<font color="#AD7FA8">2</font>,<font color="#AD7FA8">3</font>,<font color="#AD7FA8">4</font>,<font color="#AD7FA8">5</font>);
+<font color="#34E2E2"><b>$ex2_L2-&gt;create_list</b></font>(<font color="#AD7FA8">6</font>,<font color="#AD7FA8">5</font>,<font color="#AD7FA8">5</font>);
+
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot; L1: &quot;</font>; <font color="#34E2E2"><b>$ex2_L1-&gt;print</b></font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot; L2: &quot;</font>; <font color="#34E2E2"><b>$ex2_L2-&gt;print</b></font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;rL1: &quot;</font>; <font color="#34E2E2"><b>$ex2_L1-&gt;a_reverse_linked_list-&gt;print</b></font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;rL2: &quot;</font>; <font color="#34E2E2"><b>$ex2_L2-&gt;a_reverse_linked_list-&gt;print</b></font>;
+
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;\"directly adding\" rL2 to rL1:</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">    &quot;</font>;
+<font color="#34E2E2"><b>$ex2_L1-&gt;a_reverse_linked_list-&gt;directly_add_another_linked_list</b></font>(<font color="#34E2E2"><b>$ex2_L2-&gt;a_reverse_linked_list</b></font>)-&gt;<font color="#FCE94F">print</font>;
+<font color="#FCE94F">print</font> <font color="#AD7FA8">&quot;<font color="#FFD7D7">\n</font>final<font color="#FFD7D7">\n</font>sum: &quot;</font>;
+<font color="#34E2E2"><b>$ex2_L1-&gt;wk129_add_another_linked_list</b></font>(<font color="#34E2E2"><b>$ex2_L2</b></font>)-&gt;<font color="#FCE94F">print</font>;
+</pre>
+
+</div>
+
+<p>Output:</p>
+<div class="code_vim_hl"><pre>
+ L1: 1-&gt;2-&gt;3-&gt;4-&gt;5
+ L2: 6-&gt;5-&gt;5
+rL1: 5-&gt;4-&gt;3-&gt;2-&gt;1
+rL2: 5-&gt;5-&gt;6
+"directly adding" rL2 to rL1:
+    10-&gt;9-&gt;9-&gt;2-&gt;1
+
+final
+sum: 1-&gt;3-&gt;0-&gt;0-&gt;0
+</pre></div>
+
+
+<h5>Discussion: the implementation of the reverse of the linked list</h5>
+
+<p>
+Since we don't have a reference to the tail of the linked list, for producing the reverse of the linked list (<tt>method a_reverse_linked_list</tt>), I choose to use a stack: make a copy (<tt>method a_copy</tt>) of the <tt>LLNode</tt> instance which has the same value but hasn't linked to any other <tt>LLNode</tt> instances, push the newly-baked object into <tt>@stack</tt>; after all linked list elements are copied, I popped out the elements from <tt>@stack</tt> so the original tail element can exactly be the head node of the new linked list, and the remaining elements are ordered as we want.
+</p>
+
+<p>The stack demands extra memory space, but it helps us more convenient to code.</p>
+
+<div class="code_vim_hl"><pre>
+method a_reverse_linked_list {
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$rvrs</b></font> = LinkedList-&gt;new();
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@stack</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$head_node</b></font>;
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@stack</b></font>, <font color="#34E2E2"><b>$p-&gt;a_copy</b></font>;
+    <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$p-&gt;next</b></font>;
+    <font color="#FCE94F">while</font> (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$p</b></font>)) {
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@stack</b></font>, <font color="#34E2E2"><b>$p-&gt;a_copy</b></font>;
+        <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$p-&gt;next</b></font>;
+    }
+
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$t</b></font> = <font color="#FCE94F">pop</font> <font color="#34E2E2"><b>@stack</b></font>;
+    <font color="#34E2E2"><b>$rvrs-&gt;set_head_node</b></font>( <font color="#34E2E2"><b>$t</b></font> );
+    <font color="#FCE94F">while</font> (<font color="#FCE94F">scalar</font> <font color="#34E2E2"><b>@stack</b></font> &gt; <font color="#AD7FA8">0</font>) {
+        <font color="#34E2E2"><b>$t-&gt;set_next</b></font>(<font color="#34E2E2"><b>$stack[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>);
+        <font color="#34E2E2"><b>$t</b></font> = <font color="#FCE94F">pop</font> <font color="#34E2E2"><b>@stack</b></font>;
+    }
+    <font color="#FCE94F">return</font> <font color="#34E2E2"><b>$rvrs</b></font>;
+}</pre></div>
+
+<p>The <tt>method a_reverse_linked_list_with_carriers</tt> goes with a similar logic; just we have to take care of the carriers, the process of the bringing the carriers to the "next" elements can be done during the stack operation. </p>
+
+<div class="code_vim_hl">
+<pre>
+method a_reverse_linked_list_with_carriers {
+    ...
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@stack</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$head_node</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$carrier</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">while</font> (<font color="#FCE94F">defined</font>(<font color="#34E2E2"><b>$p</b></font>)) {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$temp_val</b></font> = <font color="#34E2E2"><b>$p-&gt;val</b></font>+<font color="#34E2E2"><b>$carrier</b></font>;
+        <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$temp_val</b></font> &gt;= <font color="#AD7FA8">10</font>) {
+            <font color="#34E2E2"><b>$temp_val</b></font> -= <font color="#AD7FA8">10</font>;
+            <font color="#34E2E2"><b>$carrier</b></font> = <font color="#AD7FA8">1</font>;
+        }
+        <font color="#FCE94F">else</font> {
+            <font color="#34E2E2"><b>$carrier</b></font> = <font color="#AD7FA8">0</font>;
+        }
+        <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@stack</b></font>, LLNode-&gt;new(<font color="#AD7FA8">val</font>=&gt;<font color="#34E2E2"><b>$temp_val</b></font>);
+        <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$p-&gt;next</b></font>;
+    }
+    ...
+}
+</pre></div>
+
+<p>Wear your mask, stay alert and healthy! □</p>
+
+<hr>
+
+<a name="right_of_use"></a>
+
+<p>The image, as a friend of mine may recognize, is modified from the current header photo of my Twitter account. The photo was taken on 18th November, 2020, on the Eagle Nest Nature Trail in Hong Kong. Modified via GIMP.</p>
+
+<p>The diagram of singly linked list is inspired by diagrams in <a href="https://cs.cmu.edu/~dst/lispbook/book.pdf"><i>COMMON LISP: A Gentle Introduction to Symbolic Computation</i></a> by David S. Touretzky.</p> 
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-129/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>, 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-129/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: 8th September, 2021. Fix typo 12th Sep.</p>
+
+</body>
+
+</html>

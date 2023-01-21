@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Puzzle Created on The Weekly Challenge #119 - Learning New Terms and Languages">
+  <meta name="keywords" content="Perl, awk, bash">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+
+<title>CY's Take on The Weekly Challenge #119 </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #119 &dash; Learning New Terms and Languages</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-119/" title="The Weekly Challenge #119">challenges
+in Week #119</a> !</i></b></p>
+
+<hr>
+
+<h4>Task 1: Swap Nibbles</h4>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<image alt="" src="../docs/wiki_img/hex.png" style="float:right" />
+<p><a href="#right_of_use">image info</a></p></div>
+
+<p>All coders or IT professionals know the term "byte". Thanks for this task, I have learnt the term "nibble".</p>
+
+<p>I made an one-liner from the knowledge learnt in the recent tasks.</p>
+
+<div style="color:white; background-color:black; padding-left: 5px;"><br><tt><font color="#FCE94F">print</font> <font color="#FCE94F"><a href="https://perldoc.perl.org/functions/oct">oct</a></font> (<font color="#AD7FA8">&quot;0x&quot;</font>. <font color="#FCE94F">scalar</font> <font color="#FCE94F">reverse</font> <font color="#FCE94F">sprintf</font>(<font color="#AD7FA8">&quot;%02x&quot;</font>, <font color="#34E2E2"><b>$ARGV[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>)) ,<font color="#AD7FA8">&quot;</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>;</tt><br>&nbsp;</div>
+
+<p><font color="red">The "<tt>2</tt>" in <tt>%02x</tt> made an advantage on the "simplicity condition" of the task. <small>#Edited on 7th July</small></font></p>
+
+<p>For a bash version script, I made an advantage of the "simplicity condition" of the task &dash; the integers input are between 1 to 255:</p>
+
+<div style="color:white; background-color:black; padding-left: 5px;"><pre>&nbsp;<br><font color="#34E2E2"><b>A</b></font>=<font color="#5FD7FF">$(($N</font><font color="#FFD7D7">/</font><font color="#AD7FA8">16</font><font color="#5FD7FF">))</font>
+<font color="#34E2E2"><b>B</b></font>=<font color="#5FD7FF">$(($N</font><font color="#FFD7D7">%</font><font color="#AD7FA8">16</font><font color="#5FD7FF">))</font>
+
+<font color="#FCE94F">echo</font><font color="#AD7FA8"> </font><font color="#5FD7FF">$(($B</font><font color="#FFD7D7">*</font><font color="#AD7FA8">16</font><font color="#FFD7D7">+</font><font color="#5FD7FF">$A))</font>
+
+</pre></div>
+
+
+<h4>Task 2: Sequence without 1-on-1</h4>
+
+<p>Yes, my coding puzzle creation again!</p>
+
+<p>I intentionally make up a sequence not on <a href="https://oeis.org">The On-Line Encyclopedia of Integer Sequences</a> (OEIS). However, its "prototype" is on OEIS. Before I coded it, actually I took the list of numbers from the <a href="https://oeis.org/A007932">A007932</a> on OEIS; its title is "Numbers that contain only 1's, 2's and 3's". Then I simply used some scripts and text editor to remove terms with "11", wrote a description, and mailed this puzzle out.</p>
+
+<p>This one is easier but it seems that it also receives some positive comments from team members as <a href="challenge_118.html">the puzzled Knight</a>.</p>
+
+<p>Back to the task. My way of coding it can be said as accumulation. I use the terms of length N to produce terms of length N+1. If someone is mindful enough, if the terms in length N has no "11", "11" won't appear in the terms of length N+1 if we do not append those length-N terms ended with "1".</p>
+
+<p>Here is the main part of my code:</p>
+<div style="color:white; background-color:black; padding-left: 5px"><pre>&nbsp;<br>sub noo {
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$p</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <i><font color="#CCCCCC"># sth sth sth</font></i>
+    <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$#arr</b></font> &lt; <font color="#34E2E2"><b>$p</b></font>) {
+        <font color="#34E2E2"><b>$y</b></font> = <font color="#34E2E2"><b>$#arr</b></font>;
+        <font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$here</b></font> (<font color="#34E2E2"><b>$x</b></font>+<font color="#AD7FA8">1.</font>.<font color="#34E2E2"><b>$y</b></font>) {
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@arr</b></font>, <font color="#34E2E2"><b>$arr[$here]</b></font>.<font color="#AD7FA8">&quot;1&quot;</font>
+                <font color="#FCE94F">if</font> <font color="#FCE94F">substr</font>(<font color="#34E2E2"><b>$arr[$here]</b></font>, -<font color="#AD7FA8">1</font>, <font color="#AD7FA8">1</font>) <font color="#FCE94F">ne</font> <font color="#AD7FA8">&quot;1&quot;</font>;
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@arr</b></font>, <font color="#34E2E2"><b>$arr[$here]</b></font>.<font color="#AD7FA8">&quot;2&quot;</font>;
+            <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@arr</b></font>, <font color="#34E2E2"><b>$arr[$here]</b></font>.<font color="#AD7FA8">&quot;3&quot;</font>;
+        }
+        <font color="#34E2E2"><b>$x</b></font> = <font color="#34E2E2"><b>$y</b></font>;
+    }
+    <i><font color="#CCCCCC"># sth sth sth</font></i>
+}
+
+</pre></div>
+
+<p>Not very fancy but does its responsibility.</p>
+
+<h4>Awk and Bash</h4>
+
+<p>I have learnt the essence of the awk language and played with it on the previous two weeks (<a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-117/cheok-yin-fung/awk/ch-1.awk">Week 117 Task 1</a> and <a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-118/cheok-yin-fung/awk/ch-1.awk">Week 118 Task 1</a>). It is specific designed for text-file operations and can handle text data by buck with simple scripting. And now shift to learn bash scripting. awk is rather advanced, or say, more modern &dash; compared with bash.</p>
+
+<p>bash is rather harsh on spacing sometimes. I have to get used to its nature. As it was the first encounter with bash, I had fought with it for about 3 hours for porting the Perl codes into bash codes yesterday. For practical use, a coder or sysadmin has to remember some commons file handling parameters.</p>
+
+<p>---</p>
+
+<p>Stay alert and healthy! □</p>
+
+<hr>
+
+<p><a name="right_of_use"></a>The image of the hex table is from a screenshot of the Wikipedia page <a href="https://zh.wikipedia.org/wiki/%E5%8D%81%E5%85%AD%E8%BF%9B%E5%88%B6">十六进制</a> (<i>base 16 in zh.wikipedia.org</i>); the image is
+released under <a href="https://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License" title="CC-BY-SA-3.0">Creative Commons Attribution-ShareAlike 3.0 License</a>.</p>
+
+<p><i>link for CY's full codes: <tt><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-119/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>, <tt><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-119/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>, <tt><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-119/cheok-yin-fung/bash/ch-1.sh" title="ch-1.sh from Cheok-Yin Fung">ch-1.sh</a></tt>, <tt><a href="https://github.com/manwar/perlweeklychallenge-club/blob/master/challenge-119/cheok-yin-fung/bash/ch-2.sh" title="ch-2.sh from Cheok-Yin Fung">ch-2.sh</a></tt></i></p>
+
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+
+<p>Created Date: 5th July, 2021 (HKT). Last Update: 7th July, 2021 14:12 (HKT)</p>
+
+</body>
+
+</html>
