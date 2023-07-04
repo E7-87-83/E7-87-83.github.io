@@ -2,18 +2,12 @@ var list = document.getElementById('list');
 var booklist = document.getElementById('booklist');
 var bbase, base, randomized, dragging, draggedOver;
 var isRight = 'Projects Todo (not in chronological order)';
-var bisRight = 'Programming-related Books To-read (not in chronological order)';
+var isRightSub = 'Subjects To-learn (not in chronological order)';
 
 const genRandom = (array) => {
   base = array.slice();
   randomized = array.sort(() => Math.random() - 0.5);
   renderItems('isRight', list, isRight, 'aqua', randomized, compare, setDragging, setDraggedOver);
-};
-
-const bgenRandom = (array) => {
-  bbase = array.slice();
-  brandomized = array.sort(() => Math.random() - 0.5);
-  renderItems('bisRight', booklist, bisRight, 'lightblue', brandomized, bcompare, bsetDragging, bsetDraggedOver);
 };
 
 
@@ -39,22 +33,31 @@ const compare = (e) =>{
   randomized.splice(index2, 0, dragging);
  
   isRight = randomized.join("") === base.join("") 
-    ? 'Projects Todo (in chronological order)': 'Projects Todo (not in chronological order)'; 
+    ? 'Pet Projects Todo (in chronological order)': 'Pet Projects Todo (not in chronological order)'; 
 
   renderItems('isRight', list, isRight, 'aqua', randomized, compare, setDragging, setDraggedOver);
 };
 
 
-const bcompare = (e) =>{
-  var index1 = brandomized.indexOf(bdragging);
-  var index2 = brandomized.indexOf(bdraggedOver);
-  brandomized.splice(index1, 1);
-  brandomized.splice(index2, 0, bdragging);
- 
-  bisRight = brandomized.join("") === bbase.join("") 
-    ? 'Programming-related Books To-read (in chronological order)':'Programming-related Books To-read (not in chronological order)'; 
 
-  renderItems('bisRight', booklist, bisRight, 'lightblue', brandomized, bcompare, bsetDragging, bsetDraggedOver);
+
+
+const genRandomSub = (array) => {
+  base = array.slice();
+  randomized = array.sort(() => Math.random() - 0.5);
+  renderItems('isRightSub', subList, isRightSub, 'pink', randomized, compareSub, setDragging, setDraggedOver);
+};
+
+const compareSub = (e) =>{
+  var index1 = randomized.indexOf(dragging);
+  var index2 = randomized.indexOf(draggedOver);
+  randomized.splice(index1, 1);
+  randomized.splice(index2, 0, dragging);
+ 
+  isRightSub = randomized.join("") === base.join("") 
+    ? 'Subjects To-Learn (in chronological order)': 'Subjects To-Learn (not in chronological order)'; 
+
+  renderItems('isRightSub', subList, isRightSub, 'pink', randomized, compareSub, setDragging, setDraggedOver);
 };
 
 
@@ -70,15 +73,6 @@ const setDragging = (e) =>{
   dragging = Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText);
 };
 
-const bsetDraggedOver = (e) => {
-  e.preventDefault();
-  bdraggedOver = Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText);
-};
-
-const bsetDragging = (e) =>{
-  bdragging = Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText);
-};
-
 
 
 
@@ -90,25 +84,44 @@ genRandom([
   'Integer number sequence computation for Kagome lattice related stuff',
   'Math::Cryptarithm',
   'Math::Permutations (ref: Permutations.jl in Julia)',
+  'Integer number sequence computation for the 4x4 game Quarto',
+  'Integer number sequence computation for game British square',
+  'Integer number sequence computation for paper-and-pencil game Dandelions',
+  'Badty (a simple mathematical card game)',
+  'Sports Day Central Management System (React Project)',
 ]);
 
-bgenRandom([
+
+
+
+
+
+genRandomSub([
+  'Philosophy of Science',
+  'Philosophy',
+  'Game Theory',
+  'Advanced Graph Theory',
+  'Decision Theory',
+  'Data Science',
+  'NLP',
+  'Computability Theory',
+]);
+
+/* bgenRandom([
   '提升程式設計的邏輯思考力 {~2018}',
   'COMMON LISP: A Gentle Introduction to Symbolic Computation {~2020}',
   'An Invitation to Applied Category Theory: Seven Sketches in Compositionality {~2021}',
   'Modern Perl {2022 Jan}',
   'How Software Works {2022 Jan}',
   'Applied mathematics for Database Professionals {2022 Jan}',
-  'Think Julia {2022 May}',
   'Systematic Program Design (not a book but a course) {2022 Jun}',
   'Rediscovering JavaScript - Master ES6, ES7, and ES8 {2022 Jun}',
   'Think Raku {2022 Jul}',
   'String and List Processing in SNOBOL4 {2022 Jul}',
-  'Why Functional Programming Matters (an article) {2022 Jul}',
   '# Some books in C',
   '# Some books in parallelism and/or threading',
   '# Some books/articles in Model-View-Control',
   '# Some practices in bash',
   '# Some practices in SQL',
-]);
+]); */
 
