@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Different Ways to Say quote(I LOVE YOU) in LISP">
+  <meta name="keywords" content="Lisp">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+
+<title>Different Ways to Say '(I LOVE YOU) in LISP</title>
+</head>
+
+<body>
+
+<div class="heading">
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>Different Ways to Say '(I LOVE YOU) in LISP</h2>
+
+<p>All runnable on GNU CLISP 2.49.92. "Compiled" from "<a href="https://matt.might.net/articles/i-love-you-in-racket/">99 ways to say '(I love you)"</a>(in <a href="https://www.racket-lang.org">Racket</a>) by Prof Matt Might.</p>
+
+<pre>
+;;;
+'(I love you)
+
+;;;
+(quote (I love you))
+
+;;;
+(list 'I 'love 'you)
+
+;;;
+(list (quote I) (quote love) (quote you))
+
+;;;
+(cons 'I (cons 'love (cons 'you '())))
+
+;;;
+(cons 'I (cons 'love (list 'you)))
+
+;;;
+(cons 'I (list 'love 'you))
+
+;;;
+(cons 'I '(love you))
+
+;;;
+'(I love . (you))
+
+;;;
+'(I . (love . (you)))
+
+;;;
+'(I . (love . (you . ())))
+
+;;;
+'(I . (love you))
+
+
+;;;
+`(I love you)
+
+;;;
+`(I ,'love you)
+
+;;;
+`(I ,`love you)
+
+;::
+(let ((verb 'love))
+  `(I ,verb you))
+
+;;;
+`(I love . (you))
+
+;;;
+`(I love . ,(list 'you))
+
+;;;
+`(I love ,@'(you))
+
+;;;
+`(I ,@(list 'love 'you))
+
+;;;
+`(,@(list 'I 'love) you)
+
+;;;
+`(,@'(I love you))
+
+;;;
+`,'(I love you)
+
+;;;
+`(I love you . ,'())
+
+;;;
+(car (list '(I love you)))
+
+;;;
+(cdr '(Hark! I love you))
+
+;;;
+(let ()
+  '(I love you not)
+  '(I love you))
+
+;;;
+((lambda (a c b) (list a b c)) 'I 'you 'love)
+
+;;;
+(apply (lambda (a c b) (list a b c)) 
+       (list 'I 'you 'love))    
+
+;;;
+(append '(I love) '(you))
+
+;;;
+(append '(I) '(love) '(you))
+
+;;;
+(reverse '(you love I))
+
+;;;
+(remove 'cannot '(I cannot love you))
+
+;;;
+(remove-duplicates '(I love love love you))]
+  
+;;;
+(cond
+  ((evenp 3) '(Not me))
+  ((oddp  3) '(I love you)))
+  
+;;;
+(case 1
+  ((a b c) '(Not me))
+  ((3 2 1) '(I love you)))
+
+
+;;;
+(let ((word 'love))
+  (setf word 'love)
+  `(I ,word you))
+
+</pre>
+
+
+
+<hr>
+<p>Contact on Mastodon: <a href="https://mathstodon.xyz/@e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Created Date: 9th July, 2023.</p>
+
+</body>
+
+</html>
