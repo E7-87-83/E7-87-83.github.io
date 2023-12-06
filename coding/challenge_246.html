@@ -80,7 +80,7 @@ in Week #246</a> !</i></b></p>
 
 <p>Becase of the requirement of integral parameter solution(s), I started with <a href="https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm">extended Euclidean algorithm</a> and <a href="https://en.wikipedia.org/wiki/B%C3%A9zout%27s_identity">Bézout coefficients</a>. Some theory can be found on Wikipedia or <a href="https://math.libretexts.org/Courses/Mount_Royal_University/MATH_2150%3A_Higher_Arithmetic/5%3A_Diophantine_Equations/5.1%3A_Linear_Diophantine_Equations">here (Linear Diophantine Equations</a>.</p>
 
-<p>The pros of the approach are (1) it identifies non-integral linear equations early on; (2) instead of two degeneracies which may be found in solvingthe two coefficients through the first two linear equations, it reduces to one degeneracy (a[2]*a[0]-a[1]*a[1] may be zero). And by number theoretic arguments, we know a[2] = k a[1] = k^2 a[0] in case of the degeneracy occurs, then we have p + qk = k^2. a[3] = p a[1] + q a[2] = p k a[0] + q k^2 a[0] = k^3 a[0]. Similarly we can deduce a[4] = k^4 a[0].</p>
+<p>The pros of the approach are (1) it identifies non-integral linear equations early on; (2) instead of two degeneracies which may be found in solving the two coefficients through the first two linear equations, it reduces to one degeneracy (a[2]*a[0]-a[1]*a[1] may be zero). And by number theoretic arguments, we know a[2] = k a[1] = k^2 a[0] in case of the degeneracy occurs, then we have p + qk = k^2. a[3] = p a[1] + q a[2] = p k a[0] + q k^2 a[0] = k^3 a[0]. Similarly we can deduce a[4] = k^4 a[0].</p>
 
 <p>The code is full of printing of equations which may not be so relevant to the "solution" but for verifying number theoretic algorithms.</p>
 
