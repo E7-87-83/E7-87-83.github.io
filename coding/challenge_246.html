@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="CY's Take on The Weekly Challenge #246">
+  <meta name="keywords" content="Perl">
+  <meta name="author" content="Cheok-Yin Fung">  
+  <link rel="styleSheet" href="../docs/main.css" type="text/css" media="(min-device-width: 769px)">
+  <link rel="stylesheet" href="../docs/mobile.css" type="text/css" media="only screen and (max-device-width: 768px)">
+
+
+  <title>CY's Take on The Weekly Challenge #246 - Uniqueness </title>
+</head>
+
+<body>
+
+<div class="heading">
+<h1 align="right">The Weekly Challenge &dash; Perl and Raku</h1>
+</div>
+
+<div class="bar">
+<ul>
+
+  <li><a href="../index.html">Hello World</a></li>
+
+  <li><a href="blog.html">Blog</a></li>
+
+  <li><a href="../cv.html">Résumé</a></li>
+
+  <li><a href="../prod.html">Production</a></li>
+
+  <li><a href="../links.html">Links</a></li>
+
+</ul>
+</div>
+
+<div class="main">
+  <h2>CY's Take on The Weekly Challenge #246 &dash; Uniqueness</h2>
+
+<p><i>If you want to challenge yourself on programming, especially on Perl and/or Raku,
+go to <a href="https://theweeklychallenge.org/" title="The Weekly Challenge - Perl & Raku">https://theweeklychallenge.org</a>,
+code the latest challenges, submit codes on-time (by GitHub or email).</i></p>
+
+<p><strong>Do tell me, if I am wrong or you strongly oppose my statements! </strong></p>
+
+<p><b><i>It's time for <a href="https://theweeklychallenge.org/blog/perl-weekly-challenge-246/" title="The Weekly Challenge #246">challenges
+in Week #246</a> !</i></b></p>
+
+<hr>
+
+
+<h4>Task 1: 6 out of 49</h4>
+
+<p>Instead of picking out the balls from a box, we can imagine we line up a set of balls labelled 1, 2, 3 ..., 49, and pick out a ball one by one via randomly selecting the k-th ball on the line to be removed.</p>
+
+<div style="float:right; border: 1px dotted black; font-size:x-small;">
+<img alt="" src="../docs/wiki_img/fibonacci_spiral.png" style="float:right" />
+<p><a href="#right_of_use">image info</a></p></div>
+
+<div class="code_vim_hl" style="background-color:#666666">
+<pre><font color="#FCE94F">use </font><font color="#AD7FA8">v5.30.0</font>;
+<font color="#FCE94F">use warnings</font>;
+
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@ans</b></font>;
+<font color="#FCE94F">my</font> <font color="#34E2E2"><b>@arr</b></font> = (<font color="#AD7FA8">1..49</font>);
+<font color="#FCE94F">for</font> <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> (<font color="#AD7FA8">0..5</font>) {
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$k</b></font> = <font color="#FCE94F">int</font>(<font color="#FCE94F">rand</font>(<font color="#AD7FA8">49</font>-<font color="#34E2E2"><b>$i</b></font>));
+    <font color="#FCE94F">push</font> <font color="#34E2E2"><b>@ans</b></font>, <font color="#FCE94F">splice</font>(<font color="#34E2E2"><b>@arr</b></font>, <font color="#34E2E2"><b>$k</b></font>, <font color="#AD7FA8">1</font>);
+}
+
+<font color="#FCE94F">say</font> <font color="#FCE94F">join</font> <font color="#AD7FA8">&quot;</font><font color="#FFD7D7">\n</font><font color="#AD7FA8">&quot;</font>, <font color="#FCE94F">sort</font> <font color="#FCE94F">{</font><font color="#34E2E2"><b>$a</b></font>&lt;=&gt;<font color="#34E2E2"><b>$b</b></font><font color="#FCE94F">}</font> <font color="#34E2E2"><b>@ans</b></font>;
+</pre>
+</div>
+
+
+
+<h4>Task 2: Linear Recurrence of Second Order</h4>
+
+<p>Let's have a brief analysis for the task first. It is given 5 integers, and they form some linear recurrence; we have three linear (Diophantine) equations to play with.</p>
+
+<p>Becase of the requirement of integral parameter solution(s), I started with <a href="https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm">extended Euclidean algorithm</a> and <a href="https://en.wikipedia.org/wiki/B%C3%A9zout%27s_identity">Bézout coefficients</a>. Some theory can be found on Wikipedia or <a href="https://math.libretexts.org/Courses/Mount_Royal_University/MATH_2150%3A_Higher_Arithmetic/5%3A_Diophantine_Equations/5.1%3A_Linear_Diophantine_Equations">here (Linear Diophantine Equations</a>.</p>
+
+<p>The pros of the approach are (1) it identifies non-integral linear equations early on; (2) instead of two degeneracies which may be found in solvingthe two coefficients through the first two linear equations, it reduces to one degeneracy (a[2]*a[0]-a[1]*a[1] may be zero). And by number theoretic arguments, we know a[2] = k a[1] = k^2 a[0] in case of the degeneracy occurs, then we have p + qk = k^2. a[3] = p a[1] + q a[2] = p k a[0] + q k^2 a[0] = k^3 a[0]. Similarly we can deduce a[4] = k^4 a[0].</p>
+
+<p>The code is full of printing of equations which may not be so relevant to the "solution" but for verifying number theoretic algorithms.</p>
+
+<div class="code_vim_hl" style="background-color:#666666">
+<pre><font color="#34E2E2"># The Weekly Challenge 246</font>
+<font color="#34E2E2"># Task 2 Linear Recurrence of Second Order</font>
+<font color="#34E2E2"># a[n] = p * a[n-2] + q * a[n-1] with n &gt; 1</font>
+<font color="#34E2E2"># where p and q must be integers.</font>
+<font color="#FCE94F">use </font><font color="#AD7FA8">v5.30.0</font>;
+<font color="#FCE94F">use warnings</font>;
+
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>ex_euc_alg </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@r</b></font> = (<font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@s</b></font> = (<font color="#AD7FA8">1</font>, <font color="#AD7FA8">0</font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@t</b></font> = (<font color="#AD7FA8">0</font>, <font color="#AD7FA8">1</font>);
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$i</b></font> = <font color="#AD7FA8">0</font>;
+    <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$r[</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> != <font color="#AD7FA8">0</font>) {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$q</b></font> = <font color="#FCE94F">int</font>(<font color="#34E2E2"><b>$r[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>/<font color="#34E2E2"><b>$r[$i]</b></font>);
+        <font color="#34E2E2"><b>$r[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> = <font color="#34E2E2"><b>$r[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> - <font color="#34E2E2"><b>$q</b></font> * <font color="#34E2E2"><b>$r[$i]</b></font>;
+        <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$r[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &gt; <font color="#FCE94F">abs</font>(<font color="#34E2E2"><b>$r[$i]</b></font>)) {
+            <font color="#34E2E2"><b>$r[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> = <font color="#34E2E2"><b>$r[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> - <font color="#FCE94F">abs</font>(<font color="#34E2E2"><b>$r[$i]</b></font>);
+            <font color="#34E2E2"><b>$q</b></font> = <font color="#34E2E2"><b>$q</b></font> + <font color="#FCE94F">abs</font>(<font color="#34E2E2"><b>$r[$i]</b></font>)/<font color="#34E2E2"><b>$r[$i]</b></font>
+        }
+        <font color="#FCE94F">while</font> (<font color="#34E2E2"><b>$r[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> &lt; <font color="#AD7FA8">0</font>) {
+            <font color="#34E2E2"><b>$r[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> = <font color="#34E2E2"><b>$r[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> + <font color="#FCE94F">abs</font>(<font color="#34E2E2"><b>$r[$i]</b></font>);
+            <font color="#34E2E2"><b>$q</b></font> = <font color="#34E2E2"><b>$q</b></font> - <font color="#FCE94F">abs</font>(<font color="#34E2E2"><b>$r[$i]</b></font>)/<font color="#34E2E2"><b>$r[$i]</b></font>
+        }
+        <font color="#34E2E2"><b>$s[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> = <font color="#34E2E2"><b>$s[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> - <font color="#34E2E2"><b>$q</b></font>*<font color="#34E2E2"><b>$s[$i]</b></font>;
+        <font color="#34E2E2"><b>$t[$i</b></font>+<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> = <font color="#34E2E2"><b>$t[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> - <font color="#34E2E2"><b>$q</b></font>*<font color="#34E2E2"><b>$t[$i]</b></font>;
+        <font color="#34E2E2"><b>$i</b></font>++;
+    }
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$a0</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$b0</b></font> = <font color="#34E2E2"><b>$_[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>;
+    <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;</font><font color="#34E2E2"><b>$r[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font><font color="#AD7FA8"> = </font><font color="#34E2E2"><b>$a0</b></font><font color="#AD7FA8">*</font><font color="#34E2E2"><b>$s[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font><font color="#AD7FA8">+</font><font color="#34E2E2"><b>$b0</b></font><font color="#AD7FA8">*</font><font color="#34E2E2"><b>$t[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font><font color="#AD7FA8">&quot;</font>;
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$d</b></font>,<font color="#34E2E2"><b>$x</b></font>,<font color="#34E2E2"><b>$y</b></font>) = (<font color="#34E2E2"><b>$r[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$s[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$t[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>);
+    <font color="#34E2E2"># for my $k (-10..10) {</font>
+    <font color="#34E2E2">#     my $x1 = $x - $k*$b0/$d;</font>
+    <font color="#34E2E2">#     my $y1 = $y + $k*$a0/$d;</font>
+    <font color="#34E2E2">#     say &quot;$d = $a0*$x1+$b0*$y1&quot;;</font>
+    <font color="#34E2E2"># }</font>
+
+    <font color="#FCE94F">return</font> [<font color="#34E2E2"><b>$r[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$s[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$t[$i</b></font>-<font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>];
+}
+
+<font color="#FCE94F">sub </font><font color="#34E2E2"><b>check </b></font>{
+    <font color="#FCE94F">my</font> <font color="#34E2E2"><b>@a</b></font> = <font color="#34E2E2"><b>@_</b></font>;
+
+    <font color="#34E2E2"># consective zeros check</font>
+    <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">0</font> &amp;&amp; <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">0</font>) {
+        <font color="#FCE94F">return</font> (<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">0</font> &amp;&amp; <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">0</font> &amp;&amp; <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">0</font>) ? <font color="#AD7FA8">1</font> : <font color="#AD7FA8">0</font>;
+    }
+    <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">0</font>) {
+        <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">0</font>) {
+            <font color="#FCE94F">return</font> (<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">0</font> &amp;&amp; <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">0</font>) ? <font color="#AD7FA8">1</font> : <font color="#AD7FA8">0</font>;
+        }
+        <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">0</font>) {
+            <font color="#FCE94F">return</font> (<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]</b></font> == <font color="#AD7FA8">0</font>) ? <font color="#AD7FA8">1</font> : <font color="#AD7FA8">0</font>;
+        }
+    }
+
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$d0</b></font>, <font color="#34E2E2"><b>$d1</b></font>, <font color="#34E2E2"><b>$x0</b></font>, <font color="#34E2E2"><b>$y0</b></font>, <font color="#34E2E2"><b>$u0</b></font>, <font color="#34E2E2"><b>$v0</b></font>);
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$a0</b></font>, <font color="#34E2E2"><b>$b0</b></font>);
+    <font color="#FCE94F">my</font> (<font color="#34E2E2"><b>$a1</b></font>, <font color="#34E2E2"><b>$b1</b></font>);
+
+    (<font color="#34E2E2"><b>$d0</b></font>, <font color="#34E2E2"><b>$x0</b></font>, <font color="#34E2E2"><b>$y0</b></font>) = ex_euc_alg(<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>)-&gt;@*;
+    (<font color="#34E2E2"><b>$a0</b></font>, <font color="#34E2E2"><b>$b0</b></font>) = (<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>);
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font> % <font color="#34E2E2"><b>$d0</b></font> != <font color="#AD7FA8">0</font>;
+    <font color="#34E2E2"><b>$x0</b></font> = <font color="#34E2E2"><b>$x0</b></font> *(<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>/<font color="#34E2E2"><b>$d0</b></font>);
+    <font color="#34E2E2"><b>$y0</b></font> = <font color="#34E2E2"><b>$y0</b></font> *(<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>/<font color="#34E2E2"><b>$d0</b></font>);
+    <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;</font><font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font><font color="#AD7FA8"> = </font><font color="#34E2E2"><b>$a0</b></font><font color="#AD7FA8">*</font><font color="#34E2E2"><b>$x0</b></font><font color="#AD7FA8">+</font><font color="#34E2E2"><b>$b0</b></font><font color="#AD7FA8">*</font><font color="#34E2E2"><b>$y0</b></font><font color="#AD7FA8">&quot;</font>;
+    <font color="#34E2E2"># for my $k (-10..10) {</font>
+    <font color="#34E2E2">#     my $x1 = $x0 + $b0/$d0*$k ;</font>
+    <font color="#34E2E2">#     my $y1 = $y0 - $a0/$d0*$k;</font>
+    <font color="#34E2E2">#     say &quot;$a[2] = $a0*$x1+$b0*$y1&quot;;</font>
+    <font color="#34E2E2"># }</font>
+
+    (<font color="#34E2E2"><b>$d1</b></font>, <font color="#34E2E2"><b>$u0</b></font>, <font color="#34E2E2"><b>$v0</b></font>) = ex_euc_alg(<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>)-&gt;@*;
+    (<font color="#34E2E2"><b>$a1</b></font>, <font color="#34E2E2"><b>$b1</b></font>) = (<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>, <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>);
+    <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">if</font> <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font> % <font color="#34E2E2"><b>$d1</b></font> != <font color="#AD7FA8">0</font>;
+    <font color="#34E2E2"><b>$u0</b></font> = <font color="#34E2E2"><b>$u0</b></font> *(<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>/<font color="#34E2E2"><b>$d1</b></font>);
+    <font color="#34E2E2"><b>$v0</b></font> = <font color="#34E2E2"><b>$v0</b></font> *(<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>/<font color="#34E2E2"><b>$d1</b></font>);
+    <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;</font><font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font><font color="#AD7FA8"> = </font><font color="#34E2E2"><b>$a1</b></font><font color="#AD7FA8">*</font><font color="#34E2E2"><b>$u0</b></font><font color="#AD7FA8">+</font><font color="#34E2E2"><b>$b1</b></font><font color="#AD7FA8">*</font><font color="#34E2E2"><b>$v0</b></font><font color="#AD7FA8">&quot;</font>;
+    <font color="#34E2E2"># for my $j (-10..10) {</font>
+    <font color="#34E2E2">#     my $x1 = $u0 + $b1/$d1*$j ;</font>
+    <font color="#34E2E2">#     my $y1 = $v0 - $a1/$d1*$j;</font>
+    <font color="#34E2E2">#     say &quot;$a[3] = $a1*$x1+$b1*$y1&quot;;</font>
+    <font color="#34E2E2"># }</font>
+
+
+    <font color="#34E2E2"># $x0 + $b0/$d0*$k == $u0 + $b1/$d1*$j</font>
+    <font color="#34E2E2"># $y0 - $a0/$d0*$k == $v0 - $a1/$d1*$j</font>
+
+    <font color="#34E2E2"># $a0$x0 + $a0$b0/$d0*$k == $a0$u0 + $a0$b1/$d1*$j</font>
+    <font color="#34E2E2"># $b0$y0 - $b0$a0/$d0*$k == $b0$v0 - $b0$a1/$d1*$j</font>
+
+    <font color="#FCE94F">if</font> (<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font> != <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>) {
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$j</b></font> = (<font color="#34E2E2"><b>$a0</b></font>*<font color="#34E2E2"><b>$x0</b></font> + <font color="#34E2E2"><b>$b0</b></font>*<font color="#34E2E2"><b>$y0</b></font> - <font color="#34E2E2"><b>$a0</b></font>*<font color="#34E2E2"><b>$u0</b></font> - <font color="#34E2E2"><b>$b0</b></font>*<font color="#34E2E2"><b>$v0</b></font>)*<font color="#34E2E2"><b>$d1</b></font>/(<font color="#34E2E2"><b>$a0</b></font>*<font color="#34E2E2"><b>$b1</b></font> - <font color="#34E2E2"><b>$b0</b></font>*<font color="#34E2E2"><b>$a1</b></font>);
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$x1</b></font> = <font color="#34E2E2"><b>$u0</b></font> + <font color="#34E2E2"><b>$b1</b></font>/<font color="#34E2E2"><b>$d1</b></font>*<font color="#34E2E2"><b>$j</b></font>;
+        <font color="#FCE94F">my</font> <font color="#34E2E2"><b>$y1</b></font> = <font color="#34E2E2"><b>$v0</b></font> - <font color="#34E2E2"><b>$a1</b></font>/<font color="#34E2E2"><b>$d1</b></font>*<font color="#34E2E2"><b>$j</b></font>;
+        <font color="#FCE94F">say</font> <font color="#AD7FA8">&quot;(</font><font color="#34E2E2"><b>$x1</b></font><font color="#AD7FA8">, </font><font color="#34E2E2"><b>$y1</b></font><font color="#AD7FA8">)&quot;</font>;
+        <font color="#FCE94F">return</font> <font color="#AD7FA8">0</font> <font color="#FCE94F">if</font> <font color="#FCE94F">int</font>(<font color="#34E2E2"><b>$x1</b></font>) != <font color="#34E2E2"><b>$x1</b></font> || <font color="#FCE94F">int</font>(<font color="#34E2E2"><b>$y1</b></font>) != <font color="#34E2E2"><b>$y1</b></font>;
+        <font color="#FCE94F">return</font> (<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]</b></font> == <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$x1</b></font>+<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$y1</b></font>) ? <font color="#AD7FA8">1</font> : <font color="#AD7FA8">0</font>;
+    }
+    <font color="#FCE94F">else</font> {
+        <font color="#FCE94F">return</font> ( <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">2</font><font color="#34E2E2"><b>]</b></font> == <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>
+                             &amp;&amp;
+                <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">1</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">3</font><font color="#34E2E2"><b>]</b></font> == <font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">4</font><font color="#34E2E2"><b>]</b></font>*<font color="#34E2E2"><b>$a[</b></font><font color="#AD7FA8">0</font><font color="#34E2E2"><b>]</b></font>) ? <font color="#AD7FA8">1</font> : <font color="#AD7FA8">0</font>;
+        <font color="#34E2E2"># Explanation:</font>
+        <font color="#34E2E2"># if a[2] = a[1]*a[1]/$a[0], </font>
+        <font color="#34E2E2"># z d0 = x^2/y d0</font>
+        <font color="#34E2E2"># since d0 = gcd(x d0, y d0), x, y coprime</font>
+        <font color="#34E2E2"># then y must be 1, i.e. x a[0] = a[1]</font>
+        <font color="#34E2E2"># and a[2] = x^2 d0 = x a[1]</font>
+        <font color="#34E2E2"># i.e. x a[1] = a[2]</font>
+    }
+}
+</pre>
+</div>
+
+
+
+<p>Test Cases</p>
+
+<div class="code_vim_hl" style="background-color:#666666">
+<pre><font color="#FCE94F">use </font>Test::More <font color="#AD7FA8">tests</font>=&gt;<font color="#AD7FA8">11</font>;
+ok check(<font color="#AD7FA8">1</font>, <font color="#AD7FA8">1</font>, <font color="#AD7FA8">2</font>, <font color="#AD7FA8">3</font>, <font color="#AD7FA8">5</font>);
+ok !check(<font color="#AD7FA8">4</font>, <font color="#AD7FA8">2</font>, <font color="#AD7FA8">4</font>, <font color="#AD7FA8">5</font>, <font color="#AD7FA8">7</font>);
+ok check(<font color="#AD7FA8">4</font>, <font color="#AD7FA8">1</font>, <font color="#AD7FA8">2</font>, -<font color="#AD7FA8">3</font>, <font color="#AD7FA8">8</font>);
+
+ok check(<font color="#AD7FA8">3</font>, <font color="#AD7FA8">9</font>, <font color="#AD7FA8">27</font>, <font color="#AD7FA8">81</font>, <font color="#AD7FA8">243</font>);
+ok check(<font color="#AD7FA8">3</font>, <font color="#AD7FA8">5</font>, <font color="#AD7FA8">27</font>, <font color="#AD7FA8">45</font>, <font color="#AD7FA8">243</font>);
+ok check(<font color="#AD7FA8">1</font>, <font color="#AD7FA8">1</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>);
+
+ok check(<font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>);
+ok check(<font color="#AD7FA8">1</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>);
+ok check(<font color="#AD7FA8">0</font>, <font color="#AD7FA8">3</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>);
+
+ok !check(<font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">3</font>, <font color="#AD7FA8">0</font>, <font color="#AD7FA8">0</font>);
+ok check(<font color="#AD7FA8">2</font>, <font color="#AD7FA8">4</font>, <font color="#AD7FA8">8</font>, <font color="#AD7FA8">16</font>, <font color="#AD7FA8">32</font>);
+</pre>
+</div>
+
+
+<p>Hope for Peace! □</p>
+
+<hr>
+
+<p><a name="right_of_use"></a>The image of Fibonacci spiral is taken from <a href="https://commons.wikimedia.org/wiki/File:Fibonacci_Spiral_GeoGebra.svg">Wikimedia Commons</a>, released in public domin.</p> 
+
+<p>Acknowledgement: Thanks to discussion of the PA&amp;A Discord Channel (maintained by Adam Crussell).</p>
+
+<p><small>Except from images and codes from other personnels, the content of this blogpost is released under a copyleft spirit. One may share (full or partial) content of this blogpost on other platform if you share it under the free and open content spirit.</small></p>
+
+<p><i>link for CY's full codes: <tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-246/cheok-yin-fung/perl/ch-1.pl" title="ch-1.pl from Cheok-Yin Fung">ch-1.pl</a></tt>, 
+<tt><a href="https://github.com/E7-87-83/perlweeklychallenge-club/blob/newt/challenge-246/cheok-yin-fung/perl/ch-2.pl" title="ch-2.pl from Cheok-Yin Fung">ch-2.pl</a></tt>
+</i>
+</p>
+<hr>
+<p>Contact on twitter: <a href="https://twitter.com/e7_87">@e7_87</a>.</p>
+<p>Discuss via GitHub issues: <a href="https://github.com/E7-87-83/E7-87-83.github.io/issues">here</a>. </p>
+<p>Email: fungcheokyin at gmail.com</p>
+<p>Created Date: 6th December, 2023.</p>
+
+</div>
+
+</body>
+
+</html>
