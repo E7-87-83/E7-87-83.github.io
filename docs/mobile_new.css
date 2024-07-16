@@ -10,3 +10,8 @@ body {
 div#bk-index {
     color: #e78783;
 }
+
+footer {
+    font-size: xx-small;
+    text-align: right;
+}

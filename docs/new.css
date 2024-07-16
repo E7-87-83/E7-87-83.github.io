@@ -12,3 +12,12 @@ body {
 div#bk-index a {
     color: #e78783;
 }
+
+body ul li {
+    list-style-type: none;
+}
+
+footer {
+    font-size: xx-small;
+    text-align: right;
+}
